@@ -7,11 +7,11 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 type createData = {
   title: string;
   description: string;
@@ -20,24 +20,21 @@ type createData = {
 };
 
 export default function ProductTable() {
-  const [products, setProducts] = useState<createData[] | []>([]);
+  const { error, data, isLoading } = useQuery({
+    queryKey: ["products"],
+    queryFn: async () => {
+      const { data } = await axios.get("/api/product");
+      return data as createData[];
+    },
+  });
 
-  useEffect(() => {
-    const getProducts = async () => {
-      try {
-        const data = await axios.get("/api/product");
-        setProducts(data.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
 
-    return () => {
-      getProducts();
-    };
-  }, []);
-
-  console.log(products);
+  if (error) {
+    return <p>Something went wrong!</p>;
+  }
 
   return (
     <TableContainer component={Paper}>
@@ -53,7 +50,7 @@ export default function ProductTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {products?.map((product: createData) => (
+          {data?.map((product: createData) => (
             <TableRow
               key={product.id}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}

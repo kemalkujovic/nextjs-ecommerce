@@ -46,7 +46,7 @@ export default function ProductTable() {
           <TableRow>
             <TableCell>Image</TableCell>
             <TableCell>Name</TableCell>
-            <TableCell align="right">Categories</TableCell>
+            <TableCell align="center">Categories</TableCell>
             <TableCell align="center">Price</TableCell>
             <TableCell align="center">Status</TableCell>
             <TableCell align="right">Actions</TableCell>

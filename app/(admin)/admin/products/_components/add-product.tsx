@@ -1,3 +1,4 @@
+"use client";
 const AddProduct = () => {
   return <div>AddProduct</div>;
 };

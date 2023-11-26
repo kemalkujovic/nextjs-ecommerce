@@ -1,26 +1,21 @@
 "use client";
 
+import CreateButton from "@/app/(admin)/_components/create-button";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import Link from "next/link";
 
 const ProductItem = () => {
-  const [product, setProduct] = useState<boolean>(false);
-
-  const onClickHandler = () => {
-    setProduct(true);
-  };
-
   return (
-    <div className="bg-zinc-100 mb-3 flex justify-between p-2 items-center">
-      <div>
-        <p>Create new Product</p>
+    <>
+      <div className="bg-zinc-100 mb-3 flex justify-between p-2 items-center">
+        <div>
+          <p>Create new Product</p>
+        </div>
+        <div>
+          <CreateButton />
+        </div>
       </div>
-      <div>
-        <Button onClick={onClickHandler} size="sm" className="bg-green-600">
-          Create Product
-        </Button>
-      </div>
-    </div>
+    </>
   );
 };
 

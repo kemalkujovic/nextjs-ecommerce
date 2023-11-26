@@ -3,10 +3,12 @@ import Sidebar from "../_components/Sidebar";
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div>
+    <div className="h-full">
       <Navbar />
-      <Sidebar />
-      {children}
+      <main className="pt-14 flex h-full gap-x-7">
+        <Sidebar />
+        {children}
+      </main>
     </div>
   );
 };

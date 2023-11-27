@@ -12,6 +12,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import Spinner from "@/app/components/Spinner";
+
 type createData = {
   title: string;
   description: string;
@@ -29,7 +31,7 @@ export default function ProductTable() {
   });
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <Spinner />;
   }
 
   if (error) {

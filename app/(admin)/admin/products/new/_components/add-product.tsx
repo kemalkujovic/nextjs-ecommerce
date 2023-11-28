@@ -64,13 +64,14 @@ const AddProduct = () => {
       setErrors((prevErrors) => ({
         ...prevErrors,
         title:
-          dataForm.title.length < 3
-            ? "Title must be at least 3 characters"
+          dataForm.title.length < 4
+            ? "Title must be at least 4 characters"
             : "",
         description:
-          dataForm.description.length < 3
-            ? "Description must be at least 3 characters"
+          dataForm.description.length < 4
+            ? "Description must be at least 4 characters"
             : "",
+        price: !dataForm.price ? "Please enter a price" : "",
         file: !dataForm.file ? "Please select a file" : "",
         category: !dataForm.category ? "Please select a category" : "",
       }));
@@ -143,7 +144,7 @@ const AddProduct = () => {
           placeholder="Enter Product price"
           onChange={(e) => setDataForm({ ...dataForm, price: e.target.value })}
         />
-        {errors.title && <p className="text-red-500">{errors.price}</p>}
+        {errors.price && <p className="text-red-500">{errors.price}</p>}
         <label htmlFor="description">Enter Product Description</label>
         <Input
           value={dataForm.description}
@@ -156,7 +157,9 @@ const AddProduct = () => {
             setDataForm({ ...dataForm, description: e.target.value })
           }
         />
-        {errors.title && <p className="text-red-500">{errors.description}</p>}
+        {errors.description && (
+          <p className="text-red-500">{errors.description}</p>
+        )}
         <label htmlFor="category">Choose a category</label>
         <select
           className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
@@ -179,7 +182,7 @@ const AddProduct = () => {
           onChange={handleFileChange}
           ref={fileInputRef}
         />
-        {errors.title && <p className="text-red-500">{errors.file}</p>}
+        {errors.file && <p className="text-red-500">{errors.file}</p>}
         {imagePreview && (
           <Image src={imagePreview} alt="Preview" width={100} height={100} />
         )}

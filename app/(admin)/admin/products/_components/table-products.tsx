@@ -7,13 +7,13 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import Spinner from "@/app/components/Spinner";
 import Image from "next/image";
+import toast from "react-hot-toast";
 
 type createData = {
   title: string;
@@ -25,7 +25,9 @@ type createData = {
 };
 
 export default function ProductTable() {
+  const queryClient = useQueryClient();
   const baseUrl = "https://kemal-web-storage.s3.eu-north-1.amazonaws.com";
+
   const { error, data, isLoading } = useQuery({
     queryKey: ["products"],
     queryFn: async () => {
@@ -33,6 +35,17 @@ export default function ProductTable() {
       return data as createData[];
     },
   });
+
+  const deleteTask = async (id: string) => {
+    try {
+      const res = await axios.delete(`/api/product/${id}`);
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+      toast.success("Task deleted");
+    } catch (error) {
+      toast.error("Something went wrong");
+    }
+  };
+
   console.log(data);
   if (isLoading) {
     return <Spinner />;
@@ -75,7 +88,10 @@ export default function ProductTable() {
               <TableCell align="center">{product.description}</TableCell>
               <TableCell align="right">
                 <button>
-                  <DeleteIcon className="text-red-600" />
+                  <DeleteIcon
+                    onClick={() => deleteTask(product.id)}
+                    className="text-red-600"
+                  />
                 </button>
                 <button>
                   <EditIcon />

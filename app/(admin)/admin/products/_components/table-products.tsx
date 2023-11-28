@@ -21,6 +21,7 @@ type createData = {
   price: number;
   id: string;
   imageURL: string;
+  category: string;
 };
 
 export default function ProductTable() {
@@ -69,9 +70,9 @@ export default function ProductTable() {
                 />
               </TableCell>
               <TableCell align="left">{product.title}</TableCell>
-              <TableCell align="center">{product.price}</TableCell>
+              <TableCell align="center">{product.category}</TableCell>
+              <TableCell align="center">${product.price}</TableCell>
               <TableCell align="center">{product.description}</TableCell>
-              <TableCell align="center">{product.id}</TableCell>
               <TableCell align="right">
                 <button>
                   <DeleteIcon className="text-red-600" />

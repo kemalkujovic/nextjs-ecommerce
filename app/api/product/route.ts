@@ -50,7 +50,8 @@ export async function POST(req: Request) {
     const requestData = formData.get("requestData") as string;
     const productInfo = JSON.parse(requestData);
 
-    const { title, description, price, featured } = productInfo;
+    const { title, description, price, featured, category } = productInfo;
+    console.log(category);
     const product = await db?.product.create({
       data: {
         title,
@@ -58,6 +59,7 @@ export async function POST(req: Request) {
         price,
         featured,
         imageURL: fileName,
+        category,
       },
     });
     return NextResponse.json({ msg: "Successful create product", product });

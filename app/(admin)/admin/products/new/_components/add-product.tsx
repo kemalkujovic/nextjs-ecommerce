@@ -3,36 +3,54 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import axios from "axios";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 const AddProduct = () => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
-  const [file, setFile] = useState(null);
+  const initialState = {
+    title: "",
+    description: "",
+    price: "",
+    category: "MAN",
+    file: null,
+  };
+
+  const [dataForm, setDataForm] = useState(initialState);
 
   const handleFileChange = (e: any) => {
     const selectedFile = e.target.files[0];
-    setFile(selectedFile);
+    setDataForm((prevData) => ({ ...prevData, file: selectedFile || "" }));
   };
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    console.log("uslo");
-    if (!title || !description || !price || !file) {
+
+    if (
+      !dataForm.title ||
+      dataForm.title.length < 2 ||
+      !dataForm.description ||
+      dataForm.description.length < 2 ||
+      !dataForm.price ||
+      !dataForm.file ||
+      !dataForm.category
+    ) {
       console.log("Something went wrong");
+      return;
     }
 
-    const convPrice = +price;
+    const convPrice = +dataForm.price;
 
     const requestData = {
-      title,
-      description,
+      title: dataForm.title,
+      description: dataForm.description,
       price: convPrice,
-      file,
+      file: dataForm.file,
       featured: false,
+      category: dataForm.category,
     };
+
     const formData = new FormData();
-    formData.append("file", file!);
+
+    formData.append("file", dataForm.file!);
     formData.append("requestData", JSON.stringify(requestData));
 
     try {
@@ -41,8 +59,12 @@ const AddProduct = () => {
           "Content-Type": "multipart/form-data",
         },
       });
+      toast.success("Product created successfully");
+      setDataForm(initialState);
+
       console.log(res);
     } catch (error) {
+      toast.error("Something went wrong!");
       console.log(error);
     }
   };
@@ -55,39 +77,45 @@ const AddProduct = () => {
       >
         <label htmlFor="name">Enter Product Name</label>
         <Input
-          value={title}
+          value={dataForm.title}
           type="text"
           id="name"
           name="name"
           required
           placeholder="Enter Product name"
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={(e) => setDataForm({ ...dataForm, title: e.target.value })}
         />
         <label htmlFor="price">Enter Product Price</label>
         <Input
-          value={price}
+          value={dataForm.price}
           type="number"
           id="price"
           name="price"
           required
           placeholder="Enter Product price"
-          onChange={(e) => setPrice(e.target.value)}
+          onChange={(e) => setDataForm({ ...dataForm, price: e.target.value })}
         />
         <label htmlFor="description">Enter Product Description</label>
         <Input
-          value={description}
+          value={dataForm.description}
           type="text"
           id="description"
           name="description"
           required
           placeholder="Enter Product description"
-          onChange={(e) => setDescription(e.target.value)}
+          onChange={(e) =>
+            setDataForm({ ...dataForm, description: e.target.value })
+          }
         />
         <label htmlFor="category">Choose a category</label>
         <select
           className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           name="category"
           id="category"
+          value={dataForm.category}
+          onChange={(e) =>
+            setDataForm({ ...dataForm, category: e.target.value })
+          }
         >
           <option value="MAN">MAN</option>
           <option value="WOMEN">WOMEN</option>

@@ -8,7 +8,9 @@ export async function POST(req: Request) {
   }
 
   // dummy products
-  const { title, description, price, featured } = await req.json();
+  const { title, description, price, featured, file } = await req.json();
+
+  console.log(price);
 
   // TODO: validation form.
 

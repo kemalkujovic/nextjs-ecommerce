@@ -1,33 +1,79 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import axios from "axios";
+import { useState } from "react";
 
 const AddProduct = () => {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState("");
+  const [file, setFile] = useState(null);
+
+  const handleFileChange = (e: any) => {
+    const selectedFile = e.target.files[0];
+    setFile(selectedFile);
+  };
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+
+    if (!title || !description || !price || !file) {
+      console.log("Something went wrong");
+    }
+
+    const convPrice = +price;
+
+    const requestData = {
+      title,
+      description,
+      price: convPrice,
+      file,
+      featured: false,
+    };
+
+    try {
+      const res = await axios.post("/api/product", requestData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="flex justify-center items-center mt-5  ">
-      <form className="flex flex-col gap-y-2 min-w-[700px] border p-4 ">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col gap-y-2 min-w-[700px] border p-4 "
+      >
         <label htmlFor="name">Enter Product Name</label>
         <Input
+          value={title}
           type="text"
           id="name"
           name="name"
           required
           placeholder="Enter Product name"
+          onChange={(e) => setTitle(e.target.value)}
         />
         <label htmlFor="price">Enter Product Price</label>
         <Input
+          value={price}
           type="number"
           id="price"
           name="price"
           required
           placeholder="Enter Product price"
+          onChange={(e) => setPrice(e.target.value)}
         />
         <label htmlFor="description">Enter Product Description</label>
         <Input
+          value={description}
           type="text"
           id="description"
           name="description"
           required
           placeholder="Enter Product description"
+          onChange={(e) => setDescription(e.target.value)}
         />
         <label htmlFor="category">Choose a category</label>
         <select
@@ -35,8 +81,8 @@ const AddProduct = () => {
           name="category"
           id="category"
         >
-          <option>MAN</option>
-          <option>WOMEN</option>
+          <option value="MAN">MAN</option>
+          <option value="WOMEN">WOMEN</option>
         </select>
         <label htmlFor="image">Add Product Image</label>
         <Input
@@ -45,6 +91,7 @@ const AddProduct = () => {
           name="image"
           required
           placeholder="Enter Product image"
+          onChange={handleFileChange}
         />
         <Button className="mt-2 bg-green-600">Add Product</Button>
       </form>

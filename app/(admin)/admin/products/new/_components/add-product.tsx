@@ -17,7 +17,7 @@ const AddProduct = () => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-
+    console.log("uslo");
     if (!title || !description || !price || !file) {
       console.log("Something went wrong");
     }
@@ -31,9 +31,17 @@ const AddProduct = () => {
       file,
       featured: false,
     };
+    const formData = new FormData();
+    formData.append("file", file!);
+    formData.append("requestData", JSON.stringify(requestData));
 
     try {
-      const res = await axios.post("/api/product", requestData);
+      const res = await axios.post("/api/product", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log(res);
     } catch (error) {
       console.log(error);
     }

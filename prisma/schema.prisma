@@ -8,11 +8,13 @@ datasource db {
 }
 
 model Product {
-  id          String  @id @default(cuid()) @map("_id")
+  id          String @id @default(cuid()) @map("_id")
   title       String
   description String
-  price       Float
-  featured    Boolean
+  imageURL    String
+
+  price    Float
+  featured Boolean
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")

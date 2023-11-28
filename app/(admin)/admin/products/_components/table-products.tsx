@@ -13,15 +13,18 @@ import EditIcon from "@mui/icons-material/Edit";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Spinner from "@/app/components/Spinner";
+import Image from "next/image";
 
 type createData = {
   title: string;
   description: string;
   price: number;
   id: string;
+  imageURL: string;
 };
 
 export default function ProductTable() {
+  const baseUrl = "https://kemal-web-storage.s3.eu-north-1.amazonaws.com";
   const { error, data, isLoading } = useQuery({
     queryKey: ["products"],
     queryFn: async () => {
@@ -29,7 +32,7 @@ export default function ProductTable() {
       return data as createData[];
     },
   });
-
+  console.log(data);
   if (isLoading) {
     return <Spinner />;
   }
@@ -47,7 +50,7 @@ export default function ProductTable() {
             <TableCell>Name</TableCell>
             <TableCell align="center">Categories</TableCell>
             <TableCell align="center">Price</TableCell>
-            <TableCell align="center">Status</TableCell>
+            <TableCell align="center">Description</TableCell>
             <TableCell align="right">Actions</TableCell>
           </TableRow>
         </TableHead>
@@ -58,7 +61,12 @@ export default function ProductTable() {
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {product.title}
+                <Image
+                  src={`${baseUrl}/${product.imageURL}`}
+                  alt="Product Image"
+                  width={50}
+                  height={50}
+                />
               </TableCell>
               <TableCell align="left">{product.title}</TableCell>
               <TableCell align="center">{product.price}</TableCell>

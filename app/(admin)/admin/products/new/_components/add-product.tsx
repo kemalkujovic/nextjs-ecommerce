@@ -2,7 +2,8 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import axios from "axios";
-import { useState } from "react";
+import Image from "next/image";
+import { useRef, useState } from "react";
 import toast from "react-hot-toast";
 
 const AddProduct = () => {
@@ -14,26 +15,66 @@ const AddProduct = () => {
     file: null,
   };
 
+  const [isLoading, setIsLoading] = useState(false);
   const [dataForm, setDataForm] = useState(initialState);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [errors, setErrors] = useState({
+    title: "",
+    description: "",
+    price: "",
+    file: "",
+    category: "",
+  });
 
   const handleFileChange = (e: any) => {
     const selectedFile = e.target.files[0];
     setDataForm((prevData) => ({ ...prevData, file: selectedFile || "" }));
+
+    if (selectedFile) {
+      const imageUrl = URL.createObjectURL(selectedFile);
+      setImagePreview(imageUrl);
+    } else {
+      setImagePreview(null);
+    }
   };
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    setIsLoading(true);
+    console.log("dsadas");
+    setErrors({
+      title: "",
+      description: "",
+      price: "",
+      file: "",
+      category: "",
+    });
 
     if (
       !dataForm.title ||
-      dataForm.title.length < 2 ||
+      dataForm.title.length < 4 ||
       !dataForm.description ||
-      dataForm.description.length < 2 ||
+      dataForm.description.length < 4 ||
       !dataForm.price ||
       !dataForm.file ||
       !dataForm.category
     ) {
-      console.log("Something went wrong");
+      setIsLoading(false);
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        title:
+          dataForm.title.length < 3
+            ? "Title must be at least 3 characters"
+            : "",
+        description:
+          dataForm.description.length < 3
+            ? "Description must be at least 3 characters"
+            : "",
+        file: !dataForm.file ? "Please select a file" : "",
+        category: !dataForm.category ? "Please select a category" : "",
+      }));
+
       return;
     }
 
@@ -60,10 +101,15 @@ const AddProduct = () => {
         },
       });
       toast.success("Product created successfully");
-      setDataForm(initialState);
 
-      console.log(res);
+      setDataForm(initialState);
+      setIsLoading(false);
+      setImagePreview(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
     } catch (error) {
+      setIsLoading(false);
       toast.error("Something went wrong!");
       console.log(error);
     }
@@ -73,7 +119,7 @@ const AddProduct = () => {
     <div className="flex justify-center items-center mt-5  ">
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col gap-y-2 min-w-[700px] border p-4 "
+        className="flex flex-col gap-y-2 max-md:min-w-[90%] min-w-[70%] border p-4 "
       >
         <label htmlFor="name">Enter Product Name</label>
         <Input
@@ -85,16 +131,19 @@ const AddProduct = () => {
           placeholder="Enter Product name"
           onChange={(e) => setDataForm({ ...dataForm, title: e.target.value })}
         />
+        {errors.title && <p className="text-red-500">{errors.title}</p>}
         <label htmlFor="price">Enter Product Price</label>
         <Input
           value={dataForm.price}
           type="number"
           id="price"
+          min={1}
           name="price"
           required
           placeholder="Enter Product price"
           onChange={(e) => setDataForm({ ...dataForm, price: e.target.value })}
         />
+        {errors.title && <p className="text-red-500">{errors.price}</p>}
         <label htmlFor="description">Enter Product Description</label>
         <Input
           value={dataForm.description}
@@ -107,6 +156,7 @@ const AddProduct = () => {
             setDataForm({ ...dataForm, description: e.target.value })
           }
         />
+        {errors.title && <p className="text-red-500">{errors.description}</p>}
         <label htmlFor="category">Choose a category</label>
         <select
           className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
@@ -126,10 +176,16 @@ const AddProduct = () => {
           id="image"
           name="image"
           required
-          placeholder="Enter Product image"
           onChange={handleFileChange}
+          ref={fileInputRef}
         />
-        <Button className="mt-2 bg-green-600">Add Product</Button>
+        {errors.title && <p className="text-red-500">{errors.file}</p>}
+        {imagePreview && (
+          <Image src={imagePreview} alt="Preview" width={100} height={100} />
+        )}
+        <Button disabled={isLoading} className="mt-2 bg-green-600">
+          Add Product
+        </Button>
       </form>
     </div>
   );

@@ -45,13 +45,27 @@ export async function POST(req: Request) {
     const buffer = Buffer.from(await file.arrayBuffer());
 
     const fileName = await uploadFileToS3(buffer, file.name);
-    console.log(fileName);
 
     const requestData = formData.get("requestData") as string;
     const productInfo = JSON.parse(requestData);
 
     const { title, description, price, featured, category } = productInfo;
-    console.log(category);
+
+    if (
+      !title ||
+      title.length < 4 ||
+      !description ||
+      description.length < 4 ||
+      !price ||
+      !file ||
+      !category
+    ) {
+      return NextResponse.json(
+        { error: "Something went wrong." },
+        { status: 400 }
+      );
+    }
+
     const product = await db?.product.create({
       data: {
         title,

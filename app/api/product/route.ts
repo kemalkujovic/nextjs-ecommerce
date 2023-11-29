@@ -10,7 +10,7 @@ const s3Client = new S3Client({
   },
 });
 
-async function uploadFileToS3(file: any, fileName: any) {
+export async function uploadFileToS3(file: any, fileName: any) {
   const fileBuffer = file;
 
   const randomSuffix = Math.random().toString(36).substring(7);
@@ -94,31 +94,5 @@ export async function GET(req: Request) {
     return NextResponse.json(tasks);
   } catch (error) {
     return NextResponse.json({ error: "Error getting products", status: 500 });
-  }
-}
-
-export async function PUT(req: Request) {
-  try {
-    if (false) {
-      return NextResponse.json({ error: "Unauthorized", status: 401 });
-    }
-
-    const { id, title, description, price, featured } = await req.json();
-
-    const task = await db.product.update({
-      where: {
-        id: id,
-      },
-      data: {
-        title,
-        description,
-        price,
-        featured,
-      },
-    });
-
-    return NextResponse.json(task);
-  } catch (error) {
-    return NextResponse.json({ error: "Error updating task", status: 500 });
   }
 }

@@ -14,6 +14,7 @@ import axios from "axios";
 import Spinner from "@/app/components/Spinner";
 import Image from "next/image";
 import toast from "react-hot-toast";
+import Link from "next/link";
 
 type createData = {
   title: string;
@@ -93,9 +94,9 @@ export default function ProductTable() {
                     className="text-red-600"
                   />
                 </button>
-                <button>
+                <Link href={`/admin/products/${product.id}`}>
                   <EditIcon />
-                </button>
+                </Link>
               </TableCell>
             </TableRow>
           ))}

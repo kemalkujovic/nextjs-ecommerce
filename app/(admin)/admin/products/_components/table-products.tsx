@@ -15,6 +15,8 @@ import Spinner from "@/app/components/Spinner";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import Link from "next/link";
+import { useState } from "react";
+import ReactPaginate from "react-paginate";
 
 type createData = {
   title: string;
@@ -26,6 +28,9 @@ type createData = {
 };
 
 export default function ProductTable() {
+  const [currentPage, setCurrentPage] = useState(0);
+  const productsPerPage = 7;
+
   const queryClient = useQueryClient();
   const baseUrl = "https://kemal-web-storage.s3.eu-north-1.amazonaws.com";
 
@@ -47,7 +52,13 @@ export default function ProductTable() {
     }
   };
 
-  console.log(data);
+  const offset = currentPage * productsPerPage;
+  const currentProducts = data?.slice(offset, offset + productsPerPage);
+
+  const handlePageClick = (selectedPage: { selected: number }) => {
+    setCurrentPage(selectedPage.selected);
+  };
+
   if (isLoading) {
     return <Spinner />;
   }
@@ -57,51 +68,70 @@ export default function ProductTable() {
   }
 
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Image</TableCell>
-            <TableCell>Name</TableCell>
-            <TableCell align="center">Categories</TableCell>
-            <TableCell align="center">Price</TableCell>
-            <TableCell align="center">Description</TableCell>
-            <TableCell align="right">Actions</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data?.map((product: createData) => (
-            <TableRow
-              key={product.id}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                <Image
-                  src={`${baseUrl}/${product.imageURL}`}
-                  alt="Product Image"
-                  width={50}
-                  height={50}
-                />
-              </TableCell>
-              <TableCell align="left">{product.title}</TableCell>
-              <TableCell align="center">{product.category}</TableCell>
-              <TableCell align="center">${product.price}</TableCell>
-              <TableCell align="center">{product.description}</TableCell>
-              <TableCell align="right">
-                <button>
-                  <DeleteIcon
-                    onClick={() => deleteTask(product.id)}
-                    className="text-red-600"
-                  />
-                </button>
-                <Link href={`/admin/products/${product.id}`}>
-                  <EditIcon />
-                </Link>
-              </TableCell>
+    <>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Image</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell align="center">Categories</TableCell>
+              <TableCell align="center">Price</TableCell>
+              <TableCell align="center">Description</TableCell>
+              <TableCell align="right">Actions</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {currentProducts?.map((product: createData) => (
+              <TableRow
+                key={product.id}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  <Image
+                    src={`${baseUrl}/${product.imageURL}`}
+                    alt="Product Image"
+                    width={50}
+                    height={50}
+                  />
+                </TableCell>
+                <TableCell align="left">{product.title}</TableCell>
+                <TableCell align="center">{product.category}</TableCell>
+                <TableCell align="center">${product.price}</TableCell>
+                <TableCell align="center">{product.description}</TableCell>
+                <TableCell align="right">
+                  <button>
+                    <DeleteIcon
+                      onClick={() => deleteTask(product.id)}
+                      className="text-red-600"
+                    />
+                  </button>
+                  <Link href={`/admin/products/${product.id}`}>
+                    <EditIcon />
+                  </Link>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      {data && (
+        <ReactPaginate
+          previousLabel={"Previous"}
+          nextLabel={"Next"}
+          breakLabel={"..."}
+          pageCount={Math.ceil(data?.length / productsPerPage)}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          onPageChange={handlePageClick}
+          containerClassName={"pagination flex space-x-2 justify-end mt-4"}
+          previousLinkClassName={"bg-neutral-800 px-4 py-2 rounded text-white"}
+          nextLinkClassName={"bg-neutral-800 px-4 py-2 rounded text-white"}
+          disabledClassName={"opacity-50 cursor-not-allowed"}
+          activeClassName={"bg-blue-700"}
+          pageClassName="hidden"
+        />
+      )}
+    </>
   );
 }

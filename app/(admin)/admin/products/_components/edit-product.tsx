@@ -1,7 +1,7 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import EditForm from "./edit-form";
 import Spinner from "@/app/components/Spinner";
 import toast from "react-hot-toast";
@@ -16,6 +16,7 @@ export type createData = {
 };
 const EditProduct = () => {
   const params = useParams();
+  const router = useRouter();
 
   const { productId } = params;
 
@@ -42,10 +43,11 @@ const EditProduct = () => {
   const handleFormSubmit = async (formData: FormData) => {
     try {
       const res = await axios.put(`/api/product/edit/${productId}`, formData);
+
       toast.success("Product edit successfully");
+      router.push("/admin/products");
     } catch (error) {
       toast.error("Something went wrong");
-      console.log(error);
     }
   };
 

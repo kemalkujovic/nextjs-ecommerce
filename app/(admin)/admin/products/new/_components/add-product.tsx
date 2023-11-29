@@ -5,6 +5,7 @@ import axios from "axios";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import toast from "react-hot-toast";
+import NewHeader from "./new-header";
 
 const AddProduct = () => {
   const initialState = {
@@ -117,7 +118,7 @@ const AddProduct = () => {
   };
 
   return (
-    <div className="flex justify-center items-center mt-5  ">
+    <div className="flex justify-center items-center mt-5">
       <form
         onSubmit={handleSubmit}
         className="flex flex-col gap-y-2 max-md:min-w-[90%] min-w-[70%] border p-4 "
@@ -184,7 +185,13 @@ const AddProduct = () => {
         />
         {errors.file && <p className="text-red-500">{errors.file}</p>}
         {imagePreview && (
-          <Image src={imagePreview} alt="Preview" width={100} height={100} />
+          <Image
+            src={imagePreview}
+            alt="Preview"
+            width={100}
+            height={100}
+            className="rounded-sm"
+          />
         )}
         <Button disabled={isLoading} className="mt-2 bg-green-600">
           Add Product

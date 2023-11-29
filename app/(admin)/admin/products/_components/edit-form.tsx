@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { type createData } from "./edit-product";
 import Image from "next/image";
 
@@ -16,6 +16,10 @@ const EditForm = ({ data, onSubmit }: EditFormProps) => {
   const [previewImage, setPreviewImage] = useState<string | undefined>(
     `${baseUrl}/${imageURL}`
   );
+
+  useEffect(() => {
+    setPreviewImage(`${baseUrl}/${imageURL}`);
+  }, [imageURL]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -39,7 +43,7 @@ const EditForm = ({ data, onSubmit }: EditFormProps) => {
     >
       <label htmlFor="name">Enter Product Name</label>
       <Input
-        defaultValue={title}
+        value={title}
         type="text"
         id="name"
         name="name"
@@ -48,7 +52,7 @@ const EditForm = ({ data, onSubmit }: EditFormProps) => {
       />
       <label htmlFor="price">Enter Product Price</label>
       <Input
-        defaultValue={price}
+        value={price}
         type="number"
         id="price"
         min={1}
@@ -58,7 +62,7 @@ const EditForm = ({ data, onSubmit }: EditFormProps) => {
       />
       <label htmlFor="description">Enter Product Description</label>
       <Input
-        defaultValue={description}
+        value={description}
         type="text"
         id="description"
         name="description"
@@ -71,7 +75,7 @@ const EditForm = ({ data, onSubmit }: EditFormProps) => {
         className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
         name="category"
         id="category"
-        defaultValue={category}
+        value={category}
       >
         <option value="MAN">MAN</option>
         <option value="WOMEN">WOMEN</option>
@@ -84,6 +88,7 @@ const EditForm = ({ data, onSubmit }: EditFormProps) => {
           alt="Product Image"
           width={100}
           height={100}
+          className="rounded-sm"
         />
       )}
       <Button type="submit" className="mt-2 bg-green-600">

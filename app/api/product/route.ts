@@ -90,7 +90,6 @@ export async function GET(req: Request) {
     }
 
     const tasks = await db.product.findMany();
-    console.log(tasks);
     return NextResponse.json(tasks);
   } catch (error) {
     return NextResponse.json({ error: "Error getting products", status: 500 });

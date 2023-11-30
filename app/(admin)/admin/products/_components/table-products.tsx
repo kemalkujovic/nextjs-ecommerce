@@ -17,19 +17,22 @@ import toast from "react-hot-toast";
 import Link from "next/link";
 import { useState } from "react";
 import ReactPaginate from "react-paginate";
+import formatDate from "@/app/utils/formateDate";
 
 type createData = {
   title: string;
   description: string;
   price: number;
+  featured: boolean;
   id: string;
   imageURL: string;
   category: string;
+  createdAt: string;
 };
 
 export default function ProductTable() {
   const [currentPage, setCurrentPage] = useState(0);
-  const productsPerPage = 7;
+  const productsPerPage = 5;
 
   const queryClient = useQueryClient();
   const baseUrl = "https://kemal-web-storage.s3.eu-north-1.amazonaws.com";
@@ -38,7 +41,13 @@ export default function ProductTable() {
     queryKey: ["products"],
     queryFn: async () => {
       const { data } = await axios.get("/api/product");
-      return data as createData[];
+
+      const sortedData = data.sort((a: createData, b: createData) => {
+        return (
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+      });
+      return sortedData as createData[];
     },
   });
 
@@ -73,12 +82,31 @@ export default function ProductTable() {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Image</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell align="center">Categories</TableCell>
-              <TableCell align="center">Price</TableCell>
-              <TableCell align="center">Description</TableCell>
-              <TableCell align="right">Actions</TableCell>
+              <TableCell width={5}>
+                <p className="text-gray-700">Image</p>
+              </TableCell>
+
+              <TableCell>
+                <p className="text-gray-700">Name</p>
+              </TableCell>
+              <TableCell align="center">
+                <p className="text-gray-700">Categories</p>
+              </TableCell>
+              <TableCell align="center">
+                <p className="text-gray-700">Featured</p>
+              </TableCell>
+              <TableCell align="center">
+                <p className="text-gray-700">Price</p>
+              </TableCell>
+              <TableCell align="center">
+                <p className="text-gray-700">Description</p>
+              </TableCell>
+              <TableCell align="center">
+                <p className="text-gray-700">Date</p>
+              </TableCell>
+              <TableCell align="center">
+                <p className="text-gray-700">Actions</p>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -91,15 +119,25 @@ export default function ProductTable() {
                   <Image
                     src={`${baseUrl}/${product.imageURL}`}
                     alt="Product Image"
-                    width={50}
-                    height={50}
+                    className="border rounded-sm"
+                    width={60}
+                    height={60}
                   />
                 </TableCell>
                 <TableCell align="left">{product.title}</TableCell>
                 <TableCell align="center">{product.category}</TableCell>
+                <TableCell align="center">
+                  {product.featured.toString()}
+                </TableCell>
                 <TableCell align="center">${product.price}</TableCell>
-                <TableCell align="center">{product.description}</TableCell>
-                <TableCell align="right">
+                <TableCell align="center">
+                  {product.description.slice(0, 11)}
+                  {product.description.length > 12 && "..."}
+                </TableCell>
+                <TableCell align="center">
+                  <p>{formatDate(product.createdAt)}</p>
+                </TableCell>
+                <TableCell align="center">
                   <button>
                     <DeleteIcon
                       onClick={() => deleteTask(product.id)}

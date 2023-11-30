@@ -50,6 +50,9 @@ export async function PUT(
     const description = formData.get("description") as string;
     const category = formData.get("category") as string;
     const img = formData.get("image");
+    const featured = formData.get("isFeatured");
+    const isFeaturedBoolean = featured === "on";
+    console.log(featured);
     let fileName: string | undefined;
 
     if (img && img instanceof File && img.name) {
@@ -64,9 +67,11 @@ export async function PUT(
       title: string;
       price: number;
       description: string;
+      featured: boolean;
       category: string;
       imageURL?: string;
     } = {
+      featured: isFeaturedBoolean,
       title,
       price: convPirce,
       description,

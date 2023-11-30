@@ -13,6 +13,7 @@ export type createData = {
   id: string;
   imageURL: string;
   category: string;
+  featured: boolean;
 };
 const EditProduct = () => {
   const params = useParams();
@@ -27,7 +28,7 @@ const EditProduct = () => {
       return data as createData;
     },
   });
-
+  console.log(data);
   if (isLoading) {
     return (
       <div>
@@ -42,6 +43,7 @@ const EditProduct = () => {
 
   const handleFormSubmit = async (formData: FormData) => {
     try {
+      console.log(formData);
       const res = await axios.put(`/api/product/edit/${productId}`, formData);
 
       toast.success("Product edit successfully");
@@ -52,7 +54,7 @@ const EditProduct = () => {
   };
 
   return (
-    <div className="flex justify-center items-center mt-5  ">
+    <div className="flex justify-center items-center">
       <EditForm onSubmit={handleFormSubmit} data={data} />
     </div>
   );

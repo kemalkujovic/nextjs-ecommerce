@@ -9,7 +9,7 @@ const ProductItem = () => {
     <>
       <div className="bg-zinc-100 mb-3 flex justify-between p-2 items-center">
         <div>
-          <p>Create new Product</p>
+          <p className="text-zinc-900 font-semibold">Create new Product</p>
         </div>
         <div>
           <CreateButton />

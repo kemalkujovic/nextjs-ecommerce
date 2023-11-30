@@ -14,6 +14,7 @@ const AddProduct = () => {
     price: "",
     category: "MAN",
     file: null,
+    isFeatured: false,
   };
 
   const [isLoading, setIsLoading] = useState(false);
@@ -38,6 +39,10 @@ const AddProduct = () => {
     } else {
       setImagePreview(null);
     }
+  };
+
+  const handleCheckboxChange = (isChecked: boolean) => {
+    setDataForm((prevData) => ({ ...prevData, isFeatured: isChecked }));
   };
 
   const handleSubmit = async (e: any) => {
@@ -87,7 +92,7 @@ const AddProduct = () => {
       description: dataForm.description,
       price: convPrice,
       file: dataForm.file,
-      featured: false,
+      featured: dataForm.isFeatured,
       category: dataForm.category,
     };
 
@@ -118,7 +123,7 @@ const AddProduct = () => {
   };
 
   return (
-    <div className="flex justify-center items-center mt-5">
+    <div className="flex justify-center items-center">
       <form
         onSubmit={handleSubmit}
         className="flex flex-col gap-y-2 max-md:min-w-[90%] min-w-[70%] border p-4 "
@@ -174,6 +179,21 @@ const AddProduct = () => {
           <option value="MAN">MAN</option>
           <option value="WOMEN">WOMEN</option>
         </select>
+        <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+          <div>
+            <input
+              type="checkbox"
+              id="isFeatured"
+              name="isFeatured"
+              checked={dataForm.isFeatured}
+              onChange={(e) => handleCheckboxChange(e.target.checked)}
+            />
+          </div>
+          <div className="space-y-1 leading-none">
+            <p className="font-semibold">Featured</p>
+            <div>This product will appear on the home page</div>
+          </div>
+        </div>
         <label htmlFor="image">Add Product Image</label>
         <Input
           type="file"

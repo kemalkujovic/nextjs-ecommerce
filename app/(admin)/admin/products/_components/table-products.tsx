@@ -18,6 +18,7 @@ import Link from "next/link";
 import { useState } from "react";
 import ReactPaginate from "react-paginate";
 import formatDate from "@/app/utils/formateDate";
+import TitleHeader from "@/app/(admin)/_components/title-header";
 
 type createData = {
   title: string;
@@ -78,6 +79,12 @@ export default function ProductTable() {
 
   return (
     <>
+      <TitleHeader
+        title="Products"
+        count={data?.length}
+        description="Manage products for your store"
+        url="/admin/products/new"
+      />
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>

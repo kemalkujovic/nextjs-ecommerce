@@ -19,3 +19,12 @@ model Product {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 }
+
+model Category {
+  id        String @id @default(cuid()) @map("_id")
+  billboard String
+  category  String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+}

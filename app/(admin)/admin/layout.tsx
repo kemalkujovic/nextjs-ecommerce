@@ -6,7 +6,9 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
     <div className="h-full">
       <Navbar />
       <main className="pt-14 flex h-full gap-x-7">
-        <Sidebar />
+        <div className="w-64 shrink-0 hidden md:block">
+          <Sidebar />
+        </div>
         {children}
       </main>
     </div>

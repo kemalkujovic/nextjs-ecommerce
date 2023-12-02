@@ -61,7 +61,7 @@ export async function POST(req: Request) {
       !category
     ) {
       return NextResponse.json(
-        { error: "Something went wrong." },
+        { error: "Missing required fields." },
         { status: 400 }
       );
     }

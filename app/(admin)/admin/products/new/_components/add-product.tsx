@@ -5,7 +5,6 @@ import axios from "axios";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import toast from "react-hot-toast";
-import NewHeader from "./new-header";
 
 const AddProduct = () => {
   const initialState = {
@@ -45,10 +44,9 @@ const AddProduct = () => {
     setDataForm((prevData) => ({ ...prevData, isFeatured: isChecked }));
   };
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
-    console.log("dsadas");
     setErrors({
       title: "",
       description: "",

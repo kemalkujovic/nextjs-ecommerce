@@ -21,6 +21,11 @@ const NewCategorie = () => {
     billboard: "",
   };
 
+  const [errors, setErrors] = useState<initialState>({
+    category: "",
+    billboard: "",
+  });
+
   const [formData, setFormData] = useState<initialState>(initialState);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -41,8 +46,30 @@ const NewCategorie = () => {
 
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setErrors({
+      category: "",
+      billboard: "",
+    });
 
-    if (formData.category.length < 2 || formData.billboard.length < 2) {
+    if (
+      !formData.category ||
+      formData.category.length < 2 ||
+      !formData.billboard ||
+      formData.billboard.length < 4
+    ) {
+      setIsLoading(false);
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        category:
+          formData.category.length < 2
+            ? "Category must be at least 3 characters"
+            : "",
+        billboard:
+          formData.billboard.length < 4
+            ? "Billboard must be at least 4 characters"
+            : "",
+      }));
+
       return;
     }
 
@@ -85,6 +112,9 @@ const NewCategorie = () => {
                 setFormData({ ...formData, category: e.target.value })
               }
             />
+            {errors.category && (
+              <p className="text-red-500">{errors.category}</p>
+            )}
           </div>
           <div>
             <label htmlFor="category" className="font-semibold">
@@ -99,6 +129,9 @@ const NewCategorie = () => {
                 setFormData({ ...formData, billboard: e.target.value })
               }
             />
+            {errors.billboard && (
+              <p className="text-red-500">{errors.billboard}</p>
+            )}
           </div>
         </div>
         <Button

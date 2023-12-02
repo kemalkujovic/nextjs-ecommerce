@@ -4,7 +4,7 @@ import TitleHeader from "@/app/(admin)/_components/title-header";
 
 const EditCategoryPage = () => {
   return (
-    <div>
+    <div className="pt-4 w-4/5 max-md:w-full">
       <TitleHeader title="Edit category" description="Edit a category" />
       <NewCategorie />
     </div>

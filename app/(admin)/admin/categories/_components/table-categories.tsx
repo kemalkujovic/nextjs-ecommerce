@@ -10,10 +10,13 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import Link from "next/link";
 import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Spinner from "@/app/components/Spinner";
 import TitleHeader from "@/app/(admin)/_components/title-header";
 import formatDate from "@/app/utils/formateDate";
+import ReactPaginate from "react-paginate";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
 type Category = {
   id: string;
@@ -24,6 +27,10 @@ type Category = {
 };
 
 const TableCategories = () => {
+  const [currentPage, setCurrentPage] = useState(0);
+  const productsPerPage = 5;
+  const queryClient = useQueryClient();
+
   const { error, data, isLoading } = useQuery({
     queryKey: ["category"],
     queryFn: async () => {
@@ -37,6 +44,25 @@ const TableCategories = () => {
       return sortedData as Category[];
     },
   });
+
+  const deleteTask = async (id: string) => {
+    console.log(id);
+    try {
+      const res = await axios.delete(`/api/categories/edit/${id}`);
+      console.log(res);
+      queryClient.invalidateQueries({ queryKey: ["category"] });
+      toast.success("Category deleted");
+    } catch (error) {
+      toast.error("Something went wrong");
+    }
+  };
+
+  const offset = currentPage * productsPerPage;
+  const currentProducts = data?.slice(offset, offset + productsPerPage);
+
+  const handlePageClick = (selectedPage: { selected: number }) => {
+    setCurrentPage(selectedPage.selected);
+  };
 
   if (isLoading) {
     return <Spinner />;
@@ -73,7 +99,7 @@ const TableCategories = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data?.map((category) => (
+            {currentProducts?.map((category) => (
               <TableRow
                 key={category.id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -88,7 +114,10 @@ const TableCategories = () => {
 
                 <TableCell align="center">
                   <button>
-                    <DeleteIcon className="text-red-600" />
+                    <DeleteIcon
+                      className="text-red-600"
+                      onClick={() => deleteTask(category.id)}
+                    />
                   </button>
                   <Link href={`/admin/categories/edit/${category.id}`}>
                     <EditIcon />
@@ -99,6 +128,23 @@ const TableCategories = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      {data && (
+        <ReactPaginate
+          previousLabel={"Previous"}
+          nextLabel={"Next"}
+          breakLabel={"..."}
+          pageCount={Math.ceil(data?.length / productsPerPage)}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          onPageChange={handlePageClick}
+          containerClassName={"pagination flex space-x-2 justify-end mt-4"}
+          previousLinkClassName={"bg-neutral-800 px-4 py-2 rounded text-white"}
+          nextLinkClassName={"bg-neutral-800 px-4 py-2 rounded text-white"}
+          disabledClassName={"opacity-50 cursor-not-allowed"}
+          activeClassName={"bg-blue-700"}
+          pageClassName="hidden"
+        />
+      )}
     </>
   );
 };

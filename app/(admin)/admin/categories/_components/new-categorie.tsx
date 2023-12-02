@@ -22,6 +22,7 @@ const NewCategorie = () => {
   };
 
   const [formData, setFormData] = useState<initialState>(initialState);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (categoryId) {
@@ -45,16 +46,19 @@ const NewCategorie = () => {
       return;
     }
 
+    setIsLoading(true);
     try {
       if (categoryId) {
         const res = await axios.put(
           `/api/categories/edit/${categoryId}`,
           formData
         );
+        setIsLoading(false);
         toast.success("Category succesfully edited.");
         router.push("/admin/categories");
       } else {
         const res = await axios.post("/api/categories", formData);
+        setIsLoading(false);
         toast.success("Category created.");
         router.push("/admin/categories");
       }
@@ -97,8 +101,13 @@ const NewCategorie = () => {
             />
           </div>
         </div>
-        <Button type="submit" className="mt-4 bg-green-600" variant="default">
-          Create
+        <Button
+          disabled={isLoading}
+          type="submit"
+          className="mt-4 bg-green-600"
+          variant="default"
+        >
+          {categoryId ? "Edit" : "Create"}
         </Button>
       </form>
     </>

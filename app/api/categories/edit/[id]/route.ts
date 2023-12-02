@@ -52,3 +52,26 @@ export async function PUT(
     return NextResponse.json({ error: "Error updating category", status: 500 });
   }
 }
+
+export async function DELETE(
+  req: Request,
+  { params }: { params: { id: string } }
+) {
+  const { id } = params;
+
+  try {
+    if (false) {
+      return NextResponse.json({ error: "Unauthorized", status: 401 });
+    }
+
+    const task = await db.category.delete({
+      where: {
+        id,
+      },
+    });
+
+    return NextResponse.json(task);
+  } catch (error) {
+    return NextResponse.json({ error: "Error deleting task", status: 500 });
+  }
+}

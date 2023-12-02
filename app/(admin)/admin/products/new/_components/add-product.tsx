@@ -3,8 +3,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import axios from "axios";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
+
+type Category = {
+  id: string;
+  name: string;
+  billboard: string;
+  category: string;
+};
 
 const AddProduct = () => {
   const initialState = {
@@ -16,10 +23,12 @@ const AddProduct = () => {
     isFeatured: false,
   };
 
+  const [category, setCategory] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [dataForm, setDataForm] = useState(initialState);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
   const [errors, setErrors] = useState({
     title: "",
     description: "",
@@ -27,6 +36,22 @@ const AddProduct = () => {
     file: "",
     category: "",
   });
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const resCategory = await axios.get("/api/categories");
+        const data = resCategory.data;
+        setCategory(data);
+      } catch (error) {
+        console.log("Error getting categories", error);
+      }
+    };
+
+    return () => {
+      fetchCategories();
+    };
+  }, []);
 
   const handleFileChange = (e: any) => {
     const selectedFile = e.target.files[0];
@@ -174,8 +199,14 @@ const AddProduct = () => {
             setDataForm({ ...dataForm, category: e.target.value })
           }
         >
-          <option value="MAN">MAN</option>
-          <option value="WOMEN">WOMEN</option>
+          {category.length > 0 &&
+            category?.map((category) => {
+              return (
+                <option key={category.id} value={category.category}>
+                  {category.category}
+                </option>
+              );
+            })}
         </select>
         <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
           <div>

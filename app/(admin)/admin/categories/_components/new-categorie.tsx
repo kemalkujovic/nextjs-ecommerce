@@ -2,37 +2,68 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import axios from "axios";
-import { useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 type initialState = {
-  name: string;
+  category: string;
   billboard: string;
 };
 
 const NewCategorie = () => {
+  const router = useRouter();
+  const paramas = useParams();
+  const categoryId = paramas.categoryId as string;
+
   const initialState: initialState = {
-    name: "",
+    category: "",
     billboard: "",
   };
 
   const [formData, setFormData] = useState<initialState>(initialState);
 
+  useEffect(() => {
+    if (categoryId) {
+      axios
+        .get(`/api/categories/edit/${categoryId}`)
+        .then((response) => {
+          const categoryData = response.data;
+
+          setFormData(categoryData);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }, [categoryId]);
+
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (formData.name.length < 2 || formData.billboard.length < 2) {
+    if (formData.category.length < 2 || formData.billboard.length < 2) {
       return;
     }
 
     try {
-      const res = await axios.post("/api/categories", formData);
-      console.log(res);
-      toast.success("Category created.");
+      if (categoryId) {
+        const res = await axios.put(
+          `/api/categories/edit/${categoryId}`,
+          formData
+        );
+        toast.success("Category succesfully edited.");
+        router.push("/admin/categories");
+      } else {
+        const res = await axios.post("/api/categories", formData);
+        toast.success("Category created.");
+        router.push("/admin/categories");
+      }
     } catch (error) {
       console.log(error);
+      toast.error("Error occurred.");
     }
   };
+
   return (
     <>
       <form onSubmit={submitHandler}>
@@ -42,12 +73,12 @@ const NewCategorie = () => {
               Name
             </label>
             <Input
-              value={formData.name}
+              value={formData.category}
               type="text"
               name="category"
               size={30}
               onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
+                setFormData({ ...formData, category: e.target.value })
               }
             />
           </div>

@@ -8,23 +8,25 @@ export async function POST(req: Request) {
   }
 
   try {
-    const { name, billboard } = await req.json();
-    console.log(name, billboard);
+    const { category, billboard } = await req.json();
 
-    if (!name || name.length < 2) {
+    if (!category || category.length < 2) {
       return NextResponse.json(
         { error: "Missing required fields." },
         { status: 400 }
       );
     }
 
-    const category = await db?.category.create({
+    const categoryProduct = await db?.category.create({
       data: {
-        category: name,
+        category,
         billboard,
       },
     });
-    return NextResponse.json({ msg: "Successful create category", category });
+    return NextResponse.json({
+      msg: "Successful create category",
+      categoryProduct,
+    });
   } catch (error) {
     return NextResponse.json({ error: "Error creating category" });
   }

@@ -6,7 +6,7 @@ import CategoryIcon from "@mui/icons-material/Category";
 import GradingIcon from "@mui/icons-material/Grading";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { usePathname, useRouter } from "next/navigation";
-
+import ArtTrackIcon from "@mui/icons-material/ArtTrack";
 const routes = [
   {
     label: "Dashboard",
@@ -24,15 +24,16 @@ const routes = [
     href: `/admin/products`,
   },
   {
+    label: "Billboards",
+    icon: <ArtTrackIcon className="h-4 w-4 mr-2" />,
+    href: `/admin/billboards`,
+  },
+  {
     label: "Categories",
     icon: <CategoryIcon className="h-4 w-4 mr-2" />,
     href: `/admin/categories`,
   },
-  {
-    label: "Billboards",
-    icon: <CategoryIcon className="h-4 w-4 mr-2" />,
-    href: `/admin/billboards`,
-  },
+
   {
     label: "Settings",
     icon: <SettingsIcon className="h-4 w-4 mr-2" />,

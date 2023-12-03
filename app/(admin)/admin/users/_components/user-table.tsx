@@ -109,7 +109,6 @@ const UserTable = () => {
             {currentProducts?.map((user: any) => {
               const timestamp = user.createdAt;
               const date = new Date(timestamp);
-              console.log(date);
               return (
                 <TableRow
                   key={user.id}

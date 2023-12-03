@@ -2,9 +2,10 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 
 type initialState = {
@@ -12,6 +13,7 @@ type initialState = {
   isAdmin: string;
   password: string;
   userName: string;
+  emailAdresses?: any[];
 };
 
 const NewUser = () => {
@@ -19,9 +21,10 @@ const NewUser = () => {
   const paramas = useParams();
   const categoryId = paramas.userId as string;
 
+  const checkDisabled = categoryId ? true : false;
   const initialState: initialState = {
     email: "",
-    isAdmin: "",
+    isAdmin: "User",
     password: "",
     userName: "",
   };
@@ -34,22 +37,20 @@ const NewUser = () => {
     userName: "",
   });
 
-  //todo: query api call
-
-  useEffect(() => {
-    if (categoryId) {
-      axios
-        .get(`/api/clerk/users/${categoryId}`)
-        .then((response) => {
-          const categoryData = response.data;
-
-          setFormData(categoryData);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
-  }, [categoryId]);
+  const { data } = useQuery({
+    queryKey: ["getUser"],
+    queryFn: async () => {
+      const { data } = await axios.get(`/api/clerk/users/${categoryId}`);
+      const mergedData = {
+        email: data.user.emailAddresses[0].emailAddress,
+        isAdmin: data.user.unsafeMetadata.isAdmin ? "Admin" : "User",
+        password: "",
+        userName: data.user.username ? data.user.username : data.user.firstName,
+      };
+      setFormData(mergedData);
+      return data;
+    },
+  });
 
   const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -63,33 +64,39 @@ const NewUser = () => {
       userName: "",
     });
 
-    try {
-      if (
-        !emailRegex.test(formData.email) ||
-        !passwordRegex.test(formData.password)
-      ) {
-        if (!emailRegex.test(formData.email)) {
-          setErrors((prevErrors) => ({
-            ...prevErrors,
-            email: "Invalid email address.",
-          }));
-        }
-
-        if (!passwordRegex.test(formData.password)) {
-          setErrors((prevErrors) => ({
-            ...prevErrors,
-            password:
-              "Password must have, one uppercase letter, one number, and special character.",
-          }));
-        }
-        return;
+    if (
+      !categoryId &&
+      (!emailRegex.test(formData.email) ||
+        !passwordRegex.test(formData.password))
+    ) {
+      if (!emailRegex.test(formData.email)) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          email: "Invalid email address.",
+        }));
       }
 
-      const res = await axios.post(`/api/clerk/users/`, formData);
-      toast.success("Created user.");
-      router.push("/admin/users");
+      if (!passwordRegex.test(formData.password)) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          password:
+            "Password must have, one uppercase letter, one number, and special character.",
+        }));
+      }
+      return;
+    }
+    try {
+      if (categoryId) {
+        const res = await axios.put(`/api/clerk/users/${categoryId}`, formData);
+        toast.success("Category succesfully edited.");
+        router.push("/admin/users");
+      } else {
+        const res = await axios.post(`/api/clerk/users/`, formData);
+        toast.success("Created user.");
+        router.push("/admin/users");
+      }
     } catch (error) {
-      toast.success("Something went wrong.");
+      toast.error("Something went wrong.");
       console.log(error);
     }
   };
@@ -103,6 +110,8 @@ const NewUser = () => {
               Email
             </label>
             <Input
+              disabled={checkDisabled}
+              value={formData.email}
               // className="mb-6 bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
               type="text"
               name="email"
@@ -117,9 +126,10 @@ const NewUser = () => {
               User Name
             </label>
             <Input
+              disabled={checkDisabled}
+              value={formData.userName}
               minLength={3}
               type="text"
-              // className="mb-6 bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
               name="username"
               id="username"
               size={40}
@@ -135,7 +145,8 @@ const NewUser = () => {
               Password
             </label>
             <Input
-              // className="mb-6 bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              disabled={checkDisabled}
+              value={categoryId ? "*********" : formData.password}
               type="password"
               name="password"
               size={40}
@@ -157,6 +168,7 @@ const NewUser = () => {
               onChange={(e) =>
                 setFormData({ ...formData, isAdmin: e.target.value })
               }
+              value={formData.isAdmin}
             >
               <option value="User">User</option>
               <option value="Admin">Admin</option>
@@ -164,7 +176,7 @@ const NewUser = () => {
           </div>
         </div>
         <Button type="submit" className="mt-4 bg-green-600" variant="default">
-          Create
+          {categoryId ? "Edit" : "Create"}
         </Button>
       </form>
     </>

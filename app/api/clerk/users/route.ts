@@ -1,27 +1,29 @@
 import { NextResponse } from "next/server";
-import { clerkClient } from "@clerk/nextjs";
+import { auth, clerkClient } from "@clerk/nextjs";
 
 export async function POST(req: Request) {
-  const { email } = await req.json();
   try {
-    const user: any = await clerkClient.users.getUserList(email);
-    const id = user[0].id;
+    const { userId } = auth();
 
-    if (user) {
-      await clerkClient.users.updateUser(id, {
-        unsafeMetadata: {
-          isAdmin: true,
-        },
-      });
-      return NextResponse.json({ msg: "ADMIN ADD", user: user });
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthorized", status: 401 });
     }
-    return NextResponse.json({ success: true, user: user });
-  } catch (error) {
-    console.error("Error updating user:", error);
-    return NextResponse.json({
-      success: false,
-      error: "Internal Server Error",
+
+    const { email, password, isAdmin, userName } = await req.json();
+
+    const admin = isAdmin === "Admin" ? true : false;
+    const user = await clerkClient.users.createUser({
+      username: userName,
+      emailAddress: [email],
+      password: password,
+      unsafeMetadata: {
+        isAdmin: admin,
+      },
     });
+
+    return NextResponse.json({ user });
+  } catch (error) {
+    return NextResponse.json({ error: "Error creating user", status: 500 });
   }
 }
 
@@ -31,7 +33,7 @@ export async function GET(req: Request) {
 
     return NextResponse.json({ user });
   } catch (error) {
-    console.error("Error updating user:", error);
+    console.error("Error getting users:", error);
     return NextResponse.json({
       success: false,
       error: "Internal Server Error",

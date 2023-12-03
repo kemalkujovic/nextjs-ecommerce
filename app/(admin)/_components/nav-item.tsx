@@ -29,6 +29,11 @@ const routes = [
     href: `/admin/categories`,
   },
   {
+    label: "Billboards",
+    icon: <CategoryIcon className="h-4 w-4 mr-2" />,
+    href: `/admin/billboards`,
+  },
+  {
     label: "Settings",
     icon: <SettingsIcon className="h-4 w-4 mr-2" />,
     href: `/admin/settings`,

@@ -6,7 +6,7 @@ const Logo = () => {
   return (
     <Link href="/">
       <div className="hover:opacity-75 transition flex items-center">
-        <Image src="/logo.jpg" alt="Logo" height={50} width={50} />
+        <Image src="/logo.png" alt="Logo" height={50} width={50} />
       </div>
     </Link>
   );

@@ -1,7 +1,13 @@
+import { auth } from "@clerk/nextjs";
 import Navbar from "../_components/Navbar";
 import Sidebar from "../_components/Sidebar";
+import { redirect } from "next/navigation";
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
+  const { userId } = auth();
+  if (!userId) {
+    redirect("/sign-in");
+  }
   return (
     <div className="h-full">
       <Navbar />

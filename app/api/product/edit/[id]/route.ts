@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { S3Client } from "@aws-sdk/client-s3";
+
 import { NextResponse } from "next/server";
 import { uploadFileToS3 } from "../../route";
 import { auth } from "@clerk/nextjs";

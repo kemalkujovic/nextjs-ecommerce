@@ -28,3 +28,17 @@ export async function POST(req: Request) {
     });
   }
 }
+
+export async function GET(req: Request) {
+  try {
+    const user: any = await clerkClient.users.getUserList();
+
+    return NextResponse.json({ success: true, user: user });
+  } catch (error) {
+    console.error("Error updating user:", error);
+    return NextResponse.json({
+      success: false,
+      error: "Internal Server Error",
+    });
+  }
+}

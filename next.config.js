@@ -6,6 +6,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "kemal-web-storage.s3.eu-north-1.amazonaws.com",
       },
+      {
+        protocol: "https",
+        hostname: "img.clerk.com",
+      },
     ],
   },
 };

@@ -7,6 +7,8 @@ import GradingIcon from "@mui/icons-material/Grading";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { usePathname, useRouter } from "next/navigation";
 import ArtTrackIcon from "@mui/icons-material/ArtTrack";
+import GroupIcon from "@mui/icons-material/Group";
+
 const routes = [
   {
     label: "Dashboard",
@@ -33,7 +35,11 @@ const routes = [
     icon: <CategoryIcon className="h-4 w-4 mr-2" />,
     href: `/admin/categories`,
   },
-
+  {
+    label: "Manage Users",
+    icon: <GroupIcon className="h-4 w-4 mr-2" />,
+    href: `/admin/users`,
+  },
   {
     label: "Settings",
     icon: <SettingsIcon className="h-4 w-4 mr-2" />,

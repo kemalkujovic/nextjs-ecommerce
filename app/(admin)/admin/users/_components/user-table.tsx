@@ -1,7 +1,7 @@
 "use client";
 import TitleHeader from "@/app/(admin)/_components/title-header";
 import axios from "axios";
-import * as React from "react";
+import { useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -11,22 +11,47 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 import formatDate from "@/app/utils/formateDate";
 import Spinner from "@/app/components/Spinner";
+import ReactPaginate from "react-paginate";
+
+type UserData = {
+  user: User[];
+};
+
+type User = {
+  username?: string;
+  id: string;
+  firstName?: string;
+  lastName?: string;
+  imageUrl?: string;
+  isAdmin?: boolean;
+  emailAddress: string;
+  createdAt: number;
+};
 
 const UserTable = () => {
+  const [currentPage, setCurrentPage] = useState(0);
+  const productsPerPage = 5;
+
   const { error, data, isLoading } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
-      const { data } = await axios.get("/api/clerk/addAdmin");
-
+      const res = await axios.get<UserData>("/api/clerk/addAdmin");
+      const data = res.data.user;
       return data;
     },
   });
 
+  const offset = currentPage * productsPerPage;
+  const currentProducts = data?.slice(offset, offset + productsPerPage);
+
+  const handlePageClick = (selectedPage: { selected: number }) => {
+    setCurrentPage(selectedPage.selected);
+  };
   if (isLoading) {
     return <Spinner />;
   }
@@ -35,14 +60,13 @@ const UserTable = () => {
     return <p>Something went wrong!</p>;
   }
 
-  console.log(data);
-
   return (
     <>
       <TitleHeader
         title="Manage user"
         description="Manage admin users"
         url="/admin/users/new"
+        count={data?.length}
       />
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -70,7 +94,7 @@ const UserTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data?.user?.map((user: any) => {
+            {currentProducts?.map((user: any) => {
               const timestamp = user.createdAt;
               const date = new Date(timestamp);
               console.log(date);
@@ -106,7 +130,7 @@ const UserTable = () => {
                     <button>
                       <DeleteIcon className="text-red-600" />
                     </button>
-                    <Link href={`/admin/users/edit`}>
+                    <Link href={`/admin/users/edit/${user.id}`}>
                       <EditIcon />
                     </Link>
                   </TableCell>
@@ -116,6 +140,23 @@ const UserTable = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      {data && (
+        <ReactPaginate
+          previousLabel={"Previous"}
+          nextLabel={"Next"}
+          breakLabel={"..."}
+          pageCount={Math.ceil(data?.length / productsPerPage)}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          onPageChange={handlePageClick}
+          containerClassName={"pagination flex space-x-2 justify-end mt-4"}
+          previousLinkClassName={"bg-neutral-800 px-4 py-2 rounded text-white"}
+          nextLinkClassName={"bg-neutral-800 px-4 py-2 rounded text-white"}
+          disabledClassName={"opacity-50 cursor-not-allowed"}
+          activeClassName={"bg-blue-700"}
+          pageClassName="hidden"
+        />
+      )}
     </>
   );
 };

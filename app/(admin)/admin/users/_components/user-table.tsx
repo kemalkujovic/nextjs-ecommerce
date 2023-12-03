@@ -11,12 +11,13 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 import formatDate from "@/app/utils/formateDate";
 import Spinner from "@/app/components/Spinner";
 import ReactPaginate from "react-paginate";
+import toast from "react-hot-toast";
 
 type UserData = {
   user: User[];
@@ -36,15 +37,26 @@ type User = {
 const UserTable = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const productsPerPage = 5;
+  const queryClient = useQueryClient();
 
   const { error, data, isLoading } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
-      const res = await axios.get<UserData>("/api/clerk/addAdmin");
+      const res = await axios.get<UserData>("/api/clerk/users");
       const data = res.data.user;
       return data;
     },
   });
+
+  const deleteUser = async (id: string) => {
+    try {
+      const res = await axios.delete(`/api/clerk/users/${id}`);
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+      toast.success("User deleted");
+    } catch (error) {
+      toast.error("Something went wrong");
+    }
+  };
 
   const offset = currentPage * productsPerPage;
   const currentProducts = data?.slice(offset, offset + productsPerPage);
@@ -127,7 +139,7 @@ const UserTable = () => {
                     <p>{formatDate(date.toString())}</p>
                   </TableCell>
                   <TableCell align="center">
-                    <button>
+                    <button onClick={() => deleteUser(user.id)}>
                       <DeleteIcon className="text-red-600" />
                     </button>
                     <Link href={`/admin/users/edit/${user.id}`}>

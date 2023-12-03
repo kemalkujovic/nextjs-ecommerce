@@ -2,6 +2,7 @@ import Logo from "@/app/components/Logo";
 import React from "react";
 import CreateButton from "./create-button";
 import MobileSidebar from "./mobile-sidebar";
+import { UserButton } from "@clerk/nextjs";
 
 const Navbar = () => {
   return (
@@ -13,7 +14,17 @@ const Navbar = () => {
       </div>
       <div className="flex items-center gap-x-4">
         <CreateButton />
-        <p className="text-white">PROFILE</p>
+        <UserButton
+          afterSignOutUrl="/"
+          appearance={{
+            elements: {
+              avatarBox: {
+                height: 30,
+                width: 30,
+              },
+            },
+          }}
+        />
       </div>
     </nav>
   );

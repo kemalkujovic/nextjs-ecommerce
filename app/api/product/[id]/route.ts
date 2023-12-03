@@ -1,21 +1,18 @@
 import { db } from "@/lib/db";
-import { DeleteObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { s3Client } from "@/lib/s3";
+import { DeleteObjectCommand } from "@aws-sdk/client-s3";
+import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
-const s3Client = new S3Client({
-  region: process.env.NEXT_PUBLIC_AWS_S3_REGION,
-  credentials: {
-    accessKeyId: process.env.NEXT_PUBLIC_AWS_S3_ACCESS_KEY_ID!,
-    secretAccessKey: process.env.NEXT_PUBLIC_AWS_S3_SECRET_ACCESS_KEY!,
-  },
-});
 
 export async function DELETE(
   req: Request,
   { params }: { params: { id: string } }
 ) {
   const { id } = params;
+  const { userId } = auth();
+
   try {
-    if (false) {
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized", status: 401 });
     }
 

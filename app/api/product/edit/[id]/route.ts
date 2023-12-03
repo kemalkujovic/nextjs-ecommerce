@@ -2,22 +2,16 @@ import { db } from "@/lib/db";
 import { S3Client } from "@aws-sdk/client-s3";
 import { NextResponse } from "next/server";
 import { uploadFileToS3 } from "../../route";
-
-const s3Client = new S3Client({
-  region: process.env.NEXT_PUBLIC_AWS_S3_REGION,
-  credentials: {
-    accessKeyId: process.env.NEXT_PUBLIC_AWS_S3_ACCESS_KEY_ID!,
-    secretAccessKey: process.env.NEXT_PUBLIC_AWS_S3_SECRET_ACCESS_KEY!,
-  },
-});
+import { auth } from "@clerk/nextjs";
 
 export async function GET(
   req: Request,
   { params }: { params: { id: string } }
 ) {
   const { id } = params;
+  const { userId } = auth();
   try {
-    if (false) {
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized", status: 401 });
     }
 
@@ -38,10 +32,12 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   const { id } = params;
+  const { userId } = auth();
 
   try {
     const formData = await req.formData();
-    if (false) {
+
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized", status: 401 });
     }
 

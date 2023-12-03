@@ -1,14 +1,8 @@
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
-
-const s3Client = new S3Client({
-  region: process.env.NEXT_PUBLIC_AWS_S3_REGION,
-  credentials: {
-    accessKeyId: process.env.NEXT_PUBLIC_AWS_S3_ACCESS_KEY_ID!,
-    secretAccessKey: process.env.NEXT_PUBLIC_AWS_S3_SECRET_ACCESS_KEY!,
-  },
-});
+import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { auth } from "@clerk/nextjs";
+import { s3Client } from "@/lib/s3";
 
 export async function uploadFileToS3(file: any, fileName: any) {
   const fileBuffer = file;
@@ -29,8 +23,9 @@ export async function uploadFileToS3(file: any, fileName: any) {
 }
 
 export async function POST(req: Request) {
-  // TODO: user auth
-  if (false) {
+  const { userId } = auth();
+
+  if (!userId) {
     return NextResponse.json({ error: "Unauthorized", status: 401 });
   }
 
@@ -85,7 +80,9 @@ export async function POST(req: Request) {
 export async function GET(req: Request) {
   try {
     // TODO: User auth
-    if (false) {
+    const { userId } = auth();
+
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized", status: 401 });
     }
 

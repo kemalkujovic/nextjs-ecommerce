@@ -11,6 +11,12 @@ type initialState = {
   billboard: string;
 };
 
+type Billboard = {
+  id: string;
+  billboard: string;
+  imageURL: string;
+};
+
 const NewCategorie = () => {
   const router = useRouter();
   const paramas = useParams();
@@ -28,6 +34,7 @@ const NewCategorie = () => {
 
   const [formData, setFormData] = useState<initialState>(initialState);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [billboards, setBillboards] = useState<Billboard[]>([]);
 
   useEffect(() => {
     if (categoryId) {
@@ -43,6 +50,24 @@ const NewCategorie = () => {
         });
     }
   }, [categoryId]);
+
+  useEffect(() => {
+    const fetchBillboards = async () => {
+      try {
+        const res = await axios.get("/api/billboards");
+        const data = res.data;
+        setBillboards(data);
+      } catch (error) {
+        console.log("Error getting categories", error);
+      }
+    };
+
+    return () => {
+      fetchBillboards();
+    };
+  }, []);
+
+  console.log(billboards);
 
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -117,21 +142,30 @@ const NewCategorie = () => {
             )}
           </div>
           <div>
-            <label htmlFor="category" className="font-semibold">
-              Billboard
+            <label htmlFor="billboard" className="font-semibold">
+              Choose a billboard
             </label>
-            <Input
-              type="text"
-              name="category"
+            <select
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              name="billboard"
+              id="billboard"
               value={formData.billboard}
-              size={30}
               onChange={(e) =>
                 setFormData({ ...formData, billboard: e.target.value })
               }
-            />
-            {errors.billboard && (
-              <p className="text-red-500">{errors.billboard}</p>
-            )}
+            >
+              {billboards.length > 0 &&
+                billboards?.map((board) => {
+                  return (
+                    <option key={board.id} value={board.billboard}>
+                      {board.billboard}
+                    </option>
+                  );
+                })}
+              {errors.billboard && (
+                <p className="text-red-500">{errors.billboard}</p>
+              )}
+            </select>
           </div>
         </div>
         <Button

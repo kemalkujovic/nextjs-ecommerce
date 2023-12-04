@@ -118,7 +118,7 @@ const NewCategorie = () => {
           </div>
           <div>
             <label htmlFor="category" className="font-semibold">
-              Bilboard
+              Billboard
             </label>
             <Input
               type="text"
@@ -137,7 +137,7 @@ const NewCategorie = () => {
         <Button
           disabled={isLoading}
           type="submit"
-          className="mt-4 bg-green-600"
+          className="mt-4 px-7 bg-green-600"
           variant="default"
         >
           {categoryId ? "Edit" : "Create"}

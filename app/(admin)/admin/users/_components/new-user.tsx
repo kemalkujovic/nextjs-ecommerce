@@ -175,7 +175,11 @@ const NewUser = () => {
             </select>
           </div>
         </div>
-        <Button type="submit" className="mt-4 bg-green-600" variant="default">
+        <Button
+          type="submit"
+          className="mt-4 px-7 bg-green-600"
+          variant="default"
+        >
           {categoryId ? "Edit" : "Create"}
         </Button>
       </form>

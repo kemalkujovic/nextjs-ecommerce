@@ -1,4 +1,5 @@
 import { db } from "@/lib/db";
+import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
 export async function GET(
@@ -6,8 +7,10 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   const { id } = params;
+  const { userId } = auth();
+
   try {
-    if (false) {
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized", status: 401 });
     }
 
@@ -28,11 +31,13 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   const { id } = params;
+  const { userId } = auth();
 
   try {
-    if (false) {
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized", status: 401 });
     }
+
     const { category, billboard } = await req.json();
 
     const formData = { category, billboard };
@@ -58,9 +63,10 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   const { id } = params;
+  const { userId } = auth();
 
   try {
-    if (false) {
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized", status: 401 });
     }
 

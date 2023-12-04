@@ -28,6 +28,8 @@ const EditProduct = () => {
       return data as createData;
     },
   });
+
+  
   console.log(data);
   if (isLoading) {
     return (

@@ -17,6 +17,7 @@ import formatDate from "@/app/utils/formateDate";
 import ReactPaginate from "react-paginate";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import Image from "next/image";
 
 type Billboards = {
   id: string;
@@ -29,6 +30,7 @@ const TableBillboards = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const productsPerPage = 5;
   const queryClient = useQueryClient();
+  const baseUrl = "https://kemal-web-storage.s3.eu-north-1.amazonaws.com";
 
   const { error, data, isLoading } = useQuery({
     queryKey: ["billboards"],
@@ -85,7 +87,10 @@ const TableBillboards = () => {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>
+              <TableCell width="100px">
+                <p className="text-gray-700">Image</p>
+              </TableCell>
+              <TableCell align="left">
                 <p className="text-gray-700">Billboard</p>
               </TableCell>
               <TableCell align="center">
@@ -102,6 +107,15 @@ const TableBillboards = () => {
                 key={billboard.id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
+                <TableCell component="th" scope="row">
+                  <Image
+                    src={`${baseUrl}/${billboard?.imageURL}`}
+                    alt="billboard Image"
+                    className="border rounded-sm"
+                    width={60}
+                    height={60}
+                  />
+                </TableCell>
                 <TableCell component="th" scope="row">
                   {billboard.billboard}
                 </TableCell>

@@ -52,7 +52,7 @@ const EditProduct = () => {
   };
 
   return (
-    <div className="flex justify-center items-center">
+    <div className="flex justify-center items-center max-md:justify-start">
       <EditForm onSubmit={handleFormSubmit} data={data} />
     </div>
   );

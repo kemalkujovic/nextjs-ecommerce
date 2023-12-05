@@ -28,7 +28,7 @@ const EditProduct = () => {
       return data as createData;
     },
   });
-  if (isLoading) {
+  if (isLoading || !data) {
     return (
       <div>
         <Spinner />

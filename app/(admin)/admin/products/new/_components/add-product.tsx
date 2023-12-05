@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import axios from "axios";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -23,6 +24,8 @@ type initialState = {
 };
 
 const AddProduct = () => {
+  const router = useRouter();
+
   const initialState = {
     title: "",
     description: "",
@@ -35,8 +38,7 @@ const AddProduct = () => {
   const [category, setCategory] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [dataForm, setDataForm] = useState<initialState>(initialState);
-  const [imagePreviews, setImagePreviews] = useState<string[]>([]); // Dodato
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
 
   const [errors, setErrors] = useState({
     title: "",
@@ -71,9 +73,7 @@ const AddProduct = () => {
       const imagePreviews: string[] = Array.from(selectedFiles).map(
         (file) => URL.createObjectURL(file) as string
       );
-      setImagePreviews(imagePreviews);
-    } else {
-      setImagePreviews([]);
+      setImagePreviews((prev) => [...prev, ...imagePreviews]);
     }
   };
 
@@ -148,12 +148,9 @@ const AddProduct = () => {
       });
       toast.success("Product created successfully");
 
-      setDataForm(initialState);
+      router.push("/admin/products");
       setIsLoading(false);
       setImagePreviews([]);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
-      }
     } catch (error) {
       setIsLoading(false);
       toast.error("Something went wrong!");
@@ -246,7 +243,6 @@ const AddProduct = () => {
           name="image"
           required
           onChange={handleFileChange}
-          ref={fileInputRef}
           multiple
         />
         {errors.files && <p className="text-red-500">{errors.files}</p>}

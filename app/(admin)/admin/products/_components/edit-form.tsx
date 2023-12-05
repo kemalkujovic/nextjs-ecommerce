@@ -34,7 +34,7 @@ const EditForm = ({ data, onSubmit }: EditFormProps) => {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [checkbox, setCheckBox] = useState<boolean>(featured);
-  const [previewImage, setPreviewImage] = useState<string[]>(imageURLs);
+  const [previewImage, setPreviewImage] = useState<string[]>();
   const [dataForm, setDataForm] = useState<InitialType>(initialState);
   const handleCheckboxChange = () => {
     setCheckBox((prevCheck) => !prevCheck);
@@ -169,6 +169,7 @@ const EditForm = ({ data, onSubmit }: EditFormProps) => {
               width={100}
               height={100}
               className="rounded-sm"
+              priority={true}
             />
           );
         })}

@@ -102,8 +102,10 @@ const NewBillboard = () => {
     <>
       <form onSubmit={submitHandler}>
         <div className="flex gap-4 flex-col">
-          <div className="flex gap-y-3 flex-col">
-            <label htmlFor="file">Background Image</label>
+          <div className="flex gap-y-2 flex-col">
+            <label htmlFor="file" className="font-semibold">
+              Background Image
+            </label>
             {imagePreview && (
               <Image
                 src={imagePreview}
@@ -122,7 +124,7 @@ const NewBillboard = () => {
             />
             {errors.image && <p className="text-red-500">{errors.image}</p>}
           </div>
-          <div>
+          <div className="flex flex-col gap-y-2">
             <label htmlFor="bilboard" className="font-semibold">
               Bilboard
             </label>

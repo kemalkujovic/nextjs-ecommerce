@@ -13,27 +13,36 @@ type Category = {
   category: string;
 };
 
+type initialState = {
+  title: string;
+  description: string;
+  price: string;
+  category: string;
+  files: File[];
+  isFeatured: boolean;
+};
+
 const AddProduct = () => {
   const initialState = {
     title: "",
     description: "",
     price: "",
     category: "MAN",
-    file: null,
+    files: [], // Promenjeno
     isFeatured: false,
   };
 
   const [category, setCategory] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [dataForm, setDataForm] = useState(initialState);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [dataForm, setDataForm] = useState<initialState>(initialState);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]); // Dodato
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const [errors, setErrors] = useState({
     title: "",
     description: "",
     price: "",
-    file: "",
+    files: "", // Promenjeno
     category: "",
   });
 
@@ -48,23 +57,25 @@ const AddProduct = () => {
       }
     };
 
-    return () => {
-      fetchCategories();
-    };
+    fetchCategories();
   }, []);
 
-  const handleFileChange = (e: any) => {
-    const selectedFile = e.target.files[0];
-    setDataForm((prevData) => ({ ...prevData, file: selectedFile || "" }));
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFiles = e.target.files as FileList;
+    setDataForm((prevData) => ({
+      ...prevData,
+      files: [...prevData.files, ...Array.from(selectedFiles)],
+    }));
 
-    if (selectedFile) {
-      const imageUrl = URL.createObjectURL(selectedFile);
-      setImagePreview(imageUrl);
+    if (selectedFiles.length > 0) {
+      const imagePreviews: string[] = Array.from(selectedFiles).map(
+        (file) => URL.createObjectURL(file) as string
+      );
+      setImagePreviews(imagePreviews);
     } else {
-      setImagePreview(null);
+      setImagePreviews([]);
     }
   };
-
   const handleCheckboxChange = (isChecked: boolean) => {
     setDataForm((prevData) => ({ ...prevData, isFeatured: isChecked }));
   };
@@ -76,7 +87,7 @@ const AddProduct = () => {
       title: "",
       description: "",
       price: "",
-      file: "",
+      files: "",
       category: "",
     });
 
@@ -86,7 +97,7 @@ const AddProduct = () => {
       !dataForm.description ||
       dataForm.description.length < 4 ||
       !dataForm.price ||
-      !dataForm.file ||
+      dataForm.files.length === 0 ||
       !dataForm.category
     ) {
       setIsLoading(false);
@@ -101,7 +112,8 @@ const AddProduct = () => {
             ? "Description must be at least 4 characters"
             : "",
         price: !dataForm.price ? "Please enter a price" : "",
-        file: !dataForm.file ? "Please select a file" : "",
+        files:
+          dataForm.files.length === 0 ? "Please select at least one file" : "",
         category: !dataForm.category ? "Please select a category" : "",
       }));
 
@@ -114,14 +126,17 @@ const AddProduct = () => {
       title: dataForm.title,
       description: dataForm.description,
       price: convPrice,
-      file: dataForm.file,
+      files: dataForm.files,
       featured: dataForm.isFeatured,
       category: dataForm.category,
     };
 
     const formData = new FormData();
 
-    formData.append("file", dataForm.file!);
+    Array.from(dataForm.files).forEach((file) => {
+      formData.append("files", file);
+    });
+
     formData.append("requestData", JSON.stringify(requestData));
 
     try {
@@ -134,7 +149,7 @@ const AddProduct = () => {
 
       setDataForm(initialState);
       setIsLoading(false);
-      setImagePreview(null);
+      setImagePreviews([]); // Dodato
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
@@ -231,17 +246,19 @@ const AddProduct = () => {
           required
           onChange={handleFileChange}
           ref={fileInputRef}
+          multiple
         />
-        {errors.file && <p className="text-red-500">{errors.file}</p>}
-        {imagePreview && (
+        {errors.files && <p className="text-red-500">{errors.files}</p>}
+        {imagePreviews.map((preview, index) => (
           <Image
-            src={imagePreview}
-            alt="Preview"
+            key={index}
+            src={preview}
+            alt={`Preview ${index}`}
             width={100}
             height={100}
             className="rounded-sm"
           />
-        )}
+        ))}
         <Button disabled={isLoading} className="mt-2 bg-green-600">
           Add Product
         </Button>

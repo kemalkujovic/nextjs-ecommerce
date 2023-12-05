@@ -8,10 +8,10 @@ datasource db {
 }
 
 model Product {
-  id          String  @id @default(cuid()) @map("_id")
+  id          String   @id @default(cuid()) @map("_id")
   title       String
   description String
-  imageURL    String
+  imageURLs   String[]
   category    String
   price       Float
   featured    Boolean

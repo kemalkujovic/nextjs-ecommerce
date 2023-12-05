@@ -26,7 +26,7 @@ type createData = {
   price: number;
   featured: boolean;
   id: string;
-  imageURL: string;
+  imageURLs: string[];
   category: string;
   createdAt: string;
 };
@@ -76,7 +76,7 @@ export default function ProductTable() {
   if (error) {
     return <p>Something went wrong!</p>;
   }
-
+  console.log(data);
   return (
     <>
       <TitleHeader
@@ -124,7 +124,7 @@ export default function ProductTable() {
               >
                 <TableCell component="th" scope="row">
                   <Image
-                    src={`${baseUrl}/${product.imageURL}`}
+                    src={`${baseUrl}/${product.imageURLs[0]}`}
                     alt="Product Image"
                     className="border rounded-sm"
                     width={60}

@@ -31,15 +31,22 @@ export async function POST(req: Request) {
 
   try {
     const formData = await req.formData();
-    const file: File | null = formData.get("file") as File;
+    const files = formData.getAll("files");
 
-    if (!file) {
+    const fileNames: string[] = [];
+    if (!files) {
       return NextResponse.json({ error: "File is required" }, { status: 400 });
     }
 
-    const buffer = Buffer.from(await file.arrayBuffer());
-
-    const fileName = await uploadFileToS3(buffer, file.name);
+    if (files) {
+      for (const file of Array.from(files)) {
+        if (file instanceof File) {
+          const buffer = Buffer.from(await file.arrayBuffer());
+          const fileName = await uploadFileToS3(buffer, file.name);
+          fileNames.push(fileName);
+        }
+      }
+    }
 
     const requestData = formData.get("requestData") as string;
     const productInfo = JSON.parse(requestData);
@@ -52,7 +59,7 @@ export async function POST(req: Request) {
       !description ||
       description.length < 4 ||
       !price ||
-      !file ||
+      !fileNames ||
       !category
     ) {
       return NextResponse.json(
@@ -67,7 +74,7 @@ export async function POST(req: Request) {
         description,
         price,
         featured,
-        imageURL: fileName,
+        imageURLs: fileNames,
         category,
       },
     });

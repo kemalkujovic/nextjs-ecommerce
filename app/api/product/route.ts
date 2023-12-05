@@ -11,7 +11,7 @@ export async function uploadFileToS3(file: any, fileName: any) {
 
   const params = {
     Bucket: process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME,
-    Key: `${fileName}-${randomSuffix}`,
+    Key: `products/${fileName}-${randomSuffix}`,
     Body: fileBuffer,
     ContentType: "image/jpg",
   };
@@ -19,7 +19,7 @@ export async function uploadFileToS3(file: any, fileName: any) {
   const command = new PutObjectCommand(params);
   await s3Client.send(command);
 
-  return `${fileName}-${randomSuffix}`;
+  return `/products/${fileName}-${randomSuffix}`;
 }
 
 export async function POST(req: Request) {

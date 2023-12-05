@@ -45,16 +45,13 @@ export async function PUT(
     const price = formData.get("price") as string;
     const description = formData.get("description") as string;
     const category = formData.get("category") as string;
-    const img = formData.get("image");
     const featured = formData.get("isFeatured");
     const isFeaturedBoolean = featured === "on";
-    console.log(featured);
-    let fileName: string | undefined;
+    const files = formData.getAll("image");
+    const fileNames: string[] = [];
 
-    if (img && img instanceof File && img.name) {
-      const imageName = img.name;
-      const buffer = Buffer.from(await img.arrayBuffer());
-      fileName = await uploadFileToS3(buffer, imageName);
+    if (!files) {
+      return NextResponse.json({ error: "File is required" }, { status: 400 });
     }
 
     const convPirce = +price;
@@ -65,7 +62,7 @@ export async function PUT(
       description: string;
       featured: boolean;
       category: string;
-      imageURL?: string;
+      imageURLs?: string[];
     } = {
       featured: isFeaturedBoolean,
       title,
@@ -74,8 +71,16 @@ export async function PUT(
       category,
     };
 
-    if (fileName) {
-      updateData.imageURL = fileName;
+    if (files) {
+      for (const file of Array.from(files)) {
+        if (file instanceof File && file.name) {
+          console.log(file.name);
+          const buffer = Buffer.from(await file.arrayBuffer());
+          const fileName = await uploadFileToS3(buffer, file.name);
+          updateData.imageURLs = fileNames;
+          fileNames.push(fileName);
+        }
+      }
     }
 
     const product = await db.product.update({

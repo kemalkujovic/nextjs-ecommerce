@@ -22,7 +22,7 @@ export async function DELETE(
       },
     });
 
-    const imageKey = product?.imageURL;
+    const imageKey = product?.imageURLs;
 
     const task = await db.product.delete({
       where: {
@@ -32,15 +32,19 @@ export async function DELETE(
 
     const bucketName = process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME;
 
-    const s3Key = imageKey;
+    if (imageKey) {
+      for (const image of Array.from(imageKey)) {
+        const s3Key = image.slice(1);
 
-    const deleteCommand = new DeleteObjectCommand({
-      Bucket: bucketName,
-      Key: s3Key,
-    });
-    await s3Client.send(deleteCommand);
+        const deleteCommand = new DeleteObjectCommand({
+          Bucket: bucketName,
+          Key: s3Key,
+        });
+        await s3Client.send(deleteCommand);
+      }
+    }
 
-    return NextResponse.json(task);
+    return NextResponse.json({});
   } catch (error) {
     return NextResponse.json({ error: "Error deleting task", status: 500 });
   }

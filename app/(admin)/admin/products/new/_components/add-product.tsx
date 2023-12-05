@@ -28,7 +28,7 @@ const AddProduct = () => {
     description: "",
     price: "",
     category: "MAN",
-    files: [], // Promenjeno
+    files: [],
     isFeatured: false,
   };
 
@@ -42,7 +42,7 @@ const AddProduct = () => {
     title: "",
     description: "",
     price: "",
-    files: "", // Promenjeno
+    files: "",
     category: "",
   });
 
@@ -76,6 +76,7 @@ const AddProduct = () => {
       setImagePreviews([]);
     }
   };
+
   const handleCheckboxChange = (isChecked: boolean) => {
     setDataForm((prevData) => ({ ...prevData, isFeatured: isChecked }));
   };
@@ -149,7 +150,7 @@ const AddProduct = () => {
 
       setDataForm(initialState);
       setIsLoading(false);
-      setImagePreviews([]); // Dodato
+      setImagePreviews([]);
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
@@ -161,7 +162,7 @@ const AddProduct = () => {
   };
 
   return (
-    <div className="flex justify-center items-center">
+    <div className="flex justify-center items-center max-md:justify-start">
       <form
         onSubmit={handleSubmit}
         className="flex flex-col gap-y-2 max-md:min-w-[90%] min-w-[70%] border p-4 "
@@ -249,16 +250,18 @@ const AddProduct = () => {
           multiple
         />
         {errors.files && <p className="text-red-500">{errors.files}</p>}
-        {imagePreviews.map((preview, index) => (
-          <Image
-            key={index}
-            src={preview}
-            alt={`Preview ${index}`}
-            width={100}
-            height={100}
-            className="rounded-sm"
-          />
-        ))}
+        <div className="flex gap-2">
+          {imagePreviews.map((preview, index) => (
+            <Image
+              key={index}
+              src={preview}
+              alt={`Preview ${index}`}
+              width={100}
+              height={100}
+              className="rounded-sm"
+            />
+          ))}
+        </div>
         <Button disabled={isLoading} className="mt-2 bg-green-600">
           Add Product
         </Button>

@@ -11,7 +11,7 @@ export type createData = {
   description: string;
   price: number;
   id: string;
-  imageURL: string;
+  imageURLs: string[];
   category: string;
   featured: boolean;
 };
@@ -28,9 +28,6 @@ const EditProduct = () => {
       return data as createData;
     },
   });
-
-  
-  console.log(data);
   if (isLoading) {
     return (
       <div>
@@ -45,7 +42,6 @@ const EditProduct = () => {
 
   const handleFormSubmit = async (formData: FormData) => {
     try {
-      console.log(formData);
       const res = await axios.put(`/api/product/edit/${productId}`, formData);
 
       toast.success("Product edit successfully");

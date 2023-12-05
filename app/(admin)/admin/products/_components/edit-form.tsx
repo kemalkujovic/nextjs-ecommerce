@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import React, { useEffect, useState } from "react";
@@ -9,8 +10,17 @@ type EditFormProps = {
   onSubmit: (formData: FormData) => void;
 };
 
+type InitialType = {
+  title: string;
+  description: string;
+  price: number;
+  category: string;
+  files: File[];
+  isFeatured: boolean;
+};
+
 const EditForm = ({ data, onSubmit }: EditFormProps) => {
-  const { title, description, imageURL, category, price, featured } = data;
+  const { title, description, imageURLs, category, price, featured } = data;
   const baseUrl = "https://kemal-web-storage.s3.eu-north-1.amazonaws.com";
 
   const initialState = {
@@ -18,17 +28,14 @@ const EditForm = ({ data, onSubmit }: EditFormProps) => {
     description,
     price,
     category,
-    file: null,
+    files: [],
     isFeatured: featured,
   };
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [checkbox, setCheckBox] = useState<boolean>(featured);
-  const [previewImage, setPreviewImage] = useState<string | undefined>(
-    `${baseUrl}/${imageURL}`
-  );
-  const [dataForm, setDataForm] = useState(initialState);
-
+  const [previewImage, setPreviewImage] = useState<string[]>(imageURLs);
+  const [dataForm, setDataForm] = useState<InitialType>(initialState);
   const handleCheckboxChange = () => {
     setCheckBox((prevCheck) => !prevCheck);
   };
@@ -38,18 +45,32 @@ const EditForm = ({ data, onSubmit }: EditFormProps) => {
   }, [featured]);
 
   useEffect(() => {
-    setPreviewImage(`${baseUrl}/${imageURL}`);
-  }, [imageURL]);
+    setPreviewImage(imageURLs);
+  }, [imageURLs]);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+  useEffect(() => {
+    setDataForm({
+      title,
+      description,
+      price,
+      category,
+      files: [],
+      isFeatured: featured,
+    });
+  }, [featured, title, description, price, category, imageURLs]);
 
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreviewImage(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFiles = e.target.files as FileList;
+    setDataForm((prevData) => ({
+      ...prevData,
+      files: [...prevData.files, ...Array.from(selectedFiles)],
+    }));
+
+    if (selectedFiles.length > 0) {
+      const imagePreviews: string[] = Array.from(selectedFiles).map(
+        (file) => URL.createObjectURL(file) as string
+      );
+      setPreviewImage(imagePreviews);
     }
   };
 
@@ -63,7 +84,6 @@ const EditForm = ({ data, onSubmit }: EditFormProps) => {
 
     setIsLoading(false);
   };
-
   return (
     <form
       onSubmit={handleSubmit}
@@ -130,16 +150,29 @@ const EditForm = ({ data, onSubmit }: EditFormProps) => {
         </div>
       </div>
       <label htmlFor="image">Change Product Image</label>
-      <Input type="file" id="image" name="image" onChange={handleImageChange} />
-      {previewImage && (
-        <Image
-          src={previewImage}
-          alt="Product Image"
-          width={100}
-          height={100}
-          className="rounded-sm"
-        />
-      )}
+      <Input
+        type="file"
+        id="image"
+        name="image"
+        onChange={handleFileChange}
+        multiple
+      />
+      <div className="flex gap-2">
+        {previewImage?.map((preview, index) => {
+          const isImageIncluded = imageURLs.includes(preview);
+          const imagePath = isImageIncluded ? `${baseUrl}${preview}` : preview;
+          return (
+            <Image
+              key={index}
+              src={imagePath}
+              alt={`Preview ${index}`}
+              width={100}
+              height={100}
+              className="rounded-sm"
+            />
+          );
+        })}
+      </div>
       <Button disabled={isLoading} type="submit" className="mt-2 bg-green-600">
         Save Changes
       </Button>

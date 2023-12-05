@@ -34,9 +34,9 @@ type createData = {
 export default function ProductTable() {
   const [currentPage, setCurrentPage] = useState(0);
   const productsPerPage = 5;
+  const baseUrl = "https://kemal-web-storage.s3.eu-north-1.amazonaws.com";
 
   const queryClient = useQueryClient();
-  const baseUrl = "https://kemal-web-storage.s3.eu-north-1.amazonaws.com";
 
   const { error, data, isLoading } = useQuery({
     queryKey: ["products"],
@@ -76,7 +76,6 @@ export default function ProductTable() {
   if (error) {
     return <p>Something went wrong!</p>;
   }
-  console.log(data);
   return (
     <>
       <TitleHeader
@@ -124,7 +123,7 @@ export default function ProductTable() {
               >
                 <TableCell component="th" scope="row">
                   <Image
-                    src={`${baseUrl}/${product.imageURLs[0]}`}
+                    src={`${baseUrl}${product.imageURLs[0]}`}
                     alt="Product Image"
                     className="border rounded-sm"
                     width={60}

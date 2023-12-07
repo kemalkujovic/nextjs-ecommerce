@@ -45,7 +45,6 @@ export async function POST(req: Request) {
     const productInfo = JSON.parse(requestData);
     const title = productInfo;
 
-    console.log(title);
     if (!title || title.length < 4) {
       return NextResponse.json(
         { error: "Missing required fields." },
@@ -67,12 +66,6 @@ export async function POST(req: Request) {
 
 export async function GET(req: Request) {
   try {
-    const { userId } = auth();
-
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized", status: 401 });
-    }
-
     const category = await db.billboard.findMany();
     return NextResponse.json(category);
   } catch (error) {

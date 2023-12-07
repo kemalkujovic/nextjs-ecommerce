@@ -1,8 +1,14 @@
-import getProducts from "@/actions/get-products";
-import NavBar from "@/components/navbar";
+import Billboard from "@/components/ui/billboard";
+import Container from "@/components/ui/container";
+
+export const revalidate = 0;
 
 const HomePage = async () => {
-  return <div>HELLO</div>;
+  return (
+    <Container>
+      <Billboard />
+    </Container>
+  );
 };
 
 export default HomePage;

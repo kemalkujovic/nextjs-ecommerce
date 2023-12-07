@@ -12,6 +12,7 @@ import { Button } from "./ui/button";
 import NavbarSearch from "./navbar-search";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import MobileSidebar from "@/app/(admin)/_components/mobile-sidebar";
+import NavItem from "./nav-item";
 
 const NavBar = async () => {
   const user = await currentUser();
@@ -22,12 +23,14 @@ const NavBar = async () => {
         <div className=" px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between">
           <MobileSidebar>
             <NavbarSearch />
+            <NavItem />
           </MobileSidebar>
           <div className="flex items-center max-md:hidden">
             <Logo />
-            <Link href="/" className="ml-2 flex lg:ml-2 gap-x-2">
+            {/* <Link href="/" className="ml-2 flex items-center lg:ml-2 gap-x-2">
               <p className="font-semibold text-l">KEMAL STORE</p>
-            </Link>
+            </Link> */}
+            <NavItem />
           </div>
           <div className="max-md:hidden">
             <NavbarSearch />
@@ -62,7 +65,7 @@ const NavBar = async () => {
               <Link href="/admin">
                 <AdminPanelSettingsIcon
                   style={{ height: "40px", width: "40px" }}
-                  className="text-neutral-800"
+                  className="text-neutral-800 hover:text-neutral-600"
                 />
               </Link>
             ) : (

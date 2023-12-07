@@ -2,10 +2,10 @@ export interface Product {
   id: string;
   category: string;
   description: string;
-  name: string;
+  title: string;
   price: string;
-  isFeatured: boolean;
-  images: string[];
+  featured: boolean;
+  imageURLs: string[];
 }
 
 export interface Image {

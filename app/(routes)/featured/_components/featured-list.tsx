@@ -4,6 +4,8 @@ import ProductCard from "@/components/ui/product-card";
 import { Product } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import Loading from "./loading";
+import Container from "@/components/ui/container";
 
 const FeautredList = () => {
   const { isLoading, data, error } = useQuery({
@@ -15,7 +17,7 @@ const FeautredList = () => {
     },
   });
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   return (

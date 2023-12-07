@@ -11,7 +11,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import Spinner from "@/app/components/Spinner";
+import Spinner from "@/components/Spinner";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import Link from "next/link";

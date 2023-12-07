@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
 import EditForm from "./edit-form";
-import Spinner from "@/app/components/Spinner";
+import Spinner from "@/components/Spinner";
 import toast from "react-hot-toast";
 
 export type createData = {

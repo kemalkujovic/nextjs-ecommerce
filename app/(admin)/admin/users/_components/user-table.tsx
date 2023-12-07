@@ -15,7 +15,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 import formatDate from "@/app/utils/formateDate";
-import Spinner from "@/app/components/Spinner";
+import Spinner from "@/components/Spinner";
 import ReactPaginate from "react-paginate";
 import toast from "react-hot-toast";
 

@@ -11,7 +11,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import Link from "next/link";
 import axios from "axios";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import Spinner from "@/app/components/Spinner";
+import Spinner from "@/components/Spinner";
 import TitleHeader from "@/app/(admin)/_components/title-header";
 import formatDate from "@/app/utils/formateDate";
 import ReactPaginate from "react-paginate";

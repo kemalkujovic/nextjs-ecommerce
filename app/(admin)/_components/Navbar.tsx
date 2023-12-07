@@ -1,4 +1,4 @@
-import Logo from "@/app/components/Logo";
+import Logo from "@/components/Logo";
 import React from "react";
 import CreateButton from "./create-button";
 import MobileSidebar from "./mobile-sidebar";

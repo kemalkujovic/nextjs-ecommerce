@@ -9,7 +9,7 @@ import { Menu } from "lucide-react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import Sidebar from "./Sidebar";
 
-const MobileSidebar = () => {
+const MobileSidebar = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
 
   const [isMounted, setIsMounted] = useState(false);
@@ -34,7 +34,7 @@ const MobileSidebar = () => {
     <>
       <Button
         onClick={onOpen}
-        className="block md:hidden mr-2 bg-transparent"
+        className="block md:hidden mr-2"
         variant="default"
         size="sm"
       >
@@ -45,7 +45,7 @@ const MobileSidebar = () => {
           side="left"
           className="p-2 pt-10 bg-neutral-800 text-white"
         >
-          <Sidebar />
+          {children}
         </SheetContent>
       </Sheet>
     </>

@@ -13,7 +13,7 @@ const Gallery: React.FC<GalleryProps> = ({ images = [] }) => {
   const baseUrl = "https://kemal-web-storage.s3.eu-north-1.amazonaws.com";
   return (
     <Tab.Group as="div" className="flex flex-col-reverse">
-      <div className="mx-auto mt-6 hidden w-full max-w-2xl sm:block lg:max-w-none">
+      <div className="mx-auto mt-6 hidden w-full max-w-2xl sm:block lg:max-w-2xl">
         <Tab.List className="grid grid-cols-4 gap-6">
           {images.map((image, index) => (
             <GalleryTab image={image} key={index} />
@@ -28,7 +28,10 @@ const Gallery: React.FC<GalleryProps> = ({ images = [] }) => {
                 fill
                 src={`${baseUrl}${image}`}
                 alt="Image"
-                className="object-cover object-center"
+                className="object-cover object-center opacity-0 duration-300 transition-opacity"
+                onLoad={(
+                  event: React.SyntheticEvent<HTMLImageElement, Event>
+                ) => event.currentTarget.classList.remove("opacity-0")}
               />
             </div>
           </Tab.Panel>

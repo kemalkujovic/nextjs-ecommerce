@@ -1,6 +1,7 @@
 import { type Metadata } from "next";
 import ProductItem from "./_components/product-item";
 import { getProduct } from "@/lib/apiCalls";
+import Footer from "@/components/footer";
 
 export async function generateMetadata({
   params,
@@ -25,6 +26,7 @@ const ProductPage = ({ params }: { params: { productId: string } }) => {
   return (
     <div>
       <ProductItem />
+      <Footer />
     </div>
   );
 };

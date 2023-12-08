@@ -9,6 +9,8 @@ import { useQueries, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useParams } from "next/navigation";
 import LoadingSkeleton from "./loading-skeleton";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import Link from "next/link";
 
 const ProductItem = () => {
   const { productId } = useParams();
@@ -49,8 +51,12 @@ const ProductItem = () => {
   return (
     <div className="bg-white">
       <Container>
-        <div className="px-4 py-10 sm:px-6 lg:px-8">
-          <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
+        <div className="px-4 py-10 sm:px-6 lg:px-16">
+          <Link href="/shop" className="flex items-center mb-5 gap-x-1">
+            <ArrowBackIcon style={{ width: "20px", height: "20px" }} />
+            <p className="text-md font-semibold">Back to shop</p>
+          </Link>
+          <div className="lg:grid lg:grid-cols-[500px_minmax(400px,_1fr)_100px] lg:items-start lg:gap-x-8">
             <Gallery images={productQuery.data?.imageURLs} />
             <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
               <Info data={productQuery?.data} />

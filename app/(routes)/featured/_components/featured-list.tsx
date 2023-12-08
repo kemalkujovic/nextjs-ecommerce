@@ -9,7 +9,7 @@ import Container from "@/components/ui/container";
 
 const FeautredList = () => {
   const { isLoading, data, error } = useQuery({
-    queryKey: ["product"],
+    queryKey: ["featured product"],
     queryFn: async () => {
       const { data } = await axios.get(`/api/product/`);
       const featuredData = data.filter((item: Product) => item.featured);

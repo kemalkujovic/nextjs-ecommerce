@@ -49,3 +49,23 @@ export async function DELETE(
     return NextResponse.json({ error: "Error deleting task", status: 500 });
   }
 }
+
+export async function GET(
+  req: Request,
+  { params }: { params: { id: string } }
+) {
+  const { id } = params;
+  const { userId } = auth();
+
+  try {
+    const product = await db.product.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    return NextResponse.json(product);
+  } catch (error) {
+    return NextResponse.json({ error: "Error getting product", status: 500 });
+  }
+}

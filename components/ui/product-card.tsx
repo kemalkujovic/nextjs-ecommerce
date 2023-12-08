@@ -27,7 +27,9 @@ const ProductCard: React.FC<ProductCard> = ({ data }) => {
           alt="Product"
           fill
           className="aspect-square object-cover rounded-md opacity-0 hover:opacity-100 transform scale-100 hover:scale-110 duration-300 transition-all"
-          onLoadingComplete={(image) => image.classList.remove("opacity-0")}
+          onLoad={(event: React.SyntheticEvent<HTMLImageElement, Event>) =>
+            event.currentTarget.classList.remove("opacity-0")
+          }
         />
         <div className="opacity-0 group-hover:opacity-100 transition absolute w-full px-6 bottom-5">
           <div className="flex gap-x-6 justify-center"></div>

@@ -8,6 +8,7 @@ import { type Product } from "@/types";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useParams } from "next/navigation";
+import LoadingSkeleton from "./loading-skeleton";
 
 const ProductItem = () => {
   const { productId } = useParams();
@@ -30,11 +31,15 @@ const ProductItem = () => {
   });
 
   if (productQuery.isLoading || relatedQuery.isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <Container>
+        <LoadingSkeleton />
+      </Container>
+    );
   }
 
-  if (productQuery.error || relatedQuery.error) {
-    return <div>Something went wrong!</div>;
+  if (!productQuery.data || !relatedQuery.data) {
+    return <Container>Something went wrong!</Container>;
   }
 
   const filteredData: Product[] = relatedQuery?.data?.filter(

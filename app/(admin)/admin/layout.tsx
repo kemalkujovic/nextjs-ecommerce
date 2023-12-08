@@ -2,6 +2,12 @@ import Navbar from "../_components/Navbar";
 import Sidebar from "../_components/Sidebar";
 import { redirect } from "next/navigation";
 import { currentUser } from "@clerk/nextjs";
+
+export const metadata = {
+  title: "Admin | Kemal Store",
+  description: `Admin for e-ecommerce, selling products, and new productivity`,
+};
+
 const AdminLayout = async ({ children }: { children: React.ReactNode }) => {
   const user = await currentUser();
 

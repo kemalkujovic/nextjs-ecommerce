@@ -1,6 +1,11 @@
 import Container from "@/components/ui/container";
 import FeautredList from "./_components/featured-list";
 
+export const metadata = {
+  title: "Featured | Kemal Store",
+  description: `Featured for e-ecommerce, selling products, and new productivity`,
+};
+
 const FeaturedPage = () => {
   return (
     <Container>

@@ -86,13 +86,6 @@ export async function POST(req: Request) {
 
 export async function GET(req: Request) {
   try {
-    // TODO: User auth
-    const { userId } = auth();
-
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized", status: 401 });
-    }
-
     const tasks = await db.product.findMany();
     return NextResponse.json(tasks);
   } catch (error) {

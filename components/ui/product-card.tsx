@@ -15,17 +15,19 @@ const ProductCard: React.FC<ProductCard> = ({ data }) => {
   const handleClick = () => {
     router.push(`/product/${data?.id}`);
   };
+
   return (
     <div
       onClick={handleClick}
       className="bg-white group cursor-pointer rounded-xl border p-3 space-y-4"
     >
-      <div className="aspect-square rounded-xl bg-gray-100 relative">
+      <div className="aspect-square rounded-xl bg-gray-100 relative overflow-hidden">
         <Image
           src={`${baseUrl}${data.imageURLs[0]}`}
-          alt=""
+          alt="Product"
           fill
-          className="aspect-square object-cover rounded-md"
+          className="aspect-square object-cover rounded-md opacity-0 hover:opacity-100 transform scale-100 hover:scale-110 duration-300 transition-all"
+          onLoadingComplete={(image) => image.classList.remove("opacity-0")}
         />
         <div className="opacity-0 group-hover:opacity-100 transition absolute w-full px-6 bottom-5">
           <div className="flex gap-x-6 justify-center"></div>

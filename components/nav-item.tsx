@@ -1,10 +1,13 @@
 "use client";
+import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 
 const NavItem = () => {
   const pathname = usePathname();
+  const user = useUser();
+
   const routes = [
     {
       label: "Home",
@@ -18,11 +21,20 @@ const NavItem = () => {
       label: "Featured",
       href: "/featured",
     },
+    {
+      label: "Admin",
+      href: "/admin",
+    },
   ];
+
+  const isAdmin = user.user && user.user.unsafeMetadata.isAdmin;
 
   return (
     <div className="flex items-center gap-2 mx-2 max-md:flex-col max-md:items-start max-md:mt-3">
       {routes.map((route) => {
+        if (route.label === "Admin" && !isAdmin) {
+          return null;
+        }
         return (
           <Link key={route.label} href={route.href} className="p-2 max-md:p-0">
             <p

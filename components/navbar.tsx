@@ -1,6 +1,5 @@
 import Container from "./ui/container";
 import Logo from "./Logo";
-import Link from "next/link";
 import NavbarActions from "./navbar-actions";
 import {
   SignInButton,
@@ -10,7 +9,6 @@ import {
 } from "@clerk/nextjs";
 import { Button } from "./ui/button";
 import NavbarSearch from "./navbar-search";
-import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import MobileSidebar from "@/app/(admin)/_components/mobile-sidebar";
 import NavItem from "./nav-item";
 
@@ -27,9 +25,6 @@ const NavBar = async () => {
           </MobileSidebar>
           <div className="flex items-center max-md:hidden">
             <Logo />
-            {/* <Link href="/" className="ml-2 flex items-center lg:ml-2 gap-x-2">
-              <p className="font-semibold text-l">KEMAL STORE</p>
-            </Link> */}
             <NavItem />
           </div>
           <div className="max-md:hidden">
@@ -60,16 +55,6 @@ const NavBar = async () => {
                   <SignInButton />
                 </Button>
               </div>
-            )}
-            {user?.unsafeMetadata.isAdmin ? (
-              <Link href="/admin">
-                <AdminPanelSettingsIcon
-                  style={{ height: "40px", width: "40px" }}
-                  className="text-neutral-800 hover:text-neutral-600"
-                />
-              </Link>
-            ) : (
-              ""
             )}
           </div>
         </div>

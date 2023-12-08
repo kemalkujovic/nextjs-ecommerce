@@ -12,7 +12,9 @@ const Info: React.FC<InfoProps> = ({ data }) => {
     <div>
       <h1 className="text-3xl font-bold text-gray-900">{data.title}</h1>
       <div className="mt-3 flex items-end justify-between">
-        <p className="text-2xl text-gray-900 font-semibold">${data?.price}</p>
+        <p className="text-2xl text-gray-900 font-semibold">
+          ${Number(data?.price).toFixed(2)}
+        </p>
       </div>
       <div className="flex items-center gap-x-4 mt-3">
         <span className="text-sm font-serif text-[#4a4a4a]">

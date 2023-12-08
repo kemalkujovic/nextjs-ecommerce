@@ -40,7 +40,7 @@ const ProductCard: React.FC<ProductCard> = ({ data }) => {
         <p className="text-sm text-gray-500">{data.category}</p>
       </div>
       <div className="flex items-center justify-between">
-        <div className="font-semibold">${data.price}</div>
+        <div className="font-semibold">${Number(data?.price).toFixed(2)}</div>
       </div>
     </div>
   );

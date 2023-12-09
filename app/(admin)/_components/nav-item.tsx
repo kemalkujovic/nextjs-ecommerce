@@ -8,6 +8,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import { usePathname, useRouter } from "next/navigation";
 import ArtTrackIcon from "@mui/icons-material/ArtTrack";
 import GroupIcon from "@mui/icons-material/Group";
+import FullscreenExitIcon from "@mui/icons-material/FullscreenExit";
 
 const routes = [
   {
@@ -34,6 +35,11 @@ const routes = [
     label: "Categories",
     icon: <CategoryIcon className="h-4 w-4 mr-2" />,
     href: `/admin/categories`,
+  },
+  {
+    label: "Sizes",
+    icon: <FullscreenExitIcon className="h-4 w-4 mr-2" />,
+    href: `/admin/sizes`,
   },
   {
     label: "Manage Users",

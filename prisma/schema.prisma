@@ -8,22 +8,24 @@ datasource db {
 }
 
 model Product {
-  id          String   @id @default(cuid()) @map("_id")
-  title       String
-  description String
-  imageURLs   String[]
-  category    String
-  price       Float
-  featured    Boolean
+  id           String        @id @default(cuid()) @map("_id")
+  title        String
+  description  String
+  imageURLs    String[]
+  category     String
+  price        Float
+  featured     Boolean
+  productSizes ProductSize[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 }
 
 model Category {
-  id        String @id @default(cuid()) @map("_id")
-  billboard String
-  category  String
+  id            String         @id @default(cuid()) @map("_id")
+  billboard     String
+  category      String
+  categorySizes CategorySize[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
@@ -36,4 +38,42 @@ model Billboard {
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+}
+
+model Size {
+  id            String         @id @default(cuid()) @map("_id")
+  name          String
+  productSizes  ProductSize[]
+  categorySizes CategorySize[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+}
+
+model ProductSize {
+  id        String  @id @default(cuid()) @map("_id")
+  productId String
+  sizeId    String
+  product   Product @relation(fields: [productId], references: [id])
+  size      Size    @relation(fields: [sizeId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@index([productId])
+  @@index([sizeId])
+}
+
+model CategorySize {
+  id         String   @id @default(cuid()) @map("_id")
+  categoryId String
+  sizeId     String
+  category   Category @relation(fields: [categoryId], references: [id])
+  size       Size     @relation(fields: [sizeId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@index([categoryId])
+  @@index([sizeId])
 }

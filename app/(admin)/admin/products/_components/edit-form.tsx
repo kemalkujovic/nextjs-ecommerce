@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import React, { useEffect, useState } from "react";
-import { type createData } from "./edit-product";
+import { type SizeProduct, type createData } from "./edit-product";
 import Image from "next/image";
 import axios from "axios";
 
@@ -25,7 +25,8 @@ type InitialType = {
   category: string;
   files: File[];
   isFeatured: boolean;
-  productSizes?: string[];
+  productSizes?: SizeProduct[];
+  categoryId: string;
 };
 
 const EditForm = ({ data, onSubmit }: EditFormProps) => {
@@ -37,6 +38,7 @@ const EditForm = ({ data, onSubmit }: EditFormProps) => {
     price,
     featured,
     productSizes,
+    categoryId,
   } = data;
   const baseUrl = "https://kemal-web-storage.s3.eu-north-1.amazonaws.com";
 
@@ -47,7 +49,8 @@ const EditForm = ({ data, onSubmit }: EditFormProps) => {
     category,
     files: [],
     isFeatured: featured,
-    productSizes,
+    productSizes: productSizes,
+    categoryId,
   };
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -77,8 +80,18 @@ const EditForm = ({ data, onSubmit }: EditFormProps) => {
       files: [],
       isFeatured: featured,
       productSizes,
+      categoryId,
     });
-  }, [featured, title, description, price, category, imageURLs, productSizes]);
+  }, [
+    featured,
+    title,
+    description,
+    price,
+    category,
+    imageURLs,
+    productSizes,
+    categoryId,
+  ]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -93,24 +106,22 @@ const EditForm = ({ data, onSubmit }: EditFormProps) => {
 
     fetchCategories();
   }, []);
-  console.log(data);
-  // useEffect(() => {
-  //   const fetchProductSizes = async () => {
-  //     try {
-  //       const res = await axios.get(`/api/sizes/product/${data.id}`);
-  //       console.log(res);
-  //       const productSizes = res.data.sizeIds;
-  //       setDataForm((prevData) => ({
-  //         ...prevData,
-  //         productSizes,
-  //       }));
-  //     } catch (error) {
-  //       console.error("Error fetching product sizes:", error);
-  //     }
-  //   };
+  const [categorySizes, setCategorySizes] = useState([]);
 
-  //   fetchProductSizes();
-  // }, [data.id]);
+  useEffect(() => {
+    const fetchCategorySizes = async () => {
+      try {
+        const response = await axios.get(`/api/sizes/${dataForm.categoryId}`);
+        setCategorySizes(response.data);
+      } catch (error) {
+        console.error("Error fetching sizes for category:", error);
+      }
+    };
+
+    if (dataForm.categoryId) {
+      fetchCategorySizes();
+    }
+  }, [dataForm.categoryId]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = e.target.files as FileList;
@@ -132,11 +143,25 @@ const EditForm = ({ data, onSubmit }: EditFormProps) => {
     setIsLoading(true);
     const formData = new FormData(e.currentTarget);
     formData.append("isFeatured", checkbox.toString());
-
+    formData.append("productSizes", JSON.stringify(dataForm.productSizes));
     await onSubmit(formData);
 
     setIsLoading(false);
   };
+
+  const handleSizeClick = (sizeId: string, sizeName: string) => {
+    setDataForm((prevData: any) => {
+      const updatedProductSizes: { sizeId: string; name: string }[] =
+        prevData.productSizes || [];
+      const newSize = { sizeId, name: sizeName };
+      if (!updatedProductSizes.some((size) => size.sizeId === newSize.sizeId)) {
+        updatedProductSizes.push(newSize);
+      }
+
+      return { ...prevData, productSizes: updatedProductSizes };
+    });
+  };
+  console.log(dataForm);
   return (
     <form
       onSubmit={handleSubmit}
@@ -190,17 +215,30 @@ const EditForm = ({ data, onSubmit }: EditFormProps) => {
           </option>
         ))}
       </select>
-      {dataForm.productSizes && dataForm?.productSizes?.length > 0 && (
+      {categorySizes.length > 0 && (
         <label htmlFor="size" className="pb-2">
-          Select a size for this product
+          Select sizes for this product
         </label>
       )}
-      <ul className="flex items-center gap-4">
-        {dataForm?.productSizes?.map((size: any) => (
-          <Button type="button" key={size.id}>
-            {size.name}
-          </Button>
-        ))}
+      <ul className="flex items-center gap-4 flex-wrap">
+        {categorySizes.map((size: any, index) => {
+          return (
+            <Button
+              type="button"
+              key={size.id}
+              onClick={() => handleSizeClick(size.id, size.name)}
+              className={
+                dataForm.productSizes?.some(
+                  (productSize: any) => productSize.sizeId === size.id
+                )
+                  ? "bg-green-500 text-white"
+                  : ""
+              }
+            >
+              {size.name}
+            </Button>
+          );
+        })}
       </ul>
       <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
         <div>

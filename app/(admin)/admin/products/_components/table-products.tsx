@@ -42,7 +42,7 @@ export default function ProductTable() {
     queryKey: ["products"],
     queryFn: async () => {
       const { data } = await axios.get("/api/product");
-
+        
       const sortedData = data.sort((a: createData, b: createData) => {
         return (
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()

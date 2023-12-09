@@ -13,6 +13,7 @@ model Product {
   description  String
   imageURLs    String[]
   category     String
+  categoryId   String
   price        Float
   featured     Boolean
   productSizes ProductSize[]

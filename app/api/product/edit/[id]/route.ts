@@ -57,7 +57,28 @@ export async function PUT(
       return NextResponse.json({ error: "File is required" }, { status: 400 });
     }
 
+    const sizes = JSON.parse(formData.get("productSizes") as string) as {
+      sizeId: string;
+      name: string;
+    }[];
+
     const convPirce = +price;
+
+    const existingSizes = await db.productSize.findMany({
+      where: {
+        productId: id,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    const newSize = existingSizes.map((item) => item.id);
+    const existingSizes2 = sizes.filter((item, index) => item.sizeId);
+
+    const filteredExistingSizes2 = existingSizes2.filter(
+      (item: any) => !newSize.includes(item.id)
+    );
 
     const updateData: {
       title: string;
@@ -66,12 +87,24 @@ export async function PUT(
       featured: boolean;
       category: string;
       imageURLs?: string[];
+      productSizes?: {
+        create: {
+          size: { connect: { id: string } };
+          name: string;
+        }[];
+      };
     } = {
       featured: isFeaturedBoolean,
       title,
       price: convPirce,
       description,
       category,
+      productSizes: {
+        create: filteredExistingSizes2.map((size: any) => ({
+          size: { connect: { id: size.sizeId } },
+          name: size.name,
+        })),
+      },
     };
 
     if (files) {
@@ -93,7 +126,7 @@ export async function PUT(
       data: updateData,
     });
 
-    return NextResponse.json({ msg: "Successful edit product" });
+    return NextResponse.json({ product, msg: "Successful edit product" });
   } catch (error) {
     return NextResponse.json({ error: "Error updating task", status: 500 });
   }

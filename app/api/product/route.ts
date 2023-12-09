@@ -51,7 +51,7 @@ export async function POST(req: Request) {
     const requestData = formData.get("requestData") as string;
     const productInfo = JSON.parse(requestData);
 
-    const { title, description, price, featured, category, sizes } =
+    const { title, description, price, featured, category, sizes, categoryId } =
       productInfo;
 
     if (
@@ -68,7 +68,6 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
-    console.log(sizes);
     const product = await db?.product.create({
       data: {
         title,
@@ -77,6 +76,7 @@ export async function POST(req: Request) {
         featured,
         imageURLs: fileNames,
         category,
+        categoryId,
         productSizes: {
           create: sizes.map((size: any) => ({
             size: { connect: { id: size.id } },

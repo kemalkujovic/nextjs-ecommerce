@@ -6,6 +6,11 @@ import EditForm from "./edit-form";
 import Spinner from "@/components/Spinner";
 import toast from "react-hot-toast";
 
+export type SizeProduct = {
+  sizeId: string;
+  id: string;
+};
+
 export type createData = {
   title: string;
   description: string;
@@ -14,7 +19,8 @@ export type createData = {
   imageURLs: string[];
   category: string;
   featured: boolean;
-  productSizes: string[];
+  productSizes?: SizeProduct[];
+  categoryId: string;
 };
 const EditProduct = () => {
   const params = useParams();
@@ -29,8 +35,6 @@ const EditProduct = () => {
       return data as createData;
     },
   });
-
-  console.log(data);
 
   if (isLoading || !data) {
     return (
@@ -47,9 +51,9 @@ const EditProduct = () => {
   const handleFormSubmit = async (formData: FormData) => {
     try {
       const res = await axios.put(`/api/product/edit/${productId}`, formData);
-
+      console.log(res);
       toast.success("Product edit successfully");
-      router.push("/admin/products");
+      // router.push("/admin/products");
     } catch (error) {
       toast.error("Something went wrong");
     }

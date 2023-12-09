@@ -51,7 +51,8 @@ export async function POST(req: Request) {
     const requestData = formData.get("requestData") as string;
     const productInfo = JSON.parse(requestData);
 
-    const { title, description, price, featured, category } = productInfo;
+    const { title, description, price, featured, category, sizes } =
+      productInfo;
 
     if (
       !title ||
@@ -76,6 +77,11 @@ export async function POST(req: Request) {
         featured,
         imageURLs: fileNames,
         category,
+        productSizes: {
+          create: sizes.map((sizeId: string) => ({
+            size: { connect: { id: sizeId } },
+          })),
+        },
       },
     });
     return NextResponse.json({ msg: "Successful create product", product });

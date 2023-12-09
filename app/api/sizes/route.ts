@@ -40,6 +40,6 @@ export async function POST(req: Request) {
     });
   } catch (error) {
     console.error(error);
-    NextResponse.json({ error: "Internal Server Error" });
+    return NextResponse.json({ error: "Internal Server Error" });
   }
 }

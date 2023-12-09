@@ -21,18 +21,23 @@ type initialState = {
   category: string;
   files: File[];
   isFeatured: boolean;
+  categoryId: string;
+  sizes: string[];
 };
 
 const AddProduct = () => {
   const router = useRouter();
+  const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
 
   const initialState = {
     title: "",
     description: "",
     price: "",
     category: "MAN",
+    categoryId: "",
     files: [],
     isFeatured: false,
+    sizes: selectedSizes,
   };
 
   const [category, setCategory] = useState<Category[]>([]);
@@ -40,6 +45,7 @@ const AddProduct = () => {
   const [dataForm, setDataForm] = useState<initialState>(initialState);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
 
+  const [availableSizes, setAvailableSizes] = useState([]);
   const [errors, setErrors] = useState({
     title: "",
     description: "",
@@ -61,6 +67,24 @@ const AddProduct = () => {
 
     fetchCategories();
   }, []);
+
+  useEffect(() => {
+    const fetchSizesForCategory = async () => {
+      try {
+        const response = await axios.get(`/api/sizes/${dataForm.categoryId}`);
+
+        setAvailableSizes(response.data);
+      } catch (error) {
+        console.error("Error fetching sizes for category:", error);
+      }
+    };
+
+    if (dataForm.categoryId) {
+      fetchSizesForCategory();
+    }
+  }, [dataForm.categoryId]);
+
+  console.log(availableSizes);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = e.target.files as FileList;
@@ -130,6 +154,7 @@ const AddProduct = () => {
       files: dataForm.files,
       featured: dataForm.isFeatured,
       category: dataForm.category,
+      sizes: selectedSizes,
     };
 
     const formData = new FormData();
@@ -155,6 +180,16 @@ const AddProduct = () => {
       setIsLoading(false);
       toast.error("Something went wrong!");
       console.log(error);
+    }
+  };
+
+  const handleSizeClick = (sizeId: string) => {
+    if (!selectedSizes.includes(sizeId)) {
+      setSelectedSizes((prevSelected) => [...prevSelected, sizeId]);
+    } else {
+      setSelectedSizes((prevSelected) =>
+        prevSelected.filter((size) => size !== sizeId)
+      );
     }
   };
 
@@ -208,9 +243,16 @@ const AddProduct = () => {
           name="category"
           id="category"
           value={dataForm.category}
-          onChange={(e) =>
-            setDataForm({ ...dataForm, category: e.target.value })
-          }
+          onChange={(e) => {
+            const selectedCategory = category.find(
+              (c) => c.category === e.target.value
+            );
+            setDataForm({
+              ...dataForm,
+              category: e.target.value,
+              categoryId: selectedCategory?.id || "",
+            });
+          }}
         >
           {category.length > 0 &&
             category?.map((category) => {
@@ -221,6 +263,26 @@ const AddProduct = () => {
               );
             })}
         </select>
+        <div className="my-2 gap-2">
+          {availableSizes.length > 0 && (
+            <label htmlFor="size" className="pb-2">
+              Select a size for this product
+            </label>
+          )}
+          <ul className="flex items-center gap-4">
+            {availableSizes.map((size: any) => (
+              <Button
+                onClick={() => handleSizeClick(size.id)}
+                className={
+                  selectedSizes.includes(size.id) ? "bg-green-600" : ""
+                }
+                key={size.id}
+              >
+                {size.name}
+              </Button>
+            ))}
+          </ul>
+        </div>
         <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
           <div>
             <input

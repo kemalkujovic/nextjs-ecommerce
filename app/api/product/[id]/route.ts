@@ -10,11 +10,27 @@ export async function DELETE(
 ) {
   const { id } = params;
   const { userId } = auth();
-
   try {
     if (!userId) {
       return NextResponse.json({ error: "Unauthorized", status: 401 });
     }
+    const productSizes = await db.productSize.findMany({
+      where: {
+        productId: id,
+      },
+    });
+
+    console.log(productSizes);
+
+    await Promise.all(
+      productSizes.map(async (productSize) => {
+        await db.productSize.delete({
+          where: {
+            id: productSize.id,
+          },
+        });
+      })
+    );
 
     const product = await db.product.findUnique({
       where: {

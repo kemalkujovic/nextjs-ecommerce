@@ -70,6 +70,22 @@ export async function DELETE(
       return NextResponse.json({ error: "Unauthorized", status: 401 });
     }
 
+    const productSizes = await db.categorySize.findMany({
+      where: {
+        categoryId: id,
+      },
+    });
+
+    await Promise.all(
+      productSizes.map(async (productSize) => {
+        await db.categorySize.delete({
+          where: {
+            id: productSize.id,
+          },
+        });
+      })
+    );
+
     const task = await db.category.delete({
       where: {
         id,

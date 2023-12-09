@@ -22,12 +22,17 @@ type initialState = {
   files: File[];
   isFeatured: boolean;
   categoryId: string;
-  sizes: string[];
+  sizes: SelectedSize[];
+};
+
+type SelectedSize = {
+  id: string;
+  name: string;
 };
 
 const AddProduct = () => {
   const router = useRouter();
-  const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
+  const [selectedSizes, setSelectedSizes] = useState<SelectedSize[]>([]);
 
   const initialState = {
     title: "",
@@ -83,8 +88,6 @@ const AddProduct = () => {
       fetchSizesForCategory();
     }
   }, [dataForm.categoryId]);
-
-  console.log(availableSizes);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = e.target.files as FileList;
@@ -156,7 +159,6 @@ const AddProduct = () => {
       category: dataForm.category,
       sizes: selectedSizes,
     };
-
     const formData = new FormData();
 
     Array.from(dataForm.files).forEach((file) => {
@@ -171,9 +173,10 @@ const AddProduct = () => {
           "Content-Type": "multipart/form-data",
         },
       });
+      console.log(res);
       toast.success("Product created successfully");
 
-      router.push("/admin/products");
+      // router.push("/admin/products");
       setIsLoading(false);
       setImagePreviews([]);
     } catch (error) {
@@ -183,15 +186,19 @@ const AddProduct = () => {
     }
   };
 
-  const handleSizeClick = (sizeId: string) => {
-    if (!selectedSizes.includes(sizeId)) {
-      setSelectedSizes((prevSelected) => [...prevSelected, sizeId]);
+  const handleSizeClick = (sizeId: string, sizeName: string) => {
+    if (!selectedSizes.some((size) => size.id === sizeId)) {
+      setSelectedSizes((prevSelected) => [
+        ...prevSelected,
+        { id: sizeId, name: sizeName },
+      ]);
     } else {
       setSelectedSizes((prevSelected) =>
-        prevSelected.filter((size) => size !== sizeId)
+        prevSelected.filter((size) => size.id !== sizeId)
       );
     }
   };
+  console.log(selectedSizes);
 
   return (
     <div className="flex justify-center items-center max-md:justify-start">
@@ -275,9 +282,13 @@ const AddProduct = () => {
             {availableSizes.map((size: any) => (
               <Button
                 type="button"
-                onClick={() => handleSizeClick(size.id)}
+                onClick={() => handleSizeClick(size.id, size.name)}
                 className={
-                  selectedSizes.includes(size.id) ? "bg-green-600" : ""
+                  selectedSizes.some(
+                    (selectedSize) => selectedSize.id === size.id
+                  )
+                    ? "bg-green-600"
+                    : ""
                 }
                 key={size.id}
               >

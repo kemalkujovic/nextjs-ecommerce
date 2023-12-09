@@ -4,10 +4,18 @@ import { Input } from "@/components/ui/input";
 import React, { useEffect, useState } from "react";
 import { type createData } from "./edit-product";
 import Image from "next/image";
+import axios from "axios";
 
 type EditFormProps = {
   data: createData;
   onSubmit: (formData: FormData) => void;
+};
+
+type Category = {
+  id: string;
+  name: string;
+  billboard: string;
+  category: string;
 };
 
 type InitialType = {
@@ -17,10 +25,19 @@ type InitialType = {
   category: string;
   files: File[];
   isFeatured: boolean;
+  productSizes?: string[];
 };
 
 const EditForm = ({ data, onSubmit }: EditFormProps) => {
-  const { title, description, imageURLs, category, price, featured } = data;
+  const {
+    title,
+    description,
+    imageURLs,
+    category,
+    price,
+    featured,
+    productSizes,
+  } = data;
   const baseUrl = "https://kemal-web-storage.s3.eu-north-1.amazonaws.com";
 
   const initialState = {
@@ -30,12 +47,15 @@ const EditForm = ({ data, onSubmit }: EditFormProps) => {
     category,
     files: [],
     isFeatured: featured,
+    productSizes,
   };
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [checkbox, setCheckBox] = useState<boolean>(featured);
   const [previewImage, setPreviewImage] = useState<string[]>();
   const [dataForm, setDataForm] = useState<InitialType>(initialState);
+  const [categories, setCategories] = useState<Category[]>([]);
+
   const handleCheckboxChange = () => {
     setCheckBox((prevCheck) => !prevCheck);
   };
@@ -56,8 +76,41 @@ const EditForm = ({ data, onSubmit }: EditFormProps) => {
       category,
       files: [],
       isFeatured: featured,
+      productSizes,
     });
-  }, [featured, title, description, price, category, imageURLs]);
+  }, [featured, title, description, price, category, imageURLs, productSizes]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const resCategory = await axios.get("/api/categories");
+        const data = resCategory.data;
+        setCategories(data);
+      } catch (error) {
+        console.log("Error getting categories", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+  console.log(data);
+  // useEffect(() => {
+  //   const fetchProductSizes = async () => {
+  //     try {
+  //       const res = await axios.get(`/api/sizes/product/${data.id}`);
+  //       console.log(res);
+  //       const productSizes = res.data.sizeIds;
+  //       setDataForm((prevData) => ({
+  //         ...prevData,
+  //         productSizes,
+  //       }));
+  //     } catch (error) {
+  //       console.error("Error fetching product sizes:", error);
+  //     }
+  //   };
+
+  //   fetchProductSizes();
+  // }, [data.id]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = e.target.files as FileList;
@@ -131,9 +184,24 @@ const EditForm = ({ data, onSubmit }: EditFormProps) => {
         value={dataForm.category}
         onChange={(e) => setDataForm({ ...dataForm, category: e.target.value })}
       >
-        <option value="MAN">MAN</option>
-        <option value="WOMEN">WOMEN</option>
+        {categories.map((category) => (
+          <option key={category.id} value={category.category}>
+            {category.category}
+          </option>
+        ))}
       </select>
+      {dataForm.productSizes && dataForm?.productSizes?.length > 0 && (
+        <label htmlFor="size" className="pb-2">
+          Select a size for this product
+        </label>
+      )}
+      <ul className="flex items-center gap-4">
+        {dataForm?.productSizes?.map((size: any) => (
+          <Button type="button" key={size.id}>
+            {size.name}
+          </Button>
+        ))}
+      </ul>
       <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
         <div>
           <input

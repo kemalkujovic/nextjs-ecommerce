@@ -14,6 +14,7 @@ export type createData = {
   imageURLs: string[];
   category: string;
   featured: boolean;
+  productSizes: string[];
 };
 const EditProduct = () => {
   const params = useParams();
@@ -28,6 +29,9 @@ const EditProduct = () => {
       return data as createData;
     },
   });
+
+  console.log(data);
+
   if (isLoading || !data) {
     return (
       <div>

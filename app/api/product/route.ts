@@ -68,7 +68,7 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
-
+    console.log(sizes);
     const product = await db?.product.create({
       data: {
         title,
@@ -78,8 +78,9 @@ export async function POST(req: Request) {
         imageURLs: fileNames,
         category,
         productSizes: {
-          create: sizes.map((sizeId: string) => ({
-            size: { connect: { id: sizeId } },
+          create: sizes.map((size: any) => ({
+            size: { connect: { id: size.id } },
+            name: size.name,
           })),
         },
       },

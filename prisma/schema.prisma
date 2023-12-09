@@ -51,12 +51,12 @@ model Size {
 }
 
 model ProductSize {
-  id        String  @id @default(cuid()) @map("_id")
+  id        String   @id @default(cuid()) @map("_id")
   productId String
   sizeId    String
-  product   Product @relation(fields: [productId], references: [id])
-  size      Size    @relation(fields: [sizeId], references: [id])
-
+  product   Product? @relation(fields: [productId], references: [id])
+  size      Size     @relation(fields: [sizeId], references: [id])
+  name      String?  @map("name")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 

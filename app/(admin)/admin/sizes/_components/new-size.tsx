@@ -4,11 +4,11 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 
 type initialState = {
   sizes: string[];
   categoryId: string;
+  newSize: string;
 };
 
 const NewSize = () => {
@@ -17,23 +17,40 @@ const NewSize = () => {
   const [formData, setFormData] = useState<initialState>({
     categoryId: "",
     sizes: [],
+    newSize: "",
+  });
+
+  const [errors, setErrors] = useState({
+    sizes: "",
   });
 
   const [availableCategories, setAvailableCategories] = useState([]);
 
   const addSize = () => {
-    const newSize = prompt("Enter a size");
-
-    if (newSize) {
+    if (formData.newSize.trim() !== "") {
       setFormData((prevData) => ({
         ...prevData,
-        sizes: [...prevData.sizes, newSize],
+        sizes: [...prevData.sizes, formData.newSize],
+        newSize: "",
       }));
     }
   };
 
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setErrors({
+      sizes: "",
+    });
+
+    if (formData.sizes.length < 1) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        sizes: formData.sizes.length < 2 ? "Must be at least 1 size" : "",
+      }));
+
+      return;
+    }
+
     try {
       const res = await axios.post("/api/sizes", {
         categoryId: formData.categoryId,
@@ -62,52 +79,65 @@ const NewSize = () => {
 
   return (
     <>
-      <form onSubmit={submitHandler}>
-        <div className="flex gap-4 max-md:flex-col">
-          <div>
-            <label htmlFor="category" className="font-semibold">
-              Choose a Category
-            </label>
-            <select
-              className="flex h-10 w-64 max-md:w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-              name="category"
-              id="category"
-              value={formData.categoryId}
-              onChange={(e) =>
-                setFormData({ ...formData, categoryId: e.target.value })
-              }
-            >
-              <option value="">Select a category</option>
-              {availableCategories?.map((category: any) => (
-                <option key={category.id} value={category.id}>
-                  {category.category}
-                </option>
-              ))}
-            </select>
-          </div>
+      <form onSubmit={submitHandler} className="max-w-md">
+        <div className="mb-4">
+          <label htmlFor="category" className="block text-sm font-semibold">
+            Choose a Category
+          </label>
+          <select
+            className="w-full h-10 border rounded-md bg-background px-3 py-2 text-sm"
+            name="category"
+            id="category"
+            required
+            value={formData.categoryId}
+            onChange={(e) =>
+              setFormData({ ...formData, categoryId: e.target.value })
+            }
+          >
+            <option value="">Select a category</option>
+            {availableCategories?.map((category: any) => (
+              <option key={category.id} value={category.id}>
+                {category.category}
+              </option>
+            ))}
+          </select>
         </div>
-        <div>
-          <label htmlFor="sizes" className="font-semibold">
+        <div className="mb-4 ">
+          <label htmlFor="sizes" className="block text-sm font-semibold">
             Sizes
           </label>
           <div className="flex gap-2">
-            {formData.sizes.map((size, index) => (
-              <div key={index}>{size}</div>
-            ))}
-            <button
-              type="button"
-              onClick={addSize}
-              className="bg-blue-500 text-white p-2 rounded"
-            >
-              Add Size
-            </button>
+            <div>
+              <input
+                type="text"
+                placeholder="Enter a size"
+                value={formData.newSize}
+                onChange={(e) =>
+                  setFormData({ ...formData, newSize: e.target.value })
+                }
+                className="w-full h-10 border rounded-md px-3"
+              />
+            </div>
+            <div>
+              <button
+                type="button"
+                onClick={addSize}
+                className="bg-blue-500 text-white h-10 px-4 rounded"
+              >
+                Add Size
+              </button>
+            </div>
           </div>
+          <div className="flex items-center flex-wrap mt-3 gap-2">
+            {formData.sizes.map((size, index) => (
+              <div key={index} className="bg-gray-200 p-2 rounded">
+                {size}
+              </div>
+            ))}
+          </div>
+          {errors.sizes && <p className="text-red-500">{errors.sizes}</p>}
         </div>
-        <Button
-          type="submit"
-          className="mt-4 px-7 bg-green-600"
-          variant="default"
-        >
+        <Button type="submit" className="w-full bg-green-600">
           Add Sizes
         </Button>
       </form>

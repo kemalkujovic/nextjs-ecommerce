@@ -6,7 +6,11 @@ const Footer = () => {
       <div className="mx-auto py-4 flex items-center justify-center gap-2">
         <Logo />
         <p className="text-center text-md text-black font-serif">
-          © 2023 Kemal, Inc. All rights reserved.
+          © 2023{" "}
+          <a className="underline" href="https://github.com/kemalkujovic">
+            Kemal
+          </a>
+          , Inc. All rights reserved.
         </p>
       </div>
     </footer>

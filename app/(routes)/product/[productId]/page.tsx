@@ -2,6 +2,7 @@ import { type Metadata } from "next";
 import ProductItem from "./_components/product-item";
 import { getProduct } from "@/lib/apiCalls";
 import Footer from "@/components/footer";
+import { siteConfig } from "@/config/site";
 
 export async function generateMetadata({
   params,
@@ -17,7 +18,7 @@ export async function generateMetadata({
     };
 
   return {
-    title: getProducts.title,
+    title: `${getProducts.title} | ${siteConfig.name}`,
     description: getProducts.description,
   };
 }

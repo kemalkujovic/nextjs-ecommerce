@@ -35,6 +35,7 @@ const ProductItem = () => {
       },
     ],
   });
+
   const { isLoading, data } = useQuery({
     queryKey: ["product categories", productQuery],
     queryFn: async () => {
@@ -62,7 +63,7 @@ const ProductItem = () => {
   const filteredData: Product[] = relatedQuery?.data?.filter(
     (item: Product) => item.category === productQuery?.data?.category
   );
-
+  console.log(productQuery.data);
   return (
     <div className="bg-white">
       <Container>
@@ -74,7 +75,11 @@ const ProductItem = () => {
           <div className="lg:grid lg:grid-cols-[500px_minmax(400px,_1fr)_100px] lg:items-start lg:gap-x-8">
             <Gallery images={productQuery.data?.imageURLs} />
             <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
-              <Info data={productQuery?.data} categories={categories} />
+              <Info
+                data={productQuery?.data}
+                categories={categories}
+                availableSizes={productQuery.data.productSizes}
+              />
             </div>
           </div>
 

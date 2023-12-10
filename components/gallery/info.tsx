@@ -6,9 +6,15 @@ import { Button } from "../ui/button";
 interface InfoProps {
   data: Product;
   categories: Category[];
+  availableSizes: Category[];
 }
 
-const Info: React.FC<InfoProps> = ({ data, categories }) => {
+const Info: React.FC<InfoProps> = ({ data, categories, availableSizes }) => {
+  console.log(availableSizes);
+  const isSizeAvailable = (sizeId: string) => {
+    return availableSizes.some((size: any) => size.sizeId === sizeId);
+  };
+
   return (
     <div>
       <h1 className="text-3xl font-bold text-gray-900">{data.title}</h1>
@@ -24,7 +30,18 @@ const Info: React.FC<InfoProps> = ({ data, categories }) => {
       </div>
       <div className="flex mt-2 flex-wrap gap-2">
         {categories?.map((category: any) => {
-          return <Button key={category.id}>{category.name}</Button>;
+          const isSizeAvailableInCategory = isSizeAvailable(category.id);
+          console.log(category);
+
+          return (
+            <Button
+              className={`${isSizeAvailableInCategory ? "bg-green-500" : ""}`}
+              key={category.id}
+              disabled={!isSizeAvailableInCategory}
+            >
+              {category.name}
+            </Button>
+          );
         })}
       </div>
       <hr className="my-4" />

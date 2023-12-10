@@ -27,6 +27,7 @@ type InitialType = {
   isFeatured: boolean;
   productSizes?: SizeProduct[];
   categoryId: string;
+  discount?: number;
 };
 
 const EditForm = ({ data, onSubmit }: EditFormProps) => {
@@ -39,6 +40,7 @@ const EditForm = ({ data, onSubmit }: EditFormProps) => {
     featured,
     productSizes,
     categoryId,
+    discount,
   } = data;
   const baseUrl = "https://kemal-web-storage.s3.eu-north-1.amazonaws.com";
 
@@ -51,6 +53,7 @@ const EditForm = ({ data, onSubmit }: EditFormProps) => {
     isFeatured: featured,
     productSizes: productSizes,
     categoryId,
+    discount,
   };
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -81,6 +84,7 @@ const EditForm = ({ data, onSubmit }: EditFormProps) => {
       isFeatured: featured,
       productSizes,
       categoryId,
+      discount,
     });
   }, [
     featured,
@@ -91,6 +95,7 @@ const EditForm = ({ data, onSubmit }: EditFormProps) => {
     imageURLs,
     productSizes,
     categoryId,
+    discount,
   ]);
 
   useEffect(() => {
@@ -107,6 +112,7 @@ const EditForm = ({ data, onSubmit }: EditFormProps) => {
     fetchCategories();
   }, []);
   const [categorySizes, setCategorySizes] = useState([]);
+  console.log(dataForm);
 
   useEffect(() => {
     const fetchCategorySizes = async () => {
@@ -163,7 +169,7 @@ const EditForm = ({ data, onSubmit }: EditFormProps) => {
       return { ...prevData, productSizes: updatedProductSizes };
     });
   };
-  console.log(dataForm);
+
   return (
     <form
       onSubmit={handleSubmit}
@@ -189,6 +195,19 @@ const EditForm = ({ data, onSubmit }: EditFormProps) => {
         required
         placeholder="Enter Product price"
         onChange={(e) => setDataForm({ ...dataForm, price: +e.target.value })}
+      />
+      <label htmlFor="discount">Enter Product Discount</label>
+      <Input
+        value={dataForm.discount || ""}
+        type="number"
+        id="discount"
+        min={5}
+        max={70}
+        name="discount"
+        placeholder="Enter Product discount"
+        onChange={(e) =>
+          setDataForm({ ...dataForm, discount: +e.target.value })
+        }
       />
       <label htmlFor="description">Enter Product Description</label>
       <Input

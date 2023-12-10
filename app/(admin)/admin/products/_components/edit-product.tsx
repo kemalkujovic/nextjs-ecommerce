@@ -21,6 +21,7 @@ export type createData = {
   featured: boolean;
   productSizes?: SizeProduct[];
   categoryId: string;
+  discount?: number;
 };
 const EditProduct = () => {
   const params = useParams();

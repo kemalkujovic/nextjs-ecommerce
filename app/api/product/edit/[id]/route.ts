@@ -49,6 +49,7 @@ export async function PUT(
     const description = formData.get("description") as string;
     const category = formData.get("category") as string;
     const featured = formData.get("isFeatured");
+    const discount = formData.get("discount") as number | null;
     const isFeaturedBoolean = featured === "on";
     const files = formData.getAll("image");
     const fileNames: string[] = [];
@@ -86,7 +87,9 @@ export async function PUT(
       description: string;
       featured: boolean;
       category: string;
+      discount?: number;
       imageURLs?: string[];
+
       productSizes?: {
         create: {
           size: { connect: { id: string } };
@@ -106,6 +109,10 @@ export async function PUT(
         })),
       },
     };
+
+    if (discount !== null) {
+      updateData.discount = +discount;
+    }
 
     if (files) {
       for (const file of Array.from(files)) {

@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { RequestData, SelectedSize } from "@/types";
 import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -23,11 +24,7 @@ type initialState = {
   isFeatured: boolean;
   categoryId: string;
   sizes: SelectedSize[];
-};
-
-type SelectedSize = {
-  id: string;
-  name: string;
+  discount?: string;
 };
 
 const AddProduct = () => {
@@ -43,6 +40,7 @@ const AddProduct = () => {
     files: [],
     isFeatured: false,
     sizes: selectedSizes,
+    discount: "",
   };
 
   const [category, setCategory] = useState<Category[]>([]);
@@ -150,7 +148,7 @@ const AddProduct = () => {
 
     const convPrice = +dataForm.price;
 
-    const requestData = {
+    const requestData: RequestData = {
       title: dataForm.title,
       description: dataForm.description,
       price: convPrice,
@@ -160,6 +158,11 @@ const AddProduct = () => {
       sizes: selectedSizes,
       categoryId: dataForm.categoryId,
     };
+
+    if (dataForm.discount !== undefined) {
+      requestData.discount = +dataForm.discount;
+    }
+
     const formData = new FormData();
 
     Array.from(dataForm.files).forEach((file) => {
@@ -174,7 +177,6 @@ const AddProduct = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log(res);
       toast.success("Product created successfully");
 
       router.push("/admin/products");
@@ -229,6 +231,19 @@ const AddProduct = () => {
           onChange={(e) => setDataForm({ ...dataForm, price: e.target.value })}
         />
         {errors.price && <p className="text-red-500">{errors.price}</p>}
+        <label htmlFor="discount">Enter Product Discount</label>
+        <Input
+          value={dataForm.discount}
+          type="number"
+          id="discount"
+          min={5}
+          max={70}
+          name="price"
+          placeholder="Enter Product discount"
+          onChange={(e) =>
+            setDataForm({ ...dataForm, discount: e.target.value })
+          }
+        />
         <label htmlFor="description">Enter Product Description</label>
         <Input
           value={dataForm.description}

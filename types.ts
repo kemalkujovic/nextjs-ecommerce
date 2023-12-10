@@ -23,3 +23,20 @@ export interface Category {
   id: string;
   name: string;
 }
+
+export interface SelectedSize {
+  id: string;
+  name: string;
+}
+
+export interface RequestData {
+  title: string;
+  description: string;
+  price: number;
+  files: File[];
+  featured: boolean;
+  category: string;
+  sizes: SelectedSize[];
+  categoryId: string;
+  discount?: number;
+}

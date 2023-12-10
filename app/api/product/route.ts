@@ -51,8 +51,16 @@ export async function POST(req: Request) {
     const requestData = formData.get("requestData") as string;
     const productInfo = JSON.parse(requestData);
 
-    const { title, description, price, featured, category, sizes, categoryId } =
-      productInfo;
+    const {
+      title,
+      description,
+      price,
+      featured,
+      category,
+      sizes,
+      categoryId,
+      discount,
+    } = productInfo;
 
     if (
       !title ||
@@ -77,6 +85,7 @@ export async function POST(req: Request) {
         imageURLs: fileNames,
         category,
         categoryId,
+        discount,
         productSizes: {
           create: sizes.map((size: any) => ({
             size: { connect: { id: size.id } },

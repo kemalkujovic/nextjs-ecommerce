@@ -11,8 +11,12 @@ import { useParams } from "next/navigation";
 import LoadingSkeleton from "./loading-skeleton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Link from "next/link";
+import { getCategories } from "@/lib/apiCalls";
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
 
 const ProductItem = () => {
+  const [categories, setCategories] = useState([]);
   const { productId } = useParams();
 
   const [productQuery, relatedQuery] = useQueries({
@@ -31,8 +35,19 @@ const ProductItem = () => {
       },
     ],
   });
+  const { isLoading, data } = useQuery({
+    queryKey: ["product categories", productQuery],
+    queryFn: async () => {
+      const { data } = await axios.get(
+        `/api/sizes/${productQuery.data.categoryId}`
+      );
+      setCategories(data);
+      return data;
+    },
+    enabled: !!productQuery.data?.categoryId,
+  });
 
-  if (productQuery.isLoading || relatedQuery.isLoading) {
+  if (isLoading || productQuery.isLoading || relatedQuery.isLoading) {
     return (
       <Container>
         <LoadingSkeleton />
@@ -59,9 +74,10 @@ const ProductItem = () => {
           <div className="lg:grid lg:grid-cols-[500px_minmax(400px,_1fr)_100px] lg:items-start lg:gap-x-8">
             <Gallery images={productQuery.data?.imageURLs} />
             <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
-              <Info data={productQuery?.data} />
+              <Info data={productQuery?.data} categories={categories} />
             </div>
           </div>
+
           <hr className="my-10" />
           <div className="space-y-4">
             <h3 className="font-semibold text-3xl">Recommended</h3>

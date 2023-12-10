@@ -67,8 +67,6 @@ const NewCategorie = () => {
     };
   }, []);
 
-  console.log(billboards);
-
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setErrors({
@@ -76,6 +74,7 @@ const NewCategorie = () => {
       billboard: "",
     });
 
+    console.log(formData);
     if (
       !formData.category ||
       formData.category.length < 2 ||
@@ -150,10 +149,12 @@ const NewCategorie = () => {
               name="billboard"
               id="billboard"
               value={formData.billboard}
+              required
               onChange={(e) =>
                 setFormData({ ...formData, billboard: e.target.value })
               }
             >
+              <option value="">Select a billboard</option>
               {billboards.length > 0 &&
                 billboards?.map((board) => {
                   return (

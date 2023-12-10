@@ -13,3 +13,11 @@ export async function getProducts() {
 
   return res.data;
 }
+
+export async function getCategories(id: string) {
+  const res = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/sizes/${id}`
+  );
+
+  return res.data;
+}

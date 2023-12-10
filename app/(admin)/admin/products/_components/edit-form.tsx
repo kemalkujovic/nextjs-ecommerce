@@ -123,6 +123,8 @@ const EditForm = ({ data, onSubmit }: EditFormProps) => {
     }
   }, [dataForm.categoryId]);
 
+  console.log(dataForm.category);
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = e.target.files as FileList;
     setDataForm((prevData) => ({

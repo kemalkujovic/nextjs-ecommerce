@@ -78,6 +78,9 @@ export async function GET(
       where: {
         id,
       },
+      include: {
+        productSizes: true,
+      },
     });
 
     return NextResponse.json(product);

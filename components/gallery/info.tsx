@@ -1,13 +1,14 @@
 import { ShoppingCart } from "lucide-react";
 
-import { Product } from "@/types";
+import { Category, Product } from "@/types";
 import { Button } from "../ui/button";
 
 interface InfoProps {
   data: Product;
+  categories: Category[];
 }
 
-const Info: React.FC<InfoProps> = ({ data }) => {
+const Info: React.FC<InfoProps> = ({ data, categories }) => {
   return (
     <div>
       <h1 className="text-3xl font-bold text-gray-900">{data.title}</h1>
@@ -20,6 +21,11 @@ const Info: React.FC<InfoProps> = ({ data }) => {
         <span className="text-sm font-serif text-[#4a4a4a]">
           {data?.description}
         </span>
+      </div>
+      <div className="flex mt-2 flex-wrap gap-2">
+        {categories?.map((category: any) => {
+          return <Button key={category.id}>{category.name}</Button>;
+        })}
       </div>
       <hr className="my-4" />
       <div className="flex flex-col gap-y-6"></div>

@@ -35,7 +35,6 @@ const EditProduct = () => {
       return data as createData;
     },
   });
-
   if (isLoading || !data) {
     return (
       <div>
@@ -53,7 +52,7 @@ const EditProduct = () => {
       const res = await axios.put(`/api/product/edit/${productId}`, formData);
       console.log(res);
       toast.success("Product edit successfully");
-      // router.push("/admin/products");
+      router.push("/admin/products");
     } catch (error) {
       toast.error("Something went wrong");
     }

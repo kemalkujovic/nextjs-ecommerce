@@ -14,13 +14,36 @@ const Info: React.FC<InfoProps> = ({ data, categories, availableSizes }) => {
     return availableSizes.some((size: any) => size.sizeId === sizeId);
   };
 
+  let discount: number = 0;
+
+  if (data?.discount !== undefined && data?.discount > 0) {
+    const mathDiscount = (data?.discount / 100) * +data.price;
+    discount = +data.price - mathDiscount;
+  }
+
   return (
     <div>
       <h1 className="text-3xl font-bold text-gray-900">{data.title}</h1>
       <div className="mt-3 flex items-end justify-between">
-        <p className="text-2xl text-gray-900 font-semibold">
-          ${Number(data?.price).toFixed(2)}
-        </p>
+        {discount > 0 ? (
+          <div className="font-semibold">
+            <div className="flex items-center gap-2">
+              <span className="text-gray-500 line-through">
+                ${Number(data?.price).toFixed(2)}
+              </span>
+              <div className=" bg-red-600 text-sm text-white  p-1 px-1 font-semibold rounded-sm">
+                -{data?.discount}%
+              </div>
+            </div>
+            <p className="text-2xl text-gray-900 font-semibold mt-1">
+              ${Number(discount).toFixed(2)}
+            </p>
+          </div>
+        ) : (
+          <p className="text-2xl text-gray-900 font-semibold">
+            ${Number(data?.price).toFixed(2)}
+          </p>
+        )}
       </div>
       <div className="flex items-center gap-x-4 mt-3">
         <span className="text-sm font-serif text-[#4a4a4a]">

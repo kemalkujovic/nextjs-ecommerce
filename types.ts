@@ -6,6 +6,7 @@ export interface Product {
   price: string;
   featured: boolean;
   imageURLs: string[];
+  discount?: number;
 }
 
 export interface Image {

@@ -16,10 +16,17 @@ const ProductCard: React.FC<ProductCard> = ({ data }) => {
     router.push(`/product/${data?.id}`);
   };
 
+  let discount: number = 0;
+
+  if (data?.discount !== undefined && data?.discount > 0) {
+    const mathDiscount = (data?.discount / 100) * +data.price;
+    discount = +data.price - mathDiscount;
+  }
+
   return (
     <div
       onClick={handleClick}
-      className="bg-white group cursor-pointer rounded-xl border p-3 space-y-4"
+      className="bg-white group cursor-pointer rounded-xl border p-3 space-y-4 relative"
     >
       <div className="aspect-square rounded-xl bg-gray-100 relative overflow-hidden">
         <Image
@@ -40,7 +47,19 @@ const ProductCard: React.FC<ProductCard> = ({ data }) => {
         <p className="text-sm text-gray-500">{data.category}</p>
       </div>
       <div className="flex items-center justify-between">
-        <div className="font-semibold">${Number(data?.price).toFixed(2)}</div>
+        {discount > 0 ? (
+          <div className="font-semibold">
+            ${Number(discount).toFixed(2)}{" "}
+            <span className="text-gray-500 line-through">
+              ${Number(data?.price).toFixed(2)}
+            </span>
+            <div className="absolute top-2.5 right-2 bg-red-600 text-sm text-white p-1 px-3 font-semibold rounded-sm">
+              -{data?.discount}%
+            </div>
+          </div>
+        ) : (
+          <div className="font-semibold">${Number(data?.price).toFixed(2)}</div>
+        )}
       </div>
     </div>
   );

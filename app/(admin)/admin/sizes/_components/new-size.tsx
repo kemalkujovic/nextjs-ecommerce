@@ -23,7 +23,6 @@ const NewSize = () => {
   const [errors, setErrors] = useState({
     sizes: "",
   });
-
   const [availableCategories, setAvailableCategories] = useState([]);
 
   const addSize = () => {

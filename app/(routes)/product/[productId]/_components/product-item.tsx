@@ -4,7 +4,7 @@ import Gallery from "@/components/gallery/gallery";
 import Info from "@/components/gallery/info";
 import Container from "@/components/ui/container";
 import ProductCard from "@/components/ui/product-card";
-import { type Product } from "@/types";
+import { Category, type Product } from "@/types";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useParams } from "next/navigation";
@@ -42,13 +42,16 @@ const ProductItem = () => {
       const { data } = await axios.get(
         `/api/sizes/${productQuery.data.categoryId}`
       );
-      setCategories(data);
+      const sortedData = data.sort((a: any, b: any) => {
+        return a.name - b.name;
+      });
+      setCategories(sortedData);
       return data;
     },
     enabled: !!productQuery.data?.categoryId,
   });
 
-  if (isLoading || productQuery.isLoading || relatedQuery.isLoading) {
+  if (productQuery.isLoading || relatedQuery.isLoading) {
     return (
       <Container>
         <LoadingSkeleton />

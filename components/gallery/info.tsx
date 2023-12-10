@@ -10,7 +10,6 @@ interface InfoProps {
 }
 
 const Info: React.FC<InfoProps> = ({ data, categories, availableSizes }) => {
-  console.log(availableSizes);
   const isSizeAvailable = (sizeId: string) => {
     return availableSizes.some((size: any) => size.sizeId === sizeId);
   };
@@ -28,21 +27,27 @@ const Info: React.FC<InfoProps> = ({ data, categories, availableSizes }) => {
           {data?.description}
         </span>
       </div>
-      <div className="flex mt-2 flex-wrap gap-2">
-        {categories?.map((category: any) => {
-          const isSizeAvailableInCategory = isSizeAvailable(category.id);
-          console.log(category);
-
-          return (
-            <Button
-              className={`${isSizeAvailableInCategory ? "bg-green-500" : ""}`}
-              key={category.id}
-              disabled={!isSizeAvailableInCategory}
-            >
-              {category.name}
-            </Button>
-          );
-        })}
+      <div className="flex mt-2 flex-wrap gap-2 flex-col">
+        <span className="text-xl font-semibold py-2 text-gray-900">Size</span>
+        <div className="flex flex-wrap gap-2">
+          {categories?.map((category: any) => {
+            const isSizeAvailableInCategory = isSizeAvailable(category.id);
+            return (
+              <Button
+                type="button"
+                className={`${
+                  isSizeAvailableInCategory
+                    ? ""
+                    : "disabled:pointer-events-auto relative z-10 cursor-not-allowed overflow-hidden bg-neutral-100 text-neutral-500 ring-1 ring-neutral-300 before:absolute before:inset-x-0 before:-z-10 before:h-px before:-rotate-45 before:bg-neutral-300 before:transition-transform hover:bg-transparent"
+                } flex min-w-[48px] items-center justify-center rounded-full border px-2 py-1 text-sm`}
+                key={category.id}
+                disabled={!isSizeAvailableInCategory}
+              >
+                {category.name}
+              </Button>
+            );
+          })}
+        </div>
       </div>
       <hr className="my-4" />
       <div className="flex flex-col gap-y-6"></div>

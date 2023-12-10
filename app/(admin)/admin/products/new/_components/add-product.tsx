@@ -199,7 +199,6 @@ const AddProduct = () => {
       );
     }
   };
-  console.log(selectedSizes);
 
   return (
     <div className="flex justify-center items-center max-md:justify-start">
@@ -273,13 +272,13 @@ const AddProduct = () => {
               );
             })}
         </select>
-        <div className="my-2 gap-2">
+        <div className="my-2 gap-2 flex flex-wrap flex-col">
           {availableSizes.length > 0 && (
             <label htmlFor="size" className="pb-2">
               Select a size for this product
             </label>
           )}
-          <ul className="flex items-center gap-4">
+          <ul className="flex items-center gap-4 flex-wrap">
             {availableSizes.map((size: any) => (
               <Button
                 type="button"

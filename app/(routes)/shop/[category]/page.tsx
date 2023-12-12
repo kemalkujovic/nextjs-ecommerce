@@ -3,6 +3,7 @@ import { siteConfig } from "@/config/site";
 import { getCategoryProducts } from "@/lib/apiCalls";
 import { Product } from "@/types";
 import { type Metadata } from "next";
+import SortItems from "../_components/sort-items";
 
 export async function generateMetadata({
   params,
@@ -25,14 +26,29 @@ export async function generateMetadata({
   };
 }
 
-const SearchPage = async ({ params }: { params: { category: string } }) => {
+const SearchPage = async ({
+  params,
+  searchParams,
+}: {
+  params: { category: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+}) => {
   const data = await getCategoryProducts(params.category);
+
+  if (searchParams.sort === "price-low-to-high") {
+    data.sort((a: any, b: any) => a.price - b.price);
+  } else if (searchParams.sort === "price-high-to-low") {
+    data.sort((a: any, b: any) => b.price - a.price);
+  }
+
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
-      {data?.map((product: Product) => (
-        <ProductCard key={product.id} data={product} />
-      ))}
-    </div>
+    <>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+        {data?.map((product: Product) => (
+          <ProductCard key={product.id} data={product} />
+        ))}
+      </div>
+    </>
   );
 };
 

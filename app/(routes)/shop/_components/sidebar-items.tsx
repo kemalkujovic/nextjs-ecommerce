@@ -10,7 +10,9 @@ const SidebarItems = ({ category }: any) => {
     <>
       <Link
         href="/shop"
-        className={`text-sm ${pathName === "/shop" ? "underline" : ""}`}
+        className={`w-full text-sm  hover:underline underline-offset-4 ${
+          pathName === "/shop" ? "underline" : ""
+        }`}
       >
         All
       </Link>
@@ -19,7 +21,7 @@ const SidebarItems = ({ category }: any) => {
           <Link
             key={category.id}
             href={`/shop/${category.category}`}
-            className={`text-sm ${
+            className={`w-full text-sm  hover:underline underline-offset-4 ${
               pathName === "/shop/" + category.category ? "underline" : ""
             }`}
           >

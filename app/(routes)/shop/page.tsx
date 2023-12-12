@@ -1,6 +1,5 @@
-import Container from "@/components/ui/container";
-import SidebarProducts from "./_components/sidebar-products";
-import { getCategories } from "@/lib/apiCalls";
+import ProductCard from "@/components/ui/product-card";
+import { getAllProducts } from "@/lib/apiCalls";
 
 export const metadata = {
   title: "Shop | Kemal Store",
@@ -8,14 +7,14 @@ export const metadata = {
 };
 
 const ShopPage = async () => {
-  const category = await getCategories();
+  const data = await getAllProducts();
 
   return (
-    <Container>
-      <div className="p-4 sm:p-6 lg:p-8">
-        <SidebarProducts data={category} />
-      </div>
-    </Container>
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+      {data?.map((product: any) => (
+        <ProductCard key={product.id} data={product} />
+      ))}
+    </div>
   );
 };
 

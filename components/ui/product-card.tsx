@@ -44,7 +44,9 @@ const ProductCard: React.FC<ProductCard> = ({ data }) => {
       </div>
       <div>
         <p className="font-semibold text-lg">{data.title}</p>
-        <p className="text-sm text-gray-500">{data.category}</p>
+        <p className="text-sm text-gray-500">
+          {data.category[0].toUpperCase() + data.category.slice(1)}
+        </p>
       </div>
       <div className="flex items-center justify-between">
         {discount > 0 ? (

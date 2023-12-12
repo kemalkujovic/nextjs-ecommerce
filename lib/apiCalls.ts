@@ -1,7 +1,7 @@
 import { Category, Product } from "@/types";
 import axios from "axios";
 
-export async function getProduct(productId: string): Promise<Product[]> {
+export async function getProduct(productId: string) {
   const res = await axios.get(
     `${process.env.NEXT_PUBLIC_API_URL}/api/product/${productId}`
   );
@@ -9,7 +9,7 @@ export async function getProduct(productId: string): Promise<Product[]> {
   return res.data;
 }
 
-export async function getProducts(category: string) {
+export async function getCategoryProducts(category: string) {
   const res = await axios.get(
     `${process.env.NEXT_PUBLIC_API_URL}/api/product/category/${category}`
   );
@@ -32,3 +32,11 @@ export const getCategory = async (category: string): Promise<Category[]> => {
 
   return res.data;
 };
+
+export async function getAllProducts() {
+  const res = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/product/`
+  );
+
+  return res.data;
+}

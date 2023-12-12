@@ -1,26 +1,12 @@
-import { Category } from "@/types";
-import Link from "next/link";
+import { getCategories } from "@/lib/apiCalls";
+import SidebarItems from "./sidebar-items";
 
-type CategoryProps = {
-  data: Category[];
-};
-
-const SidebarProducts: React.FC<CategoryProps> = (data) => {
+const SidebarProducts = async () => {
+  const category = await getCategories();
   return (
-    <div className="flex flex-col gap-y-1">
+    <div className="w-1/6 max-sm:w-full p-4 flex flex-col gap-y-1">
       <p className="font-semibold">Category</p>
-      <Link href="/shop" className="text-sm">
-        All
-      </Link>
-      {data.data?.map((category: any) => (
-        <Link
-          href={`/shop/${category.category}`}
-          key={category.id}
-          className="text-sm"
-        >
-          {category.category[0].toUpperCase() + category.category.slice(1)}
-        </Link>
-      ))}
+      <SidebarItems category={category} />
     </div>
   );
 };

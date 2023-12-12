@@ -20,8 +20,6 @@ export async function DELETE(
       },
     });
 
-    console.log(productSizes);
-
     await Promise.all(
       productSizes.map(async (productSize) => {
         await db.productSize.delete({
@@ -71,7 +69,6 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   const { id } = params;
-  const { userId } = auth();
 
   try {
     const product = await db.product.findUnique({

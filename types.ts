@@ -22,7 +22,7 @@ export interface Billboard {
 
 export interface Category {
   id: string;
-  name: string;
+  category: string;
 }
 
 export interface SelectedSize {

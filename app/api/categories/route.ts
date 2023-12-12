@@ -19,9 +19,11 @@ export async function POST(req: Request) {
       );
     }
 
+    const categoryCase = category.toLowerCase();
+
     const categoryProduct = await db?.category.create({
       data: {
-        category,
+        category: categoryCase,
         billboard,
       },
     });
@@ -36,12 +38,6 @@ export async function POST(req: Request) {
 
 export async function GET(req: Request) {
   try {
-    const { userId } = auth();
-
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized", status: 401 });
-    }
-
     const category = await db.category.findMany();
     return NextResponse.json(category);
   } catch (error) {

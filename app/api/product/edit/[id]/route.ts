@@ -10,6 +10,7 @@ export async function GET(
 ) {
   const { id } = params;
   const { userId } = auth();
+
   try {
     if (!userId) {
       return NextResponse.json({ error: "Unauthorized", status: 401 });

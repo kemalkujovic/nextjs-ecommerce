@@ -39,6 +39,11 @@ const SearchPage = async ({
     data.sort((a: any, b: any) => a.price - b.price);
   } else if (searchParams.sort === "price-high-to-low") {
     data.sort((a: any, b: any) => b.price - a.price);
+  } else if (searchParams.sort === "latest-arrivals") {
+    data.sort(
+      (a: any, b: any) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
   }
 
   return (

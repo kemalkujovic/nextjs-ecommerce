@@ -1,6 +1,7 @@
 import ProductCard from "@/components/ui/product-card";
 import { getAllProducts } from "@/lib/apiCalls";
 import SortItems from "./_components/sort-items";
+import SidebarProducts from "./_components/sidebar-products";
 
 export const metadata = {
   title: "Shop | Kemal Store",

@@ -20,7 +20,7 @@ const SortItems = () => {
       const search = current.toString();
       const query = search ? `?${search}` : "";
 
-      await router.push(`${pathName}${query}`);
+      await router.replace(`${pathName}${query}`);
 
       setSelectedSort(value);
     },

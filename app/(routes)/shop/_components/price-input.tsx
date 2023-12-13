@@ -1,4 +1,6 @@
 "use client";
+
+import filterDiscountPrice from "@/app/utils/filterDiscount";
 import { getCategoryProducts } from "@/lib/apiCalls";
 import { Product } from "@/types";
 import { usePathname } from "next/navigation";
@@ -19,13 +21,13 @@ const PriceInput = ({ data }: PriceInputProps) => {
       if (pathName.startsWith("/shop/") && pathName !== "/shop") {
         const urlString = pathName.substring("/shop/".length);
         const data = await getCategoryProducts(urlString);
-        const prices = data.map((product: Product) => +product.price);
-        console.log(data);
+        const prices = filterDiscountPrice(data);
+
         setMaxPrice(Math.max(...prices));
         setMinPrice(Math.min(...prices));
         setValue(maxPrice);
       } else {
-        const prices = data.map((product) => +product.price);
+        const prices = filterDiscountPrice(data);
         setMaxPrice(Math.max(...prices));
         setMinPrice(Math.min(...prices));
         setValue(maxPrice);
@@ -48,8 +50,8 @@ const PriceInput = ({ data }: PriceInputProps) => {
         min={minPrice}
         max={maxPrice}
         value={value || 0}
-        step="0.5"
-        onChange={(e) => setValue(Number(e.target.value))}
+        step="0.25"
+        onChange={(e) => setValue(parseFloat(e.target.value))}
         className=" accent-neutral-800 w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
       />
     </div>

@@ -2,11 +2,7 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
-type SortItemsProps = {
-  count: number;
-};
-
-const SortItems: React.FC<SortItemsProps> = ({ count }) => {
+const SortItems = () => {
   const pathName = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -37,8 +33,7 @@ const SortItems: React.FC<SortItemsProps> = ({ count }) => {
 
   return (
     <div className="flex items-center mb-4">
-      <p className="font-semibold text-sm">{count} Products found</p>
-      <div className="flex-grow h-0.5 bg-neutral-800 mx-5"></div>
+      <div className="flex-grow h-0.5 bg-neutral-800 ml-1 mr-5"></div>
       <div className="flex items-center">
         <p className="font-semibold text-sm">Sort by</p>
         <select

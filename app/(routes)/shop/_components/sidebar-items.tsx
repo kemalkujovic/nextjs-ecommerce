@@ -13,8 +13,6 @@ const SidebarItems = ({ category }: any) => {
     router.push(`${selectedCategory}`);
   };
 
-
-
   return (
     <>
       <select

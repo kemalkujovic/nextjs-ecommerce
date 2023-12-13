@@ -3,7 +3,6 @@ import { siteConfig } from "@/config/site";
 import { getCategoryProducts } from "@/lib/apiCalls";
 import { Product } from "@/types";
 import { type Metadata } from "next";
-import SortItems from "../_components/sort-items";
 
 export async function generateMetadata({
   params,

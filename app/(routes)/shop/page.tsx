@@ -1,6 +1,8 @@
 import ProductCard from "@/components/ui/product-card";
 import { getAllProducts } from "@/lib/apiCalls";
 import SortItems from "./_components/sort-items";
+import filteredData from "@/app/utils/filteredData";
+import { Product } from "@/types";
 
 export const metadata = {
   title: "Shop | Kemal Store",
@@ -15,20 +17,16 @@ const ShopPage = async ({
   };
 }) => {
   const data = await getAllProducts();
-  if (searchParams.sort === "price-low-to-high") {
-    data.sort((a: any, b: any) => a.price - b.price);
-  } else if (searchParams.sort === "price-high-to-low") {
-    data.sort((a: any, b: any) => b.price - a.price);
-  } else if (searchParams.sort === "latest-arrivals") {
-    data.sort(
-      (a: any, b: any) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    );
+  let filtered: Product[] | undefined;
+
+  if (searchParams.sort || searchParams.price) {
+    filtered = filteredData(searchParams, data);
   }
+
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
-        {data?.map((product: any) => (
+        {(filtered || data)?.map((product: any) => (
           <ProductCard key={product.id} data={product} />
         ))}
       </div>

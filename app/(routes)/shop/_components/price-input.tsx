@@ -3,8 +3,8 @@
 import filterDiscountPrice from "@/app/utils/filterDiscount";
 import { getCategoryProducts } from "@/lib/apiCalls";
 import { Product } from "@/types";
-import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
 
 type PriceInputProps = {
   data: Product[];
@@ -12,9 +12,29 @@ type PriceInputProps = {
 
 const PriceInput = ({ data }: PriceInputProps) => {
   const pathName = usePathname();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
   const [minPrice, setMinPrice] = useState<number>();
   const [maxPrice, setMaxPrice] = useState<number>();
   const [value, setValue] = useState<number>();
+
+  const handleSortChange = useCallback(
+    async (value: string) => {
+      const current = new URLSearchParams(Array.from(searchParams.entries()));
+
+      if (!value || +value === maxPrice) {
+        current.delete("price");
+      } else {
+        current.set("price", value);
+      }
+      const search = current.toString();
+      const query = search ? `?${search}` : "";
+
+      await router.replace(`${pathName}${query}`);
+    },
+    [searchParams, pathName, router, maxPrice]
+  );
 
   useEffect(() => {
     const fetchProductPrice = async () => {
@@ -51,7 +71,10 @@ const PriceInput = ({ data }: PriceInputProps) => {
         max={maxPrice}
         value={value || 0}
         step="0.25"
-        onChange={(e) => setValue(parseFloat(e.target.value))}
+        onChange={(e) => {
+          handleSortChange(e.target.value);
+          setValue(parseFloat(e.target.value));
+        }}
         className=" accent-neutral-800 w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
       />
     </div>

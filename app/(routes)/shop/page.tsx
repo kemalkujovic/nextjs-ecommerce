@@ -17,6 +17,7 @@ const ShopPage = async ({
   };
 }) => {
   const data = await getAllProducts();
+
   let filtered: Product[] | undefined;
 
   if (searchParams.sort || searchParams.price) {

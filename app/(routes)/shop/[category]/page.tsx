@@ -34,7 +34,9 @@ const SearchPage = async ({
   searchParams: { [key: string]: string | string[] | undefined };
 }) => {
   const data = await getCategoryProducts(params.category);
+
   let filtered: Product[] | undefined;
+
   if (searchParams.sort || searchParams.price) {
     filtered = filteredData(searchParams, data);
   }

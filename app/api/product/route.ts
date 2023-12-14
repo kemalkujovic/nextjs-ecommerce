@@ -76,6 +76,13 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
+
+    let priceDiscount: number = 0;
+    if (discount > 0) {
+      const mathDiscount = (discount / 100) * +price;
+      priceDiscount = +price - mathDiscount;
+    }
+
     const product = await db?.product.create({
       data: {
         title,
@@ -86,6 +93,7 @@ export async function POST(req: Request) {
         category,
         categoryId,
         discount,
+        finalPrice: priceDiscount,
         productSizes: {
           create: sizes.map((size: any) => ({
             size: { connect: { id: size.id } },

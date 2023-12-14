@@ -1,6 +1,5 @@
 "use client";
 
-import filterDiscountPrice from "@/app/utils/filterDiscount";
 import { getCategoryProducts } from "@/lib/apiCalls";
 import { Product } from "@/types";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -41,13 +40,24 @@ const PriceInput = ({ data }: PriceInputProps) => {
       if (pathName.startsWith("/shop/") && pathName !== "/shop") {
         const urlString = pathName.substring("/shop/".length);
         const data = await getCategoryProducts(urlString);
-        const prices = filterDiscountPrice(data);
-
+        const prices = data?.map((product: Product) => {
+          if (product.finalPrice && product.finalPrice > 0) {
+            return product.finalPrice;
+          } else {
+            return product.price;
+          }
+        });
         setMaxPrice(Math.max(...prices));
         setMinPrice(Math.min(...prices));
         setValue(maxPrice);
       } else {
-        const prices = filterDiscountPrice(data);
+        const prices = data?.map((product: Product) => {
+          if (product.finalPrice && product.finalPrice > 0) {
+            return product.finalPrice;
+          } else {
+            return +product.price;
+          }
+        });
         setMaxPrice(Math.max(...prices));
         setMinPrice(Math.min(...prices));
         setValue(maxPrice);
@@ -70,7 +80,7 @@ const PriceInput = ({ data }: PriceInputProps) => {
         min={minPrice}
         max={maxPrice}
         value={value || 0}
-        step="0.25"
+        step="0.01"
         onChange={(e) => {
           handleSortChange(e.target.value);
           setValue(parseFloat(e.target.value));

@@ -16,13 +16,6 @@ const ProductCard: React.FC<ProductCard> = ({ data }) => {
     router.push(`/product/${data?.id}`);
   };
 
-  let discount: number = 0;
-
-  if (data?.discount !== undefined && data?.discount > 0) {
-    const mathDiscount = (data?.discount / 100) * +data.price;
-    discount = +data.price - mathDiscount;
-  }
-
   return (
     <div
       onClick={handleClick}
@@ -49,9 +42,9 @@ const ProductCard: React.FC<ProductCard> = ({ data }) => {
         </p>
       </div>
       <div className="flex items-center justify-between">
-        {discount > 0 ? (
+        {data.finalPrice && data.finalPrice > 0 ? (
           <div className="font-semibold">
-            ${Number(discount).toFixed(2)}{" "}
+            ${data.finalPrice.toFixed(2)}{" "}
             <span className="text-gray-500 line-through">
               ${Number(data?.price).toFixed(2)}
             </span>

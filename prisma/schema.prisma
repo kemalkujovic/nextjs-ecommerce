@@ -15,6 +15,7 @@ model Product {
   category     String
   categoryId   String
   price        Float
+  finalPrice   Float?
   discount     Float?
   featured     Boolean
   productSizes ProductSize[]

@@ -4,6 +4,7 @@ import { siteConfig } from "@/config/site";
 import { getCategoryProducts } from "@/lib/apiCalls";
 import { Product } from "@/types";
 import { type Metadata } from "next";
+import { Suspense } from "react";
 
 export async function generateMetadata({
   params,

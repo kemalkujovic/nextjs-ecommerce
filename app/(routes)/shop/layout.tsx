@@ -1,4 +1,3 @@
-import Container from "@/components/ui/container";
 import SidebarProducts from "./_components/sidebar-products";
 import SortItems from "./_components/sort-items";
 import Footer from "@/components/footer";

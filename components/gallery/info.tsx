@@ -1,7 +1,9 @@
+"use client";
 import { ShoppingCart } from "lucide-react";
 
 import { Category, Product } from "@/types";
 import { Button } from "../ui/button";
+import useCart from "@/hooks/use-cart";
 
 interface InfoProps {
   data: Product;
@@ -12,6 +14,11 @@ interface InfoProps {
 const Info: React.FC<InfoProps> = ({ data, categories, availableSizes }) => {
   const isSizeAvailable = (sizeId: string) => {
     return availableSizes.some((size: any) => size.sizeId === sizeId);
+  };
+  const cart = useCart();
+
+  const onAddToCart = () => {
+    cart.addItem(data);
   };
 
   return (
@@ -68,7 +75,7 @@ const Info: React.FC<InfoProps> = ({ data, categories, availableSizes }) => {
       <hr className="my-4" />
       <div className="flex flex-col gap-y-6"></div>
       <div className="mt-10 flex items-center gap-x-3">
-        <Button className="flex items-center gap-x-2">
+        <Button onClick={onAddToCart} className="flex items-center gap-x-2">
           Add To Cart
           <ShoppingCart size={20} />
         </Button>

@@ -13,7 +13,7 @@ const CartItem: React.FC<CartItemProps> = ({ data }) => {
   const baseUrl = "https://kemal-web-storage.s3.eu-north-1.amazonaws.com";
 
   const onRemove = () => {
-    cart.removeItem(data.id);
+    cart.removeItem(data);
   };
 
   return (
@@ -41,8 +41,9 @@ const CartItem: React.FC<CartItemProps> = ({ data }) => {
           </div>
 
           <div className="mt-1 flex text-sm">
-            <p className="ml-4 border-l border-gray-200 pl-4 text-gray-500">
-              {data.category}
+            <p className="text-gray-500">
+              {data.category[0].toUpperCase() + data.category.slice(1)} /{" "}
+              {data.size}
             </p>
           </div>
           <div>

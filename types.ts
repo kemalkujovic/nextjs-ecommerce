@@ -8,6 +8,7 @@ export interface Product {
   imageURLs: string[];
   discount?: number;
   finalPrice?: number;
+  size?: string;
 }
 
 export interface Image {

@@ -66,7 +66,7 @@ const ProductItem = () => {
   const filteredData: Product[] = relatedQuery?.data?.filter(
     (item: Product) => item.category === productQuery?.data?.category
   );
-  console.log(productQuery.data);
+
   return (
     <div className="bg-white">
       <Container>

@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 
-import Container from "@/components/ui/container";
 import useCart from "@/hooks/use-cart";
 import CartItem from "./_components/cart-item";
+import Footer from "@/components/footer";
 
 const CartPage = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -20,7 +20,7 @@ const CartPage = () => {
 
   return (
     <div className="bg-white">
-      <Container>
+      <div className="mx-auto max-w-7xl min-h-screen">
         <div className="px-4 py-8 sm:px-6 lg:px-8">
           <h1 className="text-3xl font-bold text-black">Shopping Cart</h1>
           <div className=" lg:grid lg:grid-cols-12 lg:items-start gap-x-12">
@@ -37,7 +37,8 @@ const CartPage = () => {
             {/* <Summary /> */}
           </div>
         </div>
-      </Container>
+      </div>
+      <Footer />
     </div>
   );
 };

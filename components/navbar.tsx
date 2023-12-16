@@ -18,7 +18,7 @@ const NavBar = async () => {
   return (
     <div className="border-b">
       <Container>
-        <div className=" px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between">
+        <div className="px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between">
           <MobileSidebar>
             <NavbarSearch />
             <NavItem />

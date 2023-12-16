@@ -2,7 +2,7 @@ import { SignUp } from "@clerk/nextjs";
 
 export default function Page() {
   return (
-    <div className="flex justify-center py-24">
+    <div className="flex justify-center p-4">
       <SignUp
         appearance={{
           variables: {
@@ -14,8 +14,17 @@ export default function Page() {
           },
           elements: {
             logoImage: {},
+
             socialButtonsProviderIcon__github: {
               filter: "brightness(0) invert(1)",
+            },
+            rootBox: {
+              "@media (max-width: 640px)": {
+                width: "100%",
+                ".cl-internal-105jsc1": {
+                  width: "100%",
+                },
+              },
             },
             footer: {
               "& + div": {

@@ -40,3 +40,12 @@ export async function getAllProducts() {
 
   return res.data;
 }
+
+export async function getFeaturedProducts() {
+  const res = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/product/`
+  );
+
+  const featured = res.data.filter((product: Product) => product.featured);
+  return featured;
+}

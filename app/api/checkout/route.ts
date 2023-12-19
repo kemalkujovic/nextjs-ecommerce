@@ -3,23 +3,16 @@ import Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { Product } from "@prisma/client";
 import { CartItem } from "@/hooks/use-cart";
+
+const base_URL = "https://kemal-web-storage.s3.eu-north-1.amazonaws.com";
 
 export async function POST(req: Request) {
   const { items } = await req.json();
-  console.log(items);
+
   if (!items || items.length === 0) {
     return NextResponse.json("Product its are required", { status: 400 });
   }
-
-  //   const products = await db.product.findMany({
-  //     where: {
-  //       id: {
-  //         in: productIds,
-  //       },
-  //     },
-  //   });
 
   const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
 
@@ -30,6 +23,7 @@ export async function POST(req: Request) {
         currency: "USD",
         product_data: {
           name: product.title,
+          images: [`${base_URL}${product.imageURLs[0]}`],
         },
         unit_amount: +product.price * 100,
       },

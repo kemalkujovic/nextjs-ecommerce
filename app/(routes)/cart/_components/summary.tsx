@@ -3,10 +3,26 @@
 import useCart from "@/hooks/use-cart";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
 
 const Summary = () => {
+  const searchParams = useSearchParams();
   const items = useCart((state) => state.items);
-  console.log(items);
+  const removeAllCart = useCart((state) => state.removeAllCart);
+
+  useEffect(() => {
+    if (searchParams.get("success")) {
+      toast.success("Payment completed.");
+      removeAllCart();
+    }
+
+    if (searchParams.get("canceled")) {
+      toast.error("Something went wrong.");
+    }
+  }, [searchParams, removeAllCart]);
+
   const totalPrice = items.reduce((total, item) => {
     return total + Number(item.totalPrice);
   }, 0);

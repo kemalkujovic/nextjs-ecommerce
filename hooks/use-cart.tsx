@@ -14,6 +14,7 @@ interface CartStore {
   addItem: (data: Product) => void;
   removeItem: (data: Product) => void;
   removeAll: (data: Product) => void;
+  removeAllCart: () => void;
 }
 
 const useCart = create(
@@ -85,6 +86,9 @@ const useCart = create(
         );
         set({ items: remainingItems });
         toast.success("Item removed from cart.");
+      },
+      removeAllCart: () => {
+        set({ items: [] });
       },
     }),
     {

@@ -3,35 +3,35 @@ import Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { Product } from "@prisma/client";
+import { CartItem } from "@/hooks/use-cart";
 
-export async function POST(
-  req: Request,
-  { params }: { params: { storeId: string } }
-) {
-  const { productIds } = await req.json();
-  if (!productIds || productIds.length === 0) {
+export async function POST(req: Request) {
+  const { items } = await req.json();
+  console.log(items);
+  if (!items || items.length === 0) {
     return NextResponse.json("Product its are required", { status: 400 });
   }
 
-  const products = await db.product.findMany({
-    where: {
-      id: {
-        in: productIds,
-      },
-    },
-  });
+  //   const products = await db.product.findMany({
+  //     where: {
+  //       id: {
+  //         in: productIds,
+  //       },
+  //     },
+  //   });
 
   const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
 
-  products.forEach((product) => {
+  items.forEach((product: CartItem) => {
     line_items.push({
-      quantity: 1,
+      quantity: product.quantity,
       price_data: {
         currency: "USD",
         product_data: {
           name: product.title,
         },
-        unit_amount: product.price * 100,
+        unit_amount: +product.price * 100,
       },
     });
   });
@@ -40,10 +40,10 @@ export async function POST(
     data: {
       isPaid: false,
       orderItems: {
-        create: productIds.map((productId: string) => ({
+        create: items.map((product: CartItem) => ({
           product: {
             connect: {
-              id: productId,
+              id: product.id,
             },
           },
         })),

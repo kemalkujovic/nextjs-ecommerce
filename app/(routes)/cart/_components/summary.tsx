@@ -6,7 +6,7 @@ import axios from "axios";
 
 const Summary = () => {
   const items = useCart((state) => state.items);
-
+  console.log(items);
   const totalPrice = items.reduce((total, item) => {
     return total + Number(item.totalPrice);
   }, 0);
@@ -15,11 +15,10 @@ const Summary = () => {
     const response = await axios.post(
       `${process.env.NEXT_PUBLIC_API_URL}/api/checkout`,
       {
-        productIds: items.map((item) => item.id),
+        items,
       }
     );
-    console.log(response);
-    // window.location = response.data.url;
+    window.location = response.data.url;
   };
 
   return (

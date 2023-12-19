@@ -2,6 +2,7 @@
 
 import useCart from "@/hooks/use-cart";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
 
 const Summary = () => {
   const items = useCart((state) => state.items);
@@ -9,6 +10,17 @@ const Summary = () => {
   const totalPrice = items.reduce((total, item) => {
     return total + Number(item.totalPrice);
   }, 0);
+
+  const onCheckout = async () => {
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/checkout`,
+      {
+        productIds: items.map((item) => item.id),
+      }
+    );
+    console.log(response);
+    // window.location = response.data.url;
+  };
 
   return (
     <div className="mt-16 rounded-lg bg-gray-50 px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8">
@@ -21,7 +33,7 @@ const Summary = () => {
           </p>
         </div>
       </div>
-      <Button disabled={items.length === 0} className="w-full mt-6">
+      <Button onClick={onCheckout} className="w-full mt-6">
         Checkout
       </Button>
     </div>

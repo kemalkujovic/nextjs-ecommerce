@@ -20,8 +20,9 @@ model Product {
   featured     Boolean
   productSizes ProductSize[]
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @default(now()) @updatedAt @map("updated_at")
+  OrderItem OrderItem[]
 }
 
 model Category {
@@ -79,4 +80,28 @@ model CategorySize {
 
   @@index([categoryId])
   @@index([sizeId])
+}
+
+model OrderItem {
+  id        String  @id @default(cuid()) @map("_id")
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id])
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([orderId])
+  @@index([productId])
+}
+
+model Order {
+  id         String      @id @default(cuid()) @map("_id")
+  orderItems OrderItem[]
+  isPaid     Boolean     @default(false)
+  phone      String      @default("")
+  address    String      @default("")
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
 }

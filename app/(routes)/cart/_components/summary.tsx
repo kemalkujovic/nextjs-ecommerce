@@ -4,10 +4,13 @@ import useCart from "@/hooks/use-cart";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import LoadingDots from "./loading-dots";
 
 const Summary = () => {
+  const [loading, setLoading] = useState<boolean>(false);
+
   const searchParams = useSearchParams();
   const items = useCart((state) => state.items);
   const removeAllCart = useCart((state) => state.removeAllCart);
@@ -28,12 +31,14 @@ const Summary = () => {
   }, 0);
 
   const onCheckout = async () => {
+    setLoading(true);
     const response = await axios.post(
       `${process.env.NEXT_PUBLIC_API_URL}/api/checkout`,
       {
         items,
       }
     );
+    setLoading(false);
     window.location = response.data.url;
   };
 
@@ -48,8 +53,8 @@ const Summary = () => {
           </p>
         </div>
       </div>
-      <Button onClick={onCheckout} className="w-full mt-6">
-        Checkout
+      <Button disabled={loading} onClick={onCheckout} className="w-full mt-6">
+        {loading ? <LoadingDots /> : "Checkout"}
       </Button>
     </div>
   );

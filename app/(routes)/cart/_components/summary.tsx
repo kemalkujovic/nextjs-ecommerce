@@ -6,10 +6,9 @@ import { Button } from "@/components/ui/button";
 const Summary = () => {
   const items = useCart((state) => state.items);
 
-  const totalPrice = items.reduce((a: any, b: any) => {
-    const sum = a.totalPrice! + b.totalPrice!;
-    return sum;
-  });
+  const totalPrice = items.reduce((total, item) => {
+    return total + Number(item.totalPrice);
+  }, 0);
 
   return (
     <div className="mt-16 rounded-lg bg-gray-50 px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8">

@@ -40,7 +40,19 @@ const useCart = create(
           set({ items: updatedItems });
           toast.success("Item added to cart.");
         } else {
-          set({ items: [...currentItems, { ...data, quantity: 1 }] });
+          set({
+            items: [
+              ...currentItems,
+              {
+                ...data,
+                quantity: 1,
+                totalPrice:
+                  data.finalPrice && data.finalPrice > 0
+                    ? data.finalPrice
+                    : +data.price,
+              },
+            ],
+          });
           toast.success("Item added to cart.");
         }
       },

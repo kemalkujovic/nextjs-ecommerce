@@ -6,6 +6,7 @@ import useCart from "@/hooks/use-cart";
 import CartItem from "./_components/cart-item";
 import Footer from "@/components/footer";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import Summary from "./_components/summary";
 
 const CartPage = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -38,7 +39,7 @@ const CartPage = () => {
                 ))}
               </ul>
             </div>
-            {/* todo: <Summary /> */}
+            <Summary />
           </div>
         </div>
       </div>

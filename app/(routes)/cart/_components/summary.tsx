@@ -7,9 +7,14 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import LoadingDots from "./loading-dots";
+import { useAuth } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 const Summary = () => {
   const [loading, setLoading] = useState<boolean>(false);
+
+  const { userId } = useAuth();
+  const router = useRouter();
 
   const searchParams = useSearchParams();
   const items = useCart((state) => state.items);
@@ -32,6 +37,10 @@ const Summary = () => {
 
   const onCheckout = async () => {
     setLoading(true);
+    if (!userId) {
+      setLoading(false);
+      return router.push("/sign-in");
+    }
     const response = await axios.post(
       `${process.env.NEXT_PUBLIC_API_URL}/api/checkout`,
       {

@@ -1,13 +1,15 @@
+import { CarouselSpacing } from "@/components/CarouselSpacing";
 import Billboard from "@/components/ui/billboard";
 import Container from "@/components/ui/container";
 
-export const revalidate = 0;
-
 const HomePage = async () => {
   return (
-    <Container>
-      <Billboard />
-    </Container>
+    <>
+      <Container>
+        <Billboard />
+      </Container>
+      <CarouselSpacing />
+    </>
   );
 };
 

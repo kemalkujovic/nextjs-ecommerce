@@ -27,6 +27,8 @@
     "axios": "^1.6.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
+    "embla-carousel-autoplay": "^8.0.0-rc17",
+    "embla-carousel-react": "^8.0.0-rc17",
     "lucide-react": "^0.293.0",
     "material-ui-search-bar": "^1.0.1",
     "moment-timezone": "^0.5.43",

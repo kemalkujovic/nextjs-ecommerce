@@ -20,6 +20,22 @@ export async function DELETE(
       },
     });
 
+    const orderItems = await db.orderItem.findMany({
+      where: {
+        productId: id,
+      },
+    });
+
+    await Promise.all(
+      orderItems.map(async (orderItem) => {
+        await db.orderItem.delete({
+          where: {
+            id: orderItem.id,
+          },
+        });
+      })
+    );
+
     await Promise.all(
       productSizes.map(async (productSize) => {
         await db.productSize.delete({

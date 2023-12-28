@@ -6,14 +6,34 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
+import { type Category } from "@/types";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
 
-export function CarouselSpacing() {
+type CategoryProps = {
+  data: Category[];
+};
+
+export function CarouselSpacing(data: CategoryProps) {
+  // const {
+  //   isLoading,
+  //   error,
+  //   data: billboard,
+  // } = useQuery({
+  //   queryKey: ["billboard"],
+  //   queryFn: async () => {
+  //     const { data } = await axios.get(`/api/billboards/edit/`);
+  //     return data;
+  //   },
+  // });
+
   return (
     <Carousel
       opts={{
         align: "start",
+        loop: true,
       }}
       plugins={[
         Autoplay({

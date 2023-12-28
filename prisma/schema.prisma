@@ -28,6 +28,7 @@ model Product {
 model Category {
   id            String         @id @default(cuid()) @map("_id")
   billboard     String
+  billboardId   String
   category      String
   categorySizes CategorySize[]
 
@@ -88,7 +89,7 @@ model OrderItem {
   order       Order   @relation(fields: [orderId], references: [id])
   productId   String
   product     Product @relation(fields: [productId], references: [id])
-  productName String?
+  productName String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 type initialState = {
   category: string;
   billboard: string;
+  billboardId: string;
 };
 
 type Billboard = {
@@ -25,11 +26,13 @@ const NewCategorie = () => {
   const initialState: initialState = {
     category: "",
     billboard: "",
+    billboardId: "",
   };
 
   const [errors, setErrors] = useState<initialState>({
     category: "",
     billboard: "",
+    billboardId: "",
   });
 
   const [formData, setFormData] = useState<initialState>(initialState);
@@ -72,6 +75,7 @@ const NewCategorie = () => {
     setErrors({
       category: "",
       billboard: "",
+      billboardId: "",
     });
 
     console.log(formData);
@@ -151,14 +155,25 @@ const NewCategorie = () => {
               value={formData.billboard}
               required
               onChange={(e) =>
-                setFormData({ ...formData, billboard: e.target.value })
+                setFormData({
+                  ...formData,
+                  billboard: e.target.value,
+                  billboardId:
+                    e.target.options[e.target.selectedIndex].getAttribute(
+                      "data-billboard-id"
+                    )!,
+                })
               }
             >
               <option value="">Select a billboard</option>
               {billboards.length > 0 &&
                 billboards?.map((board) => {
                   return (
-                    <option key={board.id} value={board.billboard}>
+                    <option
+                      key={board.id}
+                      value={board.billboard}
+                      data-billboard-id={board.id}
+                    >
                       {board.billboard}
                     </option>
                   );

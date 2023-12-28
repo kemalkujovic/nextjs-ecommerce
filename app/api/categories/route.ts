@@ -10,7 +10,7 @@ export async function POST(req: Request) {
   }
 
   try {
-    const { category, billboard } = await req.json();
+    const { category, billboard, billboardId } = await req.json();
 
     if (!category || category.length < 2) {
       return NextResponse.json(
@@ -25,6 +25,7 @@ export async function POST(req: Request) {
       data: {
         category: categoryCase,
         billboard,
+        billboardId,
       },
     });
     return NextResponse.json({

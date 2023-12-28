@@ -25,6 +25,7 @@ export interface Billboard {
 export interface Category {
   id: string;
   category: string;
+  billboard?: string;
 }
 
 export interface SelectedSize {

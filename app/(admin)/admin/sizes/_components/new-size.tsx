@@ -129,9 +129,7 @@ const NewSize = () => {
           </div>
           <div className="flex items-center flex-wrap mt-3 gap-2">
             {formData.sizes.map((size, index) => (
-              <div key={index} className="bg-gray-200 p-2 rounded">
-                {size}
-              </div>
+              <Button key={index}>{size}</Button>
             ))}
           </div>
           {errors.sizes && <p className="text-red-500">{errors.sizes}</p>}

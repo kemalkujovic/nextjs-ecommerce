@@ -35,6 +35,7 @@ export async function POST(req: Request) {
       isPaid: false,
       orderItems: {
         create: items.map((product: CartItem) => ({
+          productName: product.title,
           product: {
             connect: {
               id: product.id,

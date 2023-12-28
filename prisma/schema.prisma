@@ -83,11 +83,12 @@ model CategorySize {
 }
 
 model OrderItem {
-  id        String  @id @default(cuid()) @map("_id")
-  orderId   String
-  order     Order   @relation(fields: [orderId], references: [id])
-  productId String
-  product   Product @relation(fields: [productId], references: [id])
+  id          String  @id @default(cuid()) @map("_id")
+  orderId     String
+  order       Order   @relation(fields: [orderId], references: [id])
+  productId   String
+  product     Product @relation(fields: [productId], references: [id])
+  productName String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

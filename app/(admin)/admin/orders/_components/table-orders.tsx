@@ -9,7 +9,7 @@ import Paper from "@mui/material/Paper";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import Spinner from "@/components/Spinner";
-import formatDate from "@/app/utils/formateDate";
+import formatDate, { sortByDate } from "@/app/utils/formateDate";
 import ReactPaginate from "react-paginate";
 import { useState } from "react";
 import TitleHeader from "@/app/(admin)/_components/title-header";
@@ -37,12 +37,7 @@ const TableOrders = () => {
     queryKey: ["orders"],
     queryFn: async () => {
       const { data } = await axios.get("/api/orders");
-
-      const sortedData = data.sort((a: Order, b: Order) => {
-        return (
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
-      });
+      const sortedData = sortByDate(data);
       return sortedData as Order[];
     },
   });

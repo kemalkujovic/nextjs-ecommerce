@@ -13,7 +13,7 @@ import axios from "axios";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Spinner from "@/components/Spinner";
 import TitleHeader from "@/app/(admin)/_components/title-header";
-import formatDate from "@/app/utils/formateDate";
+import formatDate, { sortByDate } from "@/app/utils/formateDate";
 import ReactPaginate from "react-paginate";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -35,12 +35,7 @@ const TableCategories = () => {
     queryKey: ["category"],
     queryFn: async () => {
       const { data } = await axios.get("/api/categories");
-
-      const sortedData = data.sort((a: Category, b: Category) => {
-        return (
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
-      });
+      const sortedData = sortByDate(data);
       return sortedData as Category[];
     },
   });

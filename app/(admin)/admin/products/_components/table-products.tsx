@@ -17,7 +17,7 @@ import toast from "react-hot-toast";
 import Link from "next/link";
 import { useState } from "react";
 import ReactPaginate from "react-paginate";
-import formatDate from "@/app/utils/formateDate";
+import formatDate, { sortByDate } from "@/app/utils/formateDate";
 import TitleHeader from "@/app/(admin)/_components/title-header";
 
 type createData = {
@@ -42,12 +42,8 @@ export default function ProductTable() {
     queryKey: ["products"],
     queryFn: async () => {
       const { data } = await axios.get("/api/product");
-        
-      const sortedData = data.sort((a: createData, b: createData) => {
-        return (
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
-      });
+
+      const sortedData = sortByDate(data);
       return sortedData as createData[];
     },
   });

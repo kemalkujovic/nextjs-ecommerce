@@ -4,7 +4,7 @@ import axios from "axios";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Billboard } from "@/types";
-import LoadingSkeleton from "@/app/(routes)/loading-skeleton";
+import LoadingSkeleton from "../loading-skeleton";
 
 const CardItem = ({ billboard }: any) => {
   const [billboards, setBillboards] = useState<Billboard>();

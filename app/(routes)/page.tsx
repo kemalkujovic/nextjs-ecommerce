@@ -8,6 +8,9 @@ const HomePage = async () => {
 
   return (
     <>
+      <Container>
+        <Billboard />
+      </Container>
       <CarouselSpacing data={category} />
     </>
   );

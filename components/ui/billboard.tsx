@@ -2,8 +2,6 @@
 
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import Spinner from "../Spinner";
-import Image from "next/image";
 import LoadingSkeleton from "../loading-skeleton";
 
 const Billboard = () => {
@@ -17,7 +15,7 @@ const Billboard = () => {
 
   if (isLoading) {
     return (
-      <div className="p-4 sm:p-6 lg:p-8 rounded-xl overflow-hidden h-[34rem] mb-4">
+      <div className="p-4  lg:p-8 rounded-xl overflow-hidden h-[32rem] mb-4 max-sm:h-full">
         <LoadingSkeleton />
       </div>
     );

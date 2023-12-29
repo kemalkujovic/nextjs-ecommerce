@@ -1,4 +1,5 @@
 import { CarouselSpacing } from "@/components/CarouselSpacing";
+import TitleHeader from "@/components/title-header";
 import Billboard from "@/components/ui/billboard";
 import Container from "@/components/ui/container";
 import { getCategories } from "@/lib/apiCalls";
@@ -11,6 +12,7 @@ const HomePage = async () => {
       <Container>
         <Billboard />
       </Container>
+      <TitleHeader title="Top Category" url="/shop" />
       <CarouselSpacing data={category} />
     </>
   );

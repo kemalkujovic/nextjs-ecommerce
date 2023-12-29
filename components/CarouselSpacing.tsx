@@ -15,6 +15,8 @@ type CategoryProps = {
 };
 
 export function CarouselSpacing(data: CategoryProps) {
+  const formatData = data.data.slice(0, 5);
+
   return (
     <Carousel
       opts={{
@@ -29,7 +31,7 @@ export function CarouselSpacing(data: CategoryProps) {
       className="w-full"
     >
       <CarouselContent className="-ml-1">
-        {data.data.map((category, index) => (
+        {formatData.map((category, index) => (
           <CarouselItem
             key={category.id}
             className="max-sm:basis-1/2 md:basis-1/2 lg:basis-1/3"

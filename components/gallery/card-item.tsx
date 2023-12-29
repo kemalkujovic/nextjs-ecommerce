@@ -5,8 +5,14 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Billboard } from "@/types";
 import LoadingSkeleton from "../loading-skeleton";
+import { Button } from "../ui/button";
 
-const CardItem = ({ billboard }: any) => {
+type CardProps = {
+  billboard: string;
+  category: string;
+};
+
+const CardItem = ({ billboard, category }: CardProps) => {
   const [billboards, setBillboards] = useState<Billboard>();
 
   useEffect(() => {
@@ -24,7 +30,7 @@ const CardItem = ({ billboard }: any) => {
 
   return (
     <Card>
-      <CardContent className="flex aspect-square justify-center">
+      <CardContent className="flex aspect-square justify-center relative">
         {billboards?.imageURL ? (
           <Image
             src={`${baseUrl}/${billboards?.imageURL}`}
@@ -41,6 +47,12 @@ const CardItem = ({ billboard }: any) => {
         ) : (
           <LoadingSkeleton />
         )}
+        <div className="absolute left-8 bottom-8 flex gap-2 flex-col">
+          <p className="text-black font-bold text-2xl">
+            {category[0].toUpperCase() + category.slice(1)}
+          </p>
+          <Button>Shop</Button>
+        </div>
       </CardContent>
     </Card>
   );

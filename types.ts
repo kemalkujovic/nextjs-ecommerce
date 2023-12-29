@@ -19,13 +19,13 @@ export interface Image {
 export interface Billboard {
   id: string;
   label: string;
-  imageUrl: string;
+  imageURL: string;
 }
 
 export interface Category {
   id: string;
   category: string;
-  billboard?: string;
+  billboardId: string;
 }
 
 export interface SelectedSize {

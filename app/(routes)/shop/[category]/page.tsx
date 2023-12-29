@@ -4,7 +4,6 @@ import { siteConfig } from "@/config/site";
 import { getCategoryProducts } from "@/lib/apiCalls";
 import { Product } from "@/types";
 import { type Metadata } from "next";
-import { Suspense } from "react";
 
 export async function generateMetadata({
   params,
@@ -12,8 +11,7 @@ export async function generateMetadata({
   params: { category: string };
 }): Promise<Metadata> {
   const data = await getCategoryProducts(params.category);
-
-  if (!data)
+  if (!data || data.length <= 0)
     return {
       title: "Kemal Store",
       description: "E-ecommerce, selling products, and new productivity",
@@ -21,9 +19,9 @@ export async function generateMetadata({
 
   return {
     title: `${
-      data[0].category[0].toUpperCase() + data[0].category.slice(1)
+      data[0]?.category[0]?.toUpperCase() + data[0]?.category.slice(1)
     } | ${siteConfig.name}`,
-    description: data[0].description,
+    description: data[0]?.description,
   };
 }
 

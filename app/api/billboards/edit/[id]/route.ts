@@ -11,11 +11,11 @@ export async function GET(
 ) {
   const { id } = params;
   const { userId } = auth();
-
+  console.log(id);
   try {
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized", status: 401 });
-    }
+    // if (!userId) {
+    //   return NextResponse.json({ error: "Unauthorized", status: 401 });
+    // }
 
     const billboard = await db.billboard.findUnique({
       where: {

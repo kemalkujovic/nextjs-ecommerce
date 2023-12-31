@@ -1,5 +1,6 @@
 import CarouselFeatured from "@/components/CarouselFeatured";
 import { CarouselSpacing } from "@/components/CarouselSpacing";
+import Footer from "@/components/footer";
 import TitleHeader from "@/components/title-header";
 import Billboard from "@/components/ui/billboard";
 import Container from "@/components/ui/container";
@@ -21,7 +22,11 @@ const HomePage = async () => {
       </Container>
       <TitleHeader title="Top Category" url="/shop" />
       <CarouselSpacing data={category} />
-      {featuredProducts.length > 0 && <CarouselFeatured data={products} />}
+      <div className="mb-24">
+        <TitleHeader title="Featured products" url="/featured" />
+        {featuredProducts.length > 0 && <CarouselFeatured data={products} />}
+      </div>
+      <Footer />
     </>
   );
 };

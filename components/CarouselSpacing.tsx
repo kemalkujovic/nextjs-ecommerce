@@ -4,6 +4,8 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Category } from "@/types";
 import Autoplay from "embla-carousel-autoplay";
@@ -16,7 +18,6 @@ type CategoryProps = {
 
 export function CarouselSpacing(data: CategoryProps) {
   const formatData = data.data.slice(0, 5);
-
   return (
     <Carousel
       opts={{
@@ -28,8 +29,10 @@ export function CarouselSpacing(data: CategoryProps) {
           delay: 2000,
         }),
       ]}
-      className="w-full"
+      className="w-full relative"
     >
+      <CarouselPrevious className="absolute z-50 left-6 w-min h-min text-xl p-4" />
+      <CarouselNext className="absolute z-50 w-min h-min right-4 text-xl p-4" />
       <CarouselContent className="-ml-1">
         {formatData.map((category, index) => (
           <CarouselItem

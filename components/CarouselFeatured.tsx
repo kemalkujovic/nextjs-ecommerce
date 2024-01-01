@@ -29,8 +29,8 @@ const CarouselFeatured = ({ data }: CarouselFeaturedProps) => {
       ]}
       className="w-full relative"
     >
-      <CarouselPrevious className="absolute z-50 left-6 w-min h-min text-xl p-4" />
-      <CarouselNext className="absolute z-50 w-min h-min right-4 text-xl p-4" />
+      <CarouselPrevious className="absolute z-50 left-7 w-min h-min text-xl p-4 top-[45%]" />
+      <CarouselNext className="absolute z-50 w-min h-min right-4 text-xl top-[45%] p-4" />
       <CarouselContent className="-ml-1">
         {data.map((product, index) => (
           <CarouselItem

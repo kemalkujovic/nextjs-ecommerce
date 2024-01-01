@@ -26,7 +26,7 @@ export function CarouselSpacing(data: CategoryProps) {
       }}
       plugins={[
         Autoplay({
-          delay: 2000,
+          delay: 2500,
         }),
       ]}
       className="w-full relative"

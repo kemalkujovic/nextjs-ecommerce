@@ -30,24 +30,22 @@ const CardItem = ({ billboard, category }: CardProps) => {
 
   return (
     <Card>
-      <CardContent className="flex aspect-square justify-center relative">
+      <CardContent className="flex aspect-square justify-center relative ">
         {billboards?.imageURL ? (
           <Image
             src={`${baseUrl}/${billboards?.imageURL}`}
-            width={300}
-            height={300}
             style={{
               width: "100%",
               height: "100%",
               borderRadius: "5px",
-              objectFit: "cover",
             }}
+            fill
             alt="Image"
           />
         ) : (
           <LoadingSkeleton />
         )}
-        <div className="absolute left-8 bottom-8 flex gap-2 flex-col">
+        <div className="absolute left-8 bottom-8 flex gap-2 flex-col w-24">
           <p className="text-black font-bold text-2xl">
             {category[0].toUpperCase() + category.slice(1)}
           </p>

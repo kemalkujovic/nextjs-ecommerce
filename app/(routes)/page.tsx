@@ -24,7 +24,9 @@ const HomePage = async () => {
       <CarouselSpacing data={category} />
       <div className="mb-24">
         <TitleHeader title="Featured Products" url="/featured" />
-        {featuredProducts.length > 0 && <CarouselFeatured data={products} />}
+        {featuredProducts.length > 0 && (
+          <CarouselFeatured data={featuredProducts} />
+        )}
       </div>
       <Footer />
     </>

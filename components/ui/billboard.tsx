@@ -20,13 +20,14 @@ const Billboard = () => {
       </div>
     );
   }
-  const baseUrl = "https://kemal-web-storage.s3.eu-north-1.amazonaws.com";
+  const baseUrl =
+    "https://kemal-web-storage.s3.eu-north-1.amazonaws.com/bg3.png";
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 rounded-xl overflow-hidden">
       <div
         style={{
-          backgroundImage: `url('${baseUrl}/${data[1]?.imageURL}')`,
+          backgroundImage: `url(${baseUrl})`,
         }}
         className="rounded-xl relative aspect-square md:aspect-[2.4/1] overflow-hidden bg-cover"
       >

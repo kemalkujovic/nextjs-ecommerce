@@ -88,7 +88,7 @@ const NewUser = () => {
     try {
       if (categoryId) {
         const res = await axios.put(`/api/clerk/users/${categoryId}`, formData);
-        toast.success("Category succesfully edited.");
+        toast.success("User succesfully edited.");
         router.push("/admin/users");
       } else {
         const res = await axios.post(`/api/clerk/users/`, formData);

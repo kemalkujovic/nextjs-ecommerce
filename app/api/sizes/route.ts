@@ -43,3 +43,12 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Internal Server Error" });
   }
 }
+
+export async function GET(req: Request) {
+  try {
+    const sizes = await db.size.findMany();
+    return NextResponse.json(sizes);
+  } catch (error) {
+    return NextResponse.json({ error: "Error getting sizes.", status: 500 });
+  }
+}

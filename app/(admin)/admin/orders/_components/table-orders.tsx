@@ -95,8 +95,8 @@ const TableOrders = () => {
                   {order.orderItems[0].productName || ""}
                 </TableCell>
                 <TableCell align="left">{order.phone}</TableCell>
-                <TableCell align="left">{order.address}</TableCell>
-                <TableCell align="left">{order.isPaid.toString()}</TableCell>
+                <TableCell align="center">{order.address}</TableCell>
+                <TableCell align="center">{order.isPaid.toString()}</TableCell>
                 <TableCell align="center">
                   {formatDate(order.createdAt)}
                 </TableCell>

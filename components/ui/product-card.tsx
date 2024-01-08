@@ -30,6 +30,7 @@ const ProductCard: React.FC<ProductCard> = ({ data }) => {
           onLoad={(event: React.SyntheticEvent<HTMLImageElement, Event>) =>
             event.currentTarget.classList.remove("opacity-0")
           }
+          sizes="any"
         />
         <div className="opacity-0 group-hover:opacity-100 transition absolute w-full px-6 bottom-5">
           <div className="flex gap-x-6 justify-center"></div>

@@ -41,6 +41,7 @@ const CardItem = ({ billboard, category }: CardProps) => {
             }}
             fill
             alt="Image"
+            sizes="any"
           />
         ) : (
           <LoadingSkeleton />

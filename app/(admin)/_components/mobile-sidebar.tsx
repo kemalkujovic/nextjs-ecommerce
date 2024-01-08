@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { useMobileSidebar } from "@/hooks/use-mobile-sidebar";
@@ -11,6 +11,8 @@ import Sidebar from "./Sidebar";
 
 const MobileSidebar = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const search = searchParams.get("q");
 
   const [isMounted, setIsMounted] = useState(false);
 
@@ -24,7 +26,7 @@ const MobileSidebar = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     onClose();
-  }, [pathname, onClose]);
+  }, [pathname, onClose, search]);
 
   if (!isMounted) {
     return null;

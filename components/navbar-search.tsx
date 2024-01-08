@@ -10,12 +10,16 @@ const NavbarSearch = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
+  const searchStr = searchParams.get("q");
 
   const handleSearchChange = async () => {
     const current = new URLSearchParams(Array.from(searchParams.entries()));
 
     if (search.length >= 1) {
       current.set("q", search);
+    } else {
+      current.delete("q");
+      await router.replace("/shop");
     }
 
     const searchq = current.toString();
@@ -33,6 +37,10 @@ const NavbarSearch = () => {
   useEffect(() => {
     if (pathname !== "/shop") setSearch("");
   }, [pathname]);
+
+  useEffect(() => {
+    if (searchStr) setSearch(searchStr);
+  }, [searchStr, setSearch]);
 
   return (
     <div className="flex mx-auto relative">

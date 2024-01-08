@@ -6,6 +6,7 @@ const filteredData = (params: any, data: Product[]) => {
       ? product.finalPrice
       : product.price;
   };
+
   if (params.sort === "price-low-to-high") {
     data.sort(
       (a: any, b: any) => +getPriceForSorting(a) - +getPriceForSorting(b)
@@ -30,6 +31,13 @@ const filteredData = (params: any, data: Product[]) => {
       }
     });
     return filteredPrice;
+  }
+
+  if (params.q) {
+    const filteredSearch = data.filter((product: Product) =>
+      product.title.toLowerCase().includes(params.q)
+    );
+    return filteredSearch;
   }
 
   return data;

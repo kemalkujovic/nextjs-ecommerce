@@ -6,6 +6,7 @@ const SortItems = () => {
   const pathName = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
+
   const [selectedSort, setSelectedSort] = useState<string>("Relevance");
 
   const handleSortChange = useCallback(

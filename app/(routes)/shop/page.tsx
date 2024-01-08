@@ -1,6 +1,5 @@
 import ProductCard from "@/components/ui/product-card";
 import { getAllProducts } from "@/lib/apiCalls";
-import SortItems from "./_components/sort-items";
 import filteredData from "@/app/utils/filteredData";
 import { Product } from "@/types";
 
@@ -21,6 +20,10 @@ const ShopPage = async ({
   let filtered: Product[] | undefined;
 
   if (searchParams.sort || searchParams.price) {
+    filtered = filteredData(searchParams, data);
+  }
+
+  if (searchParams.q) {
     filtered = filteredData(searchParams, data);
   }
 

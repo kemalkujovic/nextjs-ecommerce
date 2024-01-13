@@ -64,7 +64,7 @@ const ProductItem = () => {
   }
 
   const filteredData: Product[] = relatedQuery?.data?.filter(
-    (item: Product) => item.category === productQuery?.data?.category
+    (item: Product) => item.category === productQuery?.data?.category && productQuery.data.id !== item.id
   );
 
   return (
@@ -88,7 +88,9 @@ const ProductItem = () => {
 
           <hr className="my-10" />
           <div className="space-y-4">
-            <h3 className="font-semibold text-3xl">Recommended</h3>
+           {
+            filteredData.length > 0 && <h3 className="font-semibold text-3xl">Recommended</h3>
+           }
             <div className="grid grid-cols-1 sm:gird-cols-2 md:grid-cols-3 lg:gird-cols-4 gap-4">
               {filteredData?.map((item: Product) => {
                 return <ProductCard key={item.id} data={item} />;

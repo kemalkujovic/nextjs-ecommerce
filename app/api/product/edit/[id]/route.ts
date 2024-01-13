@@ -82,12 +82,20 @@ export async function PUT(
       (item: any) => !newSize.includes(item.id)
     );
 
+    let priceDiscount: number = 0;
+    
+    if (discount !== null && discount > 0) {
+      const mathDiscount = (discount / 100) * +price;
+      priceDiscount = +price - mathDiscount;
+    }
+
     const updateData: {
       title: string;
       price: number;
       description: string;
       featured: boolean;
       category: string;
+      finalPrice: number;
       discount?: number;
       imageURLs?: string[];
 
@@ -103,6 +111,7 @@ export async function PUT(
       price: convPirce,
       description,
       category,
+      finalPrice: priceDiscount,
       productSizes: {
         create: filteredExistingSizes2.map((size: any) => ({
           size: { connect: { id: size.sizeId } },
@@ -111,10 +120,10 @@ export async function PUT(
       },
     };
 
-    if (discount !== null) {
+    if (discount !== null && discount > 0) {
       updateData.discount = +discount;
     }
-
+    
     if (files) {
       for (const file of Array.from(files)) {
         if (file instanceof File && file.name) {

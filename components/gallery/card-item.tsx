@@ -22,10 +22,7 @@ const CardItem = ({ billboard, category }: CardProps) => {
       const data = await axios.get(`/api/billboards/edit/${billboard}`);
       setBillboards(data.data);
     };
-
-    return () => {
       fetchData();
-    };
   }, [billboard]);
 
   useEffect(() => {
@@ -36,13 +33,14 @@ const CardItem = ({ billboard, category }: CardProps) => {
     return null;
   }
 
+  console.log(billboards)
   const baseUrl = "https://kemal-web-storage.s3.eu-north-1.amazonaws.com";
 
-  console.log(billboards);
   return (
     <Card>
       <CardContent className="flex aspect-square justify-center relative ">
         {billboards?.imageURL ? (
+          <>
           <Image
             src={`${baseUrl}/${billboards?.imageURL}`}
             style={{
@@ -54,16 +52,19 @@ const CardItem = ({ billboard, category }: CardProps) => {
             alt="Image"
             sizes="any"
           />
-        ) : (
-          <LoadingSkeleton />
-        )}
-        <div className="absolute left-8 bottom-8 flex gap-2 flex-col w-24">
+          <div className="absolute left-8 bottom-8 flex gap-2 flex-col w-24">
           <p className="text-black font-bold text-2xl">
             {category[0].toUpperCase() + category.slice(1)}
           </p>
           <Button>Shop</Button>
         </div>
-      </CardContent>
+        </>
+        ) : (
+          <LoadingSkeleton />
+          )}
+          </CardContent>
+        
+        
     </Card>
   );
 };

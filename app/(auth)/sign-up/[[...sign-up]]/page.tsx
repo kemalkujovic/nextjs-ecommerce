@@ -2,7 +2,7 @@ import { SignUp } from "@clerk/nextjs";
 
 export default function Page() {
   return (
-    <div className="flex justify-center p-4">
+    <div className="flex justify-center items-center p-4 min-h-[90vh]">
       <SignUp
         appearance={{
           variables: {

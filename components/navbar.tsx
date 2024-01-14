@@ -5,7 +5,6 @@ import {
   SignInButton,
   SignUpButton,
   UserButton,
-  auth,
   currentUser,
 } from "@clerk/nextjs";
 import { Button } from "./ui/button";
@@ -13,10 +12,9 @@ import NavbarSearch from "./navbar-search";
 import MobileSidebar from "@/app/(admin)/_components/mobile-sidebar";
 import NavItem from "./nav-item";
 
-const NavBar = () => {
-  const { userId } = auth();
+const NavBar = async () => {
+  const user = await currentUser();
 
-  
   return (
     <div className="border-b">
       <Container>
@@ -34,7 +32,7 @@ const NavBar = () => {
           </div>
           <div className="flex items-center">
             <NavbarActions />
-            {userId ? (
+            {user ? (
               <div className="ml-2">
                 <UserButton
                   afterSignOutUrl="/"

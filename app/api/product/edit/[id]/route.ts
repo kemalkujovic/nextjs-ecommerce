@@ -1,8 +1,27 @@
 import { db } from "@/lib/db";
 
 import { NextResponse } from "next/server";
-import { uploadFileToS3 } from "../../route";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { auth } from "@clerk/nextjs";
+import { s3Client } from "@/lib/s3";
+
+async function uploadFileToS3(file: any, fileName: any) {
+  const fileBuffer = file;
+
+  const randomSuffix = Math.random().toString(36).substring(7);
+
+  const params = {
+    Bucket: process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME,
+    Key: `products/${fileName}-${randomSuffix}`,
+    Body: fileBuffer,
+    ContentType: "image/jpg",
+  };
+
+  const command = new PutObjectCommand(params);
+  await s3Client.send(command);
+
+  return `/products/${fileName}-${randomSuffix}`;
+}
 
 export async function GET(
   req: Request,

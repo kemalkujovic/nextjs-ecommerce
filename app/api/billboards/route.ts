@@ -4,7 +4,8 @@ import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
-export async function uploadFileToS3(file: any, fileName: any) {
+
+async function uploadFileToS3(file: any, fileName: any) {
   const fileBuffer = file;
 
   const randomSuffix = Math.random().toString(36).substring(7);

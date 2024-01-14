@@ -3,7 +3,25 @@ import { s3Client } from "@/lib/s3";
 import { DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
-import { uploadFileToS3 } from "../../route";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
+
+async function uploadFileToS3(file: any, fileName: any) {
+  const fileBuffer = file;
+
+  const randomSuffix = Math.random().toString(36).substring(7);
+
+  const params = {
+    Bucket: process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME,
+    Key: `billboards/${fileName}-${randomSuffix}`,
+    Body: fileBuffer,
+    ContentType: "image/jpg",
+  };
+
+  const command = new PutObjectCommand(params);
+  await s3Client.send(command);
+
+  return `billboards/${fileName}-${randomSuffix}`;
+}
 
 export async function GET(
   req: Request,
@@ -13,9 +31,7 @@ export async function GET(
   const { userId } = auth();
   console.log(id);
   try {
-    // if (!userId) {
-    //   return NextResponse.json({ error: "Unauthorized", status: 401 });
-    // }
+
 
     const billboard = await db.billboard.findUnique({
       where: {

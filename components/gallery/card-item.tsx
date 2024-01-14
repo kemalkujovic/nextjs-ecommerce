@@ -15,6 +15,8 @@ type CardProps = {
 const CardItem = ({ billboard, category }: CardProps) => {
   const [billboards, setBillboards] = useState<Billboard>();
 
+  const [isMounted, setIsMounted] = useState(false);
+
   useEffect(() => {
     const fetchData = async () => {
       const data = await axios.get(`/api/billboards/edit/${billboard}`);
@@ -26,8 +28,17 @@ const CardItem = ({ billboard, category }: CardProps) => {
     };
   }, [billboard]);
 
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return null;
+  }
+
   const baseUrl = "https://kemal-web-storage.s3.eu-north-1.amazonaws.com";
 
+  console.log(billboards);
   return (
     <Card>
       <CardContent className="flex aspect-square justify-center relative ">

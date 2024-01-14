@@ -6,10 +6,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CreditCard, Package } from "lucide-react";
 import { useQueries } from "@tanstack/react-query";
 import axios from "axios";
-import { Overivew } from "@/components/overview";
+import { Overview } from "@/components/overview";
 
 const AdminPage = () => {
-  const [orderQuery, productQuery] = useQueries({
+  const [orderQuery, productQuery, graphQuery] = useQueries({
     queries: [
       {
         queryKey: ["Sales count"],
@@ -21,7 +21,14 @@ const AdminPage = () => {
       {
         queryKey: ["Stock products"],
         queryFn: async () => {
-          const response = await axios.get("/api/product/");
+          const response = await axios.get("/api/product");
+          return response.data;
+        },
+      },
+      {
+        queryKey: ["graph data"],
+        queryFn: async () => {
+          const response = await axios.get("/api/graph");
           return response.data;
         },
       },
@@ -62,7 +69,7 @@ const AdminPage = () => {
           <CardTitle>Overview</CardTitle>
         </CardHeader>
         <CardContent>
-          <Overivew data={[]} />
+          <Overview data={graphQuery.data} />
         </CardContent>
       </Card>
     </div>

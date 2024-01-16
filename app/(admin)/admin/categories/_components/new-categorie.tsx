@@ -65,7 +65,7 @@ const NewCategorie = () => {
       }
     };
 
-      fetchBillboards();
+    fetchBillboards();
   }, []);
 
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -115,7 +115,6 @@ const NewCategorie = () => {
         router.push("/admin/categories");
       }
     } catch (error) {
-      console.log(error);
       toast.error("Error occurred.");
     }
   };

@@ -93,7 +93,6 @@ const NewBillboard = () => {
         router.push("/admin/billboards");
       }
     } catch (error) {
-      console.log(error);
       toast.error("Error occurred.");
     }
   };

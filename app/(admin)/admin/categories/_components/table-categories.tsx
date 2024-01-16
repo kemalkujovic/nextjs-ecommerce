@@ -41,10 +41,8 @@ const TableCategories = () => {
   });
 
   const deleteTask = async (id: string) => {
-    console.log(id);
     try {
       const res = await axios.delete(`/api/categories/edit/${id}`);
-      console.log(res);
       queryClient.invalidateQueries({ queryKey: ["category"] });
       toast.success("Category deleted");
     } catch (error) {

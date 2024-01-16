@@ -146,7 +146,6 @@ export async function PUT(
     if (files) {
       for (const file of Array.from(files)) {
         if (file instanceof File && file.name) {
-          console.log(file.name);
           const buffer = Buffer.from(await file.arrayBuffer());
           const fileName = await uploadFileToS3(buffer, file.name);
           updateData.imageURLs = fileNames;

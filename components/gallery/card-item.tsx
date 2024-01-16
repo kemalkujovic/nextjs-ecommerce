@@ -22,7 +22,7 @@ const CardItem = ({ billboard, category }: CardProps) => {
       const data = await axios.get(`/api/billboards/edit/${billboard}`);
       setBillboards(data.data);
     };
-      fetchData();
+    fetchData();
   }, [billboard]);
 
   useEffect(() => {
@@ -33,7 +33,6 @@ const CardItem = ({ billboard, category }: CardProps) => {
     return null;
   }
 
-  console.log(billboards)
   const baseUrl = "https://kemal-web-storage.s3.eu-north-1.amazonaws.com";
 
   return (
@@ -41,30 +40,28 @@ const CardItem = ({ billboard, category }: CardProps) => {
       <CardContent className="flex aspect-square justify-center relative ">
         {billboards?.imageURL ? (
           <>
-          <Image
-            src={`${baseUrl}/${billboards?.imageURL}`}
-            style={{
-              width: "100%",
-              height: "100%",
-              borderRadius: "5px",
-            }}
-            fill
-            alt="Image"
-            sizes="any"
-          />
-          <div className="absolute left-8 bottom-8 flex gap-2 flex-col w-24">
-          <p className="text-black font-bold text-2xl">
-            {category[0].toUpperCase() + category.slice(1)}
-          </p>
-          <Button>Shop</Button>
-        </div>
-        </>
+            <Image
+              src={`${baseUrl}/${billboards?.imageURL}`}
+              style={{
+                width: "100%",
+                height: "100%",
+                borderRadius: "5px",
+              }}
+              fill
+              alt="Image"
+              sizes="any"
+            />
+            <div className="absolute left-8 bottom-8 flex gap-2 flex-col w-24">
+              <p className="text-black font-bold text-2xl">
+                {category[0].toUpperCase() + category.slice(1)}
+              </p>
+              <Button>Shop</Button>
+            </div>
+          </>
         ) : (
           <LoadingSkeleton />
-          )}
-          </CardContent>
-        
-        
+        )}
+      </CardContent>
     </Card>
   );
 };

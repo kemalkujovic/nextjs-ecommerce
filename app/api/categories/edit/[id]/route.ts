@@ -41,7 +41,6 @@ export async function PUT(
     const { category, billboard } = await req.json();
 
     const formData = { category, billboard };
-    console.log(formData);
     const categoryProduct = await db.category.update({
       where: {
         id: id,

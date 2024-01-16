@@ -29,7 +29,6 @@ export async function GET(
 ) {
   const { id } = params;
   const { userId } = auth();
-  console.log(id);
   try {
 
 

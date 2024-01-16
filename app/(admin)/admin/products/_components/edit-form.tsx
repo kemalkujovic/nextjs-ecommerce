@@ -112,7 +112,6 @@ const EditForm = ({ data, onSubmit }: EditFormProps) => {
     fetchCategories();
   }, []);
   const [categorySizes, setCategorySizes] = useState([]);
-  console.log(dataForm);
 
   useEffect(() => {
     const fetchCategorySizes = async () => {
@@ -128,8 +127,6 @@ const EditForm = ({ data, onSubmit }: EditFormProps) => {
       fetchCategorySizes();
     }
   }, [dataForm.categoryId]);
-
-  console.log(dataForm.category);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = e.target.files as FileList;

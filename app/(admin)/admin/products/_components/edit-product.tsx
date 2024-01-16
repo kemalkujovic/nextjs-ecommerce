@@ -51,7 +51,6 @@ const EditProduct = () => {
   const handleFormSubmit = async (formData: FormData) => {
     try {
       const res = await axios.put(`/api/product/edit/${productId}`, formData);
-      console.log(res);
       toast.success("Product edit successfully");
       router.push("/admin/products");
     } catch (error) {

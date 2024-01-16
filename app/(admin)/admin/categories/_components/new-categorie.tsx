@@ -65,9 +65,7 @@ const NewCategorie = () => {
       }
     };
 
-    return () => {
       fetchBillboards();
-    };
   }, []);
 
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -78,7 +76,6 @@ const NewCategorie = () => {
       billboardId: "",
     });
 
-    console.log(formData);
     if (
       !formData.category ||
       formData.category.length < 2 ||

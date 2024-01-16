@@ -57,6 +57,7 @@ const TableSizes = () => {
         title="Sizes"
         count={data?.length}
         description="Manage sizes for your store"
+        url="/admin/sizes/new"
       />
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">

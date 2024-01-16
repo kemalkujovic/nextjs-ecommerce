@@ -1,4 +1,4 @@
-Full Stack E-Commerce platform with admin panel and online store within a single project. Stripe is employed for secure and reliable payment transactions, while modern technologies such as Next.js, React, TypeScript, MongoDB, AWS S3, ShadnCN, and Tailwind CSS for user experience, and administrative experience.
+Full Stack E-Commerce platform with admin panel and online store within a single project. Stripe is employed for secure and reliable payment transactions, while modern technologies such as Next.js, React, TypeScript, MongoDB, AWS S3, ShadCN, and Tailwind CSS for user experience, and administrative experience.
 
 ## Features
 
@@ -71,10 +71,9 @@ Full Stack E-Commerce platform with admin panel and online store within a single
 - Next.js
 - React
 - TypeScript
-- JavaScript
 - MongoDB
 - AWS S3
-- ShadnCN
+- ShadCN
 - Tailwind CSS
 - Material-UI
 

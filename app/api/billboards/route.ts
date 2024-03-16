@@ -4,7 +4,6 @@ import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
-
 async function uploadFileToS3(file: any, fileName: any) {
   const fileBuffer = file;
 
